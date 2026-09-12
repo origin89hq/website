@@ -91,7 +91,7 @@ await writeFile(
   new URL("_headers", out),
   "/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/brand/*\n  X-Content-Type-Options: nosniff\n/storybook/*\n  X-Robots-Tag: noindex, nofollow\n",
 );
-// Concrete redirects also work in the existing ngrok file preview.
+// Concrete redirects preserve legacy URLs on static preview servers too.
 for (const [from, to] of Object.entries(legacyRoutes)) {
   if (!from.endsWith("/")) continue;
   const file = new URL(from.slice(1) + "index.html", out);

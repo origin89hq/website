@@ -2,7 +2,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import { RouterClient } from "@tanstack/react-router/ssr/client";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { createRouter } from "./router";
-import "./styles/concepts.css";
+import "./styles/base.css";
 import "./styles/journal.css";
 import "./styles/buddy-setup.css";
 import "./styles/ui.css";

@@ -25,7 +25,7 @@ jobs:
           ORIGIN89_STORYBOOK_URL: http://127.0.0.1:4325/storybook
           WRANGLER_SEND_METRICS: 'false'
         run: |
-          pnpm --filter origin89-website preview:fixture --ip 127.0.0.1 --port 4325 --inspector-port 9235 > /tmp/website-fixture.log 2>&1 &
+          pnpm --filter origin89-website preview --ip 127.0.0.1 --port 4325 --inspector-port 9235 > /tmp/website-fixture.log 2>&1 &
           preview_pid=$!
           trap 'kill "$preview_pid"' EXIT
           curl --fail --silent --retry 30 --retry-connrefused --retry-delay 1 http://127.0.0.1:4325/ > /dev/null
