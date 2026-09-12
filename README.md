@@ -20,4 +20,4 @@ Run `just build`, then `just fixture` to start the website and the packaged fixt
 
 Copy `apps/website/.env.example` to `apps/website/.env.production` and fill the account ID and intended targets. Authenticate with `pnpm --filter origin89-website exec wrangler login`, or supply `CLOUDFLARE_API_TOKEN`. Run `just check`, then `just deploy`. It builds the site and Storybook, generates an ignored target config, and deploys `origin89-website` with the existing Buddy service binding. GitHub Actions is not required. The named Buddy Worker must already exist; this command does not deploy Buddy or create its storage.
 
-Source was extracted from `origin89hq/origin89` at `7dc27cd9e5f7f7ae67b519b037ca600265012d1e` without private Git history. See [LICENSING.md](LICENSING.md) for source, artwork and third-party terms.
+See [LICENSING.md](LICENSING.md) for source, artwork and third-party terms.
