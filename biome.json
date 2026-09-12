@@ -6,33 +6,19 @@
       "!**/node_modules",
       "!**/dist",
       "!**/storybook-static",
-      "!**/.astro",
       "!**/.wrangler",
       "!apps/website/src/react/generated",
-      "!apps/website/design/generated",
       "!pnpm-lock.yaml",
-      "!apps/buddy/test/fixtures",
-      "!apps/buddy/knowledge",
       "!apps/website/public",
       "!**/.website-server",
       "!**/website-report",
-      "!**/storybook-server",
-      "!**/design-react-dist",
-      "!**/design-dist",
       "!**/storybook-report",
-      "!**/*.astro",
       "!**/*.css",
-      "!clients/ts/src/generated.ts",
       "!**/.origin89",
       "!**/.agents",
+      "!**/.claude",
       "!apps/website/src/assets",
-      "!apps/docs/public",
-      "!**/worker-configuration.d.ts",
-      "!**/target",
-      "!**/.build",
-      "!**/.gradle",
-      "!**/build",
-      "!platforms/**/Generated*"
+      "!**/worker-configuration.d.ts"
     ]
   },
   "formatter": {
@@ -50,7 +36,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "style": {
         "noNonNullAssertion": "off",
         "useTemplate": "off"

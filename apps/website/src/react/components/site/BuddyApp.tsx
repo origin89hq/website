@@ -7,14 +7,12 @@ import { RemoteAppScene } from "./RemoteAppScene";
 import { SiteControl } from "./SiteControl";
 import { SolarDashboard } from "./SolarDashboard";
 export interface BuddyAppProps {
-  theme?: string;
   presentation?: "phone" | "preview";
   scene?: "overview" | "energy" | "control" | "care";
   site?: JournalSite;
   buddyUrl: string;
 }
 export function BuddyApp({
-  theme = "journal",
   presentation = "phone",
   scene: initialScene = "overview",
   site = "cottage",
@@ -131,7 +129,7 @@ export function BuddyApp({
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: Native child buttons dispatch clicks for both pointer and keyboard activation.
     <section
-      className={`buddy-app energy-app app-${theme} app-site-${site} ${presentation === "preview" ? "app-preview" : ""}`}
+      className={`buddy-app energy-app app-journal app-site-${site} ${presentation === "preview" ? "app-preview" : ""}`}
       data-buddy-app
       data-app-site={site}
       onClick={handleAction}

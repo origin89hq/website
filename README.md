@@ -8,9 +8,11 @@ just dev
 just check
 ```
 
-Use Node from `.node-version`, pnpm from `package.json`, and `just`. `apps/website` contains the React site, static rendering, Storybook and the public Cloudflare Worker. The committed equipment table is a reviewed website snapshot; builds do not read a private research checkout. Product demonstrations are illustrative, not live measurements.
+Use Node from `.node-version`, pnpm from `package.json`, and `just`. `apps/website` contains the React site, static rendering, Storybook and the public Cloudflare Worker. `just storybook` opens component development. `just check` covers lint, behavior tests, React and Worker types, and the full site/Storybook build. The committed equipment table is a reviewed website snapshot; builds do not read a private research checkout. Product demonstrations are illustrative, not live measurements.
 
 Shared drawings come from the versioned [UI library](https://github.com/origin89hq/ui). Buddy contracts and its local fixture Worker come from a versioned [Buddy release](https://github.com/origin89hq/buddy). Their release tarballs and integrity hashes are pinned in `pnpm-lock.yaml`; a sibling checkout is not required. The working `/buddy/` frontend lives here, while inference, equipment tools, D1, R2 and sessions live in Buddy.
+
+Asset preparation reuses outputs only when their bytes, source inputs and image-tool versions match. A clean checkout or any missing/modified output regenerates them. The reviewed equipment snapshot remains a tracked input.
 
 ## Local browser checks
 

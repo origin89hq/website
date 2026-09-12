@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
 import { createElement } from "react";
-import "../src/react/styles/concepts.css";
+import "../src/react/styles/base.css";
 import "../src/react/styles/journal.css";
 import "../src/react/styles/buddy-setup.css";
 import "./review.css";

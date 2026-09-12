@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 
 export default {
-  stories: ["../design/**/*.stories.@(ts|tsx)"],
+  stories: ["../stories/**/*.stories.@(ts|tsx)"],
   framework: "@storybook/react-vite",
   staticDirs: ["../public"],
   addons: ["@storybook/addon-a11y"],

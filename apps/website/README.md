@@ -15,7 +15,6 @@ pnpm build:site         # Build and pre-render the website
 pnpm build              # Website plus the public Storybook
 pnpm preview            # Serve dist/ with Wrangler's local runtime
 pnpm storybook          # Shared components at http://127.0.0.1:6006
-pnpm design:review      # Full build; refresh the existing design-dist/ file preview
 pnpm deploy:cf          # Deploy the built website directly with Wrangler
 ```
 
@@ -31,10 +30,11 @@ See the [repository README](../../README.md) for root commands, fixture checks a
 - `src/react/styles/`: shared website and Storybook styling. `ui.css` maps shadcn semantics; `journal.css` defines site palettes; `website.css` covers the full website pages.
 - `src/react/lib/page-meta.ts`: canonical URLs, metadata, sitemap routes and legacy redirects.
 - `src/react/lib/site-config.ts`: public GitHub, documentation and contact links.
-- `design/stories/` and `.storybook/`: component review and viewport controls.
+- `stories/` and `.storybook/`: component review and viewport controls.
 - `scripts/build-website.mjs`: browser/server bundles, TanStack server rendering, HTML hydration data and Cloudflare assets metadata.
 
-The previous Astro website and early design studies remain as historical source. They are not part of the production build. `archive:dev` and `archive:build` run the Astro design studies separately. `design:review` copies the current production output to the existing ngrok file-preview directory, retaining older study files and marking review HTML noindex.
+The React site and Storybook share components. `page-meta.ts` keeps legacy URLs
+pointed at their current routes.
 
 ## Developer guide and brand sources
 
@@ -42,7 +42,7 @@ The previous Astro website and early design studies remain as historical source.
 
 Logos, fonts and colour tokens come from [`@origin89/brand`](https://github.com/origin89hq/brand), the installable brand package.
 
-Brand assets are rebuilt from the pinned package and committed editable inputs under `src/assets/`. Generated directories are ignored; the reviewed equipment snapshot at `src/react/generated/catalogue.json` is committed. Fonts and artwork are served from the website origin. `.website-server/` is disposable.
+Brand assets are rebuilt from the pinned package and committed editable inputs under `src/assets/`. Generated directories are ignored; the reviewed equipment snapshot at `src/react/generated/catalogue.json` is committed. Preparation verifies hashes of the source inputs and every generated output, reusing matching files. Missing or altered outputs, changed inputs, or a changed Sharp version regenerate the assets. The cache is ignored and is never required by a fresh clone. Fonts and artwork are served from the website origin. `.website-server/` is disposable.
 
 Use the shared `BuddyAvatar` for Buddy images. It supplies WebP `srcSet` variants for Retina displays, front-facing green circular avatars up to 96 CSS pixels, and transparent portraits above that size. Set `framing="avatar"` when a larger placement is still an avatar. Its `size` is the displayed width; if CSS changes that width at a breakpoint, pass a matching `sizes` hint, such as `sizes="(max-width: 760px) 78px, 100px"`. Browsers choose the image resolution for the screen density without downloading every variant.
 
@@ -76,11 +76,10 @@ Buddy checks compare the decoded source pixels with the actual CSS width at 1x, 
 
 Website checks cover generated HTML/internal assets, desktop/mobile routes, developer-guide controls/downloads, catalogue search and model transfer, client navigation, site themes, mobile menus, Buddy chat/map/photo handling and legacy redirects. Storybook checks cover all stories, image assets, streaming/error/retry states, mobile chat/map views and manager viewports. Reports are written to ignored `website-report/` and `storybook-report/` directories.
 
-This app is the public Worker. It owns the hostname and the pre-rendered site, and forwards `/api/buddy/*` across a service binding to `origin89-buddy`, which has no route of its own. `pnpm preview` runs both together, which is the only way to exercise an API path locally:
+This app is the public Worker. It owns the hostname and the pre-rendered site, and forwards `/api/buddy/*` across a service binding to `origin89-buddy`, which has no route of its own. `pnpm preview` runs the website and released Buddy fixture together for local API checks:
 
 ```sh
 pnpm preview            # website worker plus the packaged Buddy fixture
-pnpm preview:fixture    # the same local fixture pair
 ```
 
 That also checks Cloudflare redirects, trailing-slash handling, headers and real 404 responses. Build success alone does not mean the site has been deployed.

@@ -1,25 +1,33 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [
-    ".astro/types.d.ts",
-    "**/*"
-  ],
-  "exclude": [
-    "dist",
-    "design-dist",
-    "design-react-dist",
-    "storybook-static",
-    "storybook-server",
-    "storybook-report",
-    ".website-server"
-  ],
   "compilerOptions": {
+    "target": "ES2023",
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-    "jsxImportSource": "react",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "vite/client"
+    ],
     "paths": {
       "@/*": [
         "./src/react/*"
       ]
     }
-  }
+  },
+  "include": [
+    "src/react/**/*.ts",
+    "src/react/**/*.tsx",
+    ".storybook/*.ts",
+    "stories/**/*.ts",
+    "stories/**/*.tsx"
+  ]
 }

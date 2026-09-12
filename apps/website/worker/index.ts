@@ -1,12 +1,5 @@
-// The public edge. It owns the hostname and the pre-rendered site, and holds no
-// secret: the OpenAI key, the knowledge database, the photo bucket and the
-// session Durable Objects all belong to Buddy, which has no route of its own and
-// is reachable only through this binding.
-//
-// Forwarded as a request rather than called as a typed method because
-// `/api/buddy/chat` streams its reply, and forwarding preserves the stream end
-// to end. Typed RPC is worth adding for the calls that return a value, once
-// something other than this worker needs them.
+// Keep inference, storage and session bindings in Buddy. Forward its responses
+// directly so chat streams and session cookies reach the browser unchanged.
 interface Env {
   BUDDY: Fetcher;
   ASSETS: Fetcher;

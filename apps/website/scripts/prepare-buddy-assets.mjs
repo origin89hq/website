@@ -5,154 +5,158 @@ import sharp from "sharp";
 // this site displays: 1280 px portraits, 384 px avatars. The Blender sources
 // behind them are 66 MB and live in the brand repository; nothing here needs
 // them, and nothing here is committed as a result.
-const repo = new URL("../../../", import.meta.url);
-const art = new URL("../node_modules/@origin89/brand/art/", import.meta.url);
-const output = new URL("apps/website/public/brand/", repo);
-const avatars = new URL("apps/website/src/react/generated/", repo);
-const green = "#3d5749";
-await mkdir(output, { recursive: true });
-await mkdir(avatars, { recursive: true });
-const expressions = [
-  "welcoming",
-  "explaining",
-  "thinking",
-  "delighted",
-  "concerned",
-  "surprised",
-  "playful",
-];
-const widths = {
-  avatar: [32, 48, 64, 96, 128, 192, 256, 384],
-  scene: [48, 96, 192, 384, 768, 1280],
-  portrait: [48, 96, 192, 384, 768, 1280],
-};
-const imports = [],
-  entries = [],
-  files = [];
-for (const expression of expressions) {
-  const frames = [];
-  for (const [framing, sizes] of Object.entries(widths)) {
-    const suffix = `-${framing}`;
-    const image = new URL(
-      framing === "avatar"
-        ? `avatar-${expression}.webp`
-        : `portrait-${expression}${framing === "portrait" ? "-transparent" : ""}.webp`,
-      art,
-    ).pathname;
-    const variants = [];
-    for (const width of sizes) {
-      const name = `buddy-${expression}${suffix}-${width}.webp`;
-      const info = await sharp(image)
-        .resize(width, width)
-        .webp({ quality: 88, alphaQuality: framing === "portrait" ? 100 : 90, effort: 6 })
-        .toFile(new URL(name, avatars).pathname);
-      // Keep tiny variants out of the JS bundle; request only the chosen image.
-      imports.push(`import ${expression}${framing}${width} from "./${name}?url&no-inline";`);
-      variants.push(`{ src: ${expression}${framing}${width}, width: ${width} }`);
-      files.push({
-        expression,
-        framing,
-        width,
-        bytes: info.size,
-        file: `src/react/generated/${name}`,
-      });
+export async function prepareBuddyAssets() {
+  const repo = new URL("../../../", import.meta.url);
+  const art = new URL("../node_modules/@origin89/brand/art/", import.meta.url);
+  const output = new URL("apps/website/public/brand/", repo);
+  const avatars = new URL("apps/website/src/react/generated/", repo);
+  const green = "#3d5749";
+  await mkdir(output, { recursive: true });
+  await mkdir(avatars, { recursive: true });
+  const expressions = [
+    "welcoming",
+    "explaining",
+    "thinking",
+    "delighted",
+    "concerned",
+    "surprised",
+    "playful",
+  ];
+  const widths = {
+    avatar: [32, 48, 64, 96, 128, 192, 256, 384],
+    scene: [48, 96, 192, 384, 768, 1280],
+    portrait: [48, 96, 192, 384, 768, 1280],
+  };
+  const imports = [],
+    entries = [],
+    files = [];
+  for (const expression of expressions) {
+    const frames = [];
+    for (const [framing, sizes] of Object.entries(widths)) {
+      const suffix = `-${framing}`;
+      const image = new URL(
+        framing === "avatar"
+          ? `avatar-${expression}.webp`
+          : `portrait-${expression}${framing === "portrait" ? "-transparent" : ""}.webp`,
+        art,
+      ).pathname;
+      const variants = [];
+      for (const width of sizes) {
+        const name = `buddy-${expression}${suffix}-${width}.webp`;
+        const info = await sharp(image)
+          .resize(width, width)
+          .webp({ quality: 88, alphaQuality: framing === "portrait" ? 100 : 90, effort: 6 })
+          .toFile(new URL(name, avatars).pathname);
+        // Keep tiny variants out of the JS bundle; request only the chosen image.
+        imports.push(`import ${expression}${framing}${width} from "./${name}?url&no-inline";`);
+        variants.push(`{ src: ${expression}${framing}${width}, width: ${width} }`);
+        files.push({
+          expression,
+          framing,
+          width,
+          bytes: info.size,
+          file: `src/react/generated/${name}`,
+        });
+      }
+      frames.push(`${framing}: [${variants.join(", ")}]`);
     }
-    frames.push(`${framing}: [${variants.join(", ")}]`);
+    entries.push(`  ${expression}: { ${frames.join(", ")} }`);
   }
-  entries.push(`  ${expression}: { ${frames.join(", ")} }`);
-}
-// Remove superseded transparent crops from generated web assets.
-for (const name of await readdir(avatars)) {
-  if (
-    /^buddy-(welcoming|explaining|thinking|delighted|concerned|surprised|playful)-(compact-)?\d+\.webp$/.test(
-      name,
-    )
-  ) {
-    await rm(new URL(name, avatars));
+  // Remove superseded transparent crops from generated web assets.
+  for (const name of await readdir(avatars)) {
+    if (
+      /^buddy-(welcoming|explaining|thinking|delighted|concerned|surprised|playful)-(compact-)?\d+\.webp$/.test(
+        name,
+      )
+    ) {
+      await rm(new URL(name, avatars), { force: true });
+    }
   }
-}
-await writeFile(
-  new URL("buddy-avatars.ts", avatars),
-  `// Generated by prepare-buddy-assets.mjs from the shared native Blender portraits.\n${imports.join("\n")}\nexport const buddyAvatars = {\n${entries.join(",\n")}\n} as const;\n`,
-);
-await writeFile(
-  new URL("buddy-avatar-sizes.json", output),
-  JSON.stringify({ widths, files }, null, 2) + "\n",
-);
+  await writeFile(
+    new URL("buddy-avatars.ts", avatars),
+    `// Generated by prepare-buddy-assets.mjs from the shared native Blender portraits.\n${imports.join("\n")}\nexport const buddyAvatars = {\n${entries.join(",\n")}\n} as const;\n`,
+  );
+  await writeFile(
+    new URL("buddy-avatar-sizes.json", output),
+    JSON.stringify({ widths, files }, null, 2) + "\n",
+  );
 
-// Served as PNG because the manifest and the tab icon are PNG contracts.
-for (const [name, input] of [
-  ["buddy-portrait.png", "portrait-welcoming-transparent.webp"],
-  ["buddy-full-body.png", "studio-transparent.webp"],
-  ["buddy-avatar.png", "avatar-round.webp"],
-])
-  await sharp(new URL(input, art).pathname).png().toFile(new URL(name, output).pathname);
+  // Served as PNG because the manifest and the tab icon are PNG contracts.
+  for (const [name, input] of [
+    ["buddy-portrait.png", "portrait-welcoming-transparent.webp"],
+    ["buddy-full-body.png", "studio-transparent.webp"],
+    ["buddy-avatar.png", "avatar-round.webp"],
+  ])
+    await sharp(new URL(input, art).pathname).png().toFile(new URL(name, output).pathname);
 
-async function icon(name, size, image = new URL("avatar-welcoming.webp", art).pathname) {
-  const png = await sharp(image).resize(size, size).png().toBuffer();
-  await writeFile(new URL(name, output), png);
-  return png;
-}
+  async function icon(name, size, image = new URL("avatar-welcoming.webp", art).pathname) {
+    const png = await sharp(image).resize(size, size).png().toBuffer();
+    await writeFile(new URL(name, output), png);
+    return png;
+  }
 
-for (const size of [192, 512]) await icon(`buddy-app-${size}.png`, size);
-await icon("buddy-apple-touch.png", 180);
-// Front-facing portrait on green; each platform applies its own mask.
-await icon("buddy-maskable-512.png", 512);
-await rm(new URL("buddy-favicon.svg", output), { force: true });
-const round = new URL("avatar-round.webp", art).pathname;
-const favicon32 = await icon("buddy-favicon-32.png", 32, round);
-const favicon48 = await icon("buddy-favicon-48.png", 48, round);
-const frames = [
-  [32, favicon32],
-  [48, favicon48],
-];
-const directory = Buffer.alloc(6 + frames.length * 16);
-directory.writeUInt16LE(1, 2);
-directory.writeUInt16LE(frames.length, 4);
-let offset = directory.length;
-for (const [index, [size, png]] of frames.entries()) {
-  const entry = 6 + index * 16;
-  directory[entry] = size;
-  directory[entry + 1] = size;
-  directory.writeUInt16LE(1, entry + 4);
-  directory.writeUInt16LE(32, entry + 6);
-  directory.writeUInt32LE(png.length, entry + 8);
-  directory.writeUInt32LE(offset, entry + 12);
-  offset += png.length;
+  for (const size of [192, 512]) await icon(`buddy-app-${size}.png`, size);
+  await icon("buddy-apple-touch.png", 180);
+  // Front-facing portrait on green; each platform applies its own mask.
+  await icon("buddy-maskable-512.png", 512);
+  await rm(new URL("buddy-favicon.svg", output), { force: true });
+  const round = new URL("avatar-round.webp", art).pathname;
+  const favicon32 = await icon("buddy-favicon-32.png", 32, round);
+  const favicon48 = await icon("buddy-favicon-48.png", 48, round);
+  const frames = [
+    [32, favicon32],
+    [48, favicon48],
+  ];
+  const directory = Buffer.alloc(6 + frames.length * 16);
+  directory.writeUInt16LE(1, 2);
+  directory.writeUInt16LE(frames.length, 4);
+  let offset = directory.length;
+  for (const [index, [size, png]] of frames.entries()) {
+    const entry = 6 + index * 16;
+    directory[entry] = size;
+    directory[entry + 1] = size;
+    directory.writeUInt16LE(1, entry + 4);
+    directory.writeUInt16LE(32, entry + 6);
+    directory.writeUInt32LE(png.length, entry + 8);
+    directory.writeUInt32LE(offset, entry + 12);
+    offset += png.length;
+  }
+  await writeFile(
+    new URL("buddy-favicon.ico", output),
+    Buffer.concat([directory, ...frames.map(([, png]) => png)]),
+  );
+  await writeFile(
+    new URL("buddy.webmanifest", output),
+    JSON.stringify(
+      {
+        id: "/buddy/",
+        name: "Buddy · Origin89",
+        short_name: "Buddy",
+        start_url: "/buddy/",
+        scope: "/buddy/",
+        display: "standalone",
+        background_color: green,
+        theme_color: green,
+        icons: [
+          ...[192, 512].map((size) => ({
+            src: `/brand/buddy-app-${size}.png`,
+            sizes: `${size}x${size}`,
+            type: "image/png",
+            purpose: "any",
+          })),
+          {
+            src: "/brand/buddy-maskable-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+  console.log(
+    "Prepared Buddy tab, app and home-screen icons from the native front-facing portrait.",
+  );
 }
-await writeFile(
-  new URL("buddy-favicon.ico", output),
-  Buffer.concat([directory, ...frames.map(([, png]) => png)]),
-);
-await writeFile(
-  new URL("buddy.webmanifest", output),
-  JSON.stringify(
-    {
-      id: "/buddy/",
-      name: "Buddy · Origin89",
-      short_name: "Buddy",
-      start_url: "/buddy/",
-      scope: "/buddy/",
-      display: "standalone",
-      background_color: green,
-      theme_color: green,
-      icons: [
-        ...[192, 512].map((size) => ({
-          src: `/brand/buddy-app-${size}.png`,
-          sizes: `${size}x${size}`,
-          type: "image/png",
-          purpose: "any",
-        })),
-        {
-          src: "/brand/buddy-maskable-512.png",
-          sizes: "512x512",
-          type: "image/png",
-          purpose: "maskable",
-        },
-      ],
-    },
-    null,
-    2,
-  ) + "\n",
-);
-console.log("Prepared Buddy tab, app and home-screen icons from the native front-facing portrait.");

@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://origin89.com/sitemap-index.xml

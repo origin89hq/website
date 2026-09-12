@@ -2,16 +2,12 @@
 
 `controller.webp` (still, status lamp lit) and `controller-live.webp`
 (two-frame heartbeat: 160 ms on, 1140 ms off — "slow blink = running", the
-lamp vocabulary in [CONTROLLER-V1.md](../../../../../docs/CONTROLLER-V1.md))
+lamp vocabulary in [controller documentation](https://docs.origin89.com))
 are **rendered in Blender from the real CAD**: the enclosure from `shoe.py` and
 board A from its EasyEDA STEP export, both in
 [origin89hq/hardware](https://github.com/origin89hq/hardware). The Blender
 scene itself is not published; it carries satin-black nylon, clean branding and
 the production transfers as a switchable alternative.
-[`Device.astro`](../../components/Device.astro) serves the live one when the
-visitor allows motion, the still to everyone else, and dissolves the cable
-run into the page with a CSS mask — the cables must reach the file's bottom
-edge for that to work.
 
 To regenerate, render the saved scene so manual edits survive, or rebuild from
 the CAD when a dimension changes there. Do not hand-edit the webps.
@@ -38,29 +34,14 @@ points lead to equipment searches; their positions illustrate the terminal row,
 not pin-level wiring instructions. Cover movement is a presentation animation,
 not a mechanical disassembly simulation. Reduced motion uses immediate controls.
 
-## Scroll reveal
+## Website consumers
 
-The controller section now uses
-[`ControllerReveal.astro`](../../components/ControllerReveal.astro) and
-[`controller-reveal.ts`](../../lib/controller-reveal.ts). The
-`controller-reveal-*` assets contain the closed assembly, the exposed board
-with its mounting plate and harness, and the separate cover in both LED
-states. Every layer shares one camera and one crop. The adjacent JSON records
-the resulting dimensions and PCB source hash.
-
-The section uses CSS sticky positioning and the site's existing GSAP
-ScrollTrigger to lift and fade the cover, then hold on the PCB. Reverse
-scrolling closes it. Only transforms and opacity animate; no WebGL runtime
-is loaded. The button moves to the matching scroll endpoint. Reduced motion
-and viewports under 600 px tall use an immediate button toggle instead.
-Without JavaScript, the closed render and native inside disclosure remain.
-Extra scroll distance is added only after the layers decode successfully.
-All port specifications stay in normal document flow below the visual.
-
-Each asset has 640 px and 1200 px versions. At 640 px, the closed fallback,
-board and live cover total about 152 kB; at 1200 px, about 322 kB. Images load
-near the section, not at the start of the page. Regenerate all layers together
-using the scroll-reveal commands in the Blender guide.
+The homepage uses the aligned `controller-study-*` plates in
+[`ControllerStudy.tsx`](../../react/components/site/ControllerStudy.tsx).
+`react-assets.ts` also exposes the closed controller and board stills from the
+`controller-reveal-*` set. Keep each set with its JSON record so the camera,
+crop and source geometry remain traceable. The React reveal has explicit open
+and zoom controls and respects reduced motion; it does not operate equipment.
 
 ## What the object is
 
