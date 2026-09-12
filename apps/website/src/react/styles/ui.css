@@ -1,0 +1,54 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@source "../components";
+@source "../../../design/stories";
+
+@theme inline {
+  --font-sans: Concept, Arial, sans-serif;
+  --font-mono: Technical, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root,.buddy-ui {
+  --background: #fafbf9;
+  --foreground: #213a42;
+  --card: #fff;
+  --card-foreground: #213a42;
+  --popover: #fff;
+  --popover-foreground: #213a42;
+  --primary: #2b4a97;
+  --primary-foreground: #fff;
+  --secondary: #e9eff5;
+  --secondary-foreground: #2c455b;
+  --muted: #edf2f6;
+  --muted-foreground: #627983;
+  --accent: #e3ebf5;
+  --accent-foreground: #2b4a97;
+  --destructive: #a94332;
+  --border: #c4d1d5;
+  --input: #c4d1d5;
+  --ring: #6683bd;
+  --radius: .75rem;
+}

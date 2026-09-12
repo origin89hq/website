@@ -1,0 +1,138 @@
+---
+import { SITE } from "../config";
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+
+const _links = [
+  { href: "#what-it-does", label: copy.nav.how },
+  { href: "#act-gear", label: copy.nav.devices },
+  { href: "#controller", label: copy.nav.controller },
+  { href: SITE.docsUrl, label: copy.nav.docs, external: true },
+];
+---
+
+<header class="fixed inset-x-0 top-0 z-40 hidden lg:block">
+  <div class="border-b border-line/70 bg-page/80 backdrop-blur-md">
+    <div
+      class="mx-auto hidden max-w-6xl items-center justify-between gap-4 px-6 py-2 text-[0.7rem] leading-4 sm:flex 2xl:max-w-[min(82vw,110rem)] 2xl:px-8"
+    >
+      <p class="font-mono tracking-wider text-faint">{copy.banner}</p>
+    </div>
+
+    <div class="border-t border-line/50 sm:border-t-0">
+      <div
+        class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5 2xl:max-w-[min(82vw,110rem)] 2xl:px-8"
+      >
+        <a
+          href="/"
+          class="flex items-center gap-2.5 text-fg transition-opacity hover:opacity-80"
+        >
+          <LogoBadge />
+          <Wordmark class="text-[1.05rem]" />
+        </a>
+
+        <div class="ml-auto flex items-center gap-7">
+          <nav aria-label="Sections" class="hidden lg:block">
+            <!-- Set to the headline's voice rather than a default nav's: a step
+                 up in size, weight carrying the tighter tracking, and the arrow
+                 dropped back so "Docs" reads as a word and not a word plus a
+                 glyph. Anything smaller than this looked like chrome around the
+                 page instead of part of it. -->
+            <ul class="flex items-center gap-8 text-[0.9375rem] tracking-[-0.017em] text-muted">
+              {
+                links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class="nav-link font-medium transition-colors hover:text-fg"
+                      data-nav-link
+                    >
+                      {link.label}
+                      {link.external && (
+                        <span aria-hidden="true" class="ml-0.5 text-[0.72em] text-faint">
+                          ↗
+                        </span>
+                      )}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+
+          <div class="flex items-center gap-3">
+            <!-- Hidden on phones: the same button sits in the hero a thumb-scroll
+                 below, and at 390 px this one wrapped to two lines and swallowed
+                 the bar. -->
+            <a
+              href="#setup"
+              class="plate hidden px-3.5 py-2 text-[0.9375rem] font-medium tracking-[-0.017em] whitespace-nowrap text-on-fill sm:inline-block"
+            >
+              {copy.hero.primary}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav-link[aria-current='location'] {
+    color: var(--color-action-lit);
+  }
+</style>
+
+<script>
+  const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]')];
+  const destinations = navLinks
+    .map((link) => {
+      const href = link.getAttribute('href');
+      const section = href?.startsWith('#') ? document.querySelector<HTMLElement>(href) : null;
+      return section ? { link, section } : null;
+    })
+    .filter((destination): destination is { link: HTMLAnchorElement; section: HTMLElement } =>
+      destination !== null
+    );
+
+  let scheduled = false;
+
+  const updateActiveLink = () => {
+    scheduled = false;
+    if (destinations.length === 0) return;
+
+    // The upper third is where a reader has committed to the next section. Use
+    // document positions rather than intersection ratios so GSAP's tall pinned
+    // sections and ordinary sections follow the same rule.
+    const marker = window.scrollY + window.innerHeight * 0.34;
+    let active = destinations[0];
+
+    for (const destination of destinations) {
+      const top = destination.section.getBoundingClientRect().top + window.scrollY;
+      if (top <= marker) active = destination;
+    }
+
+    for (const destination of destinations) {
+      if (destination === active) {
+        destination.link.setAttribute('aria-current', 'location');
+      } else {
+        destination.link.removeAttribute('aria-current');
+      }
+    }
+  };
+
+  const scheduleUpdate = () => {
+    if (scheduled) return;
+    scheduled = true;
+    window.requestAnimationFrame(updateActiveLink);
+  };
+
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate);
+  window.addEventListener('load', scheduleUpdate, { once: true });
+  scheduleUpdate();
+</script>

@@ -1,0 +1,198 @@
+---
+// The actual SVG artwork from isladjan's MIT-licensed parallax scene is kept
+// as one shared external document instead of being repeated in the
+// generated HTML. The source UI, remote falling-star bitmap and dinosaurs are
+// removed; its sun, clouds, landscape planes, wildlife and night sky remain.
+interface Props {
+  id: string;
+  mode?: "story" | "night";
+  class?: string;
+}
+
+const { id, mode = "story", class: className } = Astro.props;
+---
+
+<div
+  class:list={['o89-parallax-scene', mode === 'night' && 'is-night', className]}
+  data-parallax-scene={id}
+  aria-hidden="true"
+>
+  <object
+    class="scene-artwork"
+    data-scene-artwork
+    data="/vendor/isladjan-parallax.svg"
+    type="image/svg+xml"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <img src="/vendor/isladjan-parallax.svg" alt="" />
+  </object>
+
+  <div class="scene-wash"></div>
+  <div class="scene-vignette"></div>
+</div>
+
+<style>
+  .o89-parallax-scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    isolation: isolate;
+    background: #111528;
+  }
+
+  .scene-artwork {
+    position: absolute;
+    top: -6%;
+    left: -6%;
+    display: block;
+    width: 112%;
+    height: 112%;
+    border: 0;
+    opacity: 0;
+    filter: saturate(0.9) brightness(0.68) contrast(1.04);
+    transition: opacity 600ms ease;
+    will-change: transform, opacity;
+  }
+
+  .is-loaded .scene-artwork {
+    opacity: 0.94;
+  }
+
+  .is-night {
+    background: var(--color-content-sky);
+  }
+
+  .is-night .scene-artwork {
+    top: -8%;
+    left: -5%;
+    width: 110%;
+    height: 116%;
+    filter: none;
+  }
+
+  .is-night.is-loaded .scene-artwork {
+    opacity: 0.92;
+  }
+
+  .scene-wash,
+  .scene-vignette {
+    position: absolute;
+    inset: 0;
+  }
+
+  .scene-wash {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(7, 9, 12, 0.74) 0%,
+        rgba(7, 9, 12, 0.56) 36%,
+        rgba(7, 9, 12, 0.18) 64%,
+        rgba(7, 9, 12, 0.36) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(7, 9, 12, 0.2) 0%,
+        transparent 44%,
+        rgba(7, 9, 12, 0.47) 100%
+      );
+  }
+
+  .scene-vignette {
+    box-shadow: inset 0 0 13rem 2rem rgba(5, 7, 10, 0.42);
+  }
+
+  .is-night .scene-wash {
+    background: none;
+  }
+
+  .is-night .scene-vignette {
+    box-shadow: none;
+  }
+
+  @media (max-width: 1023px) {
+    .scene-artwork {
+      top: -3%;
+      left: -28%;
+      width: 156%;
+      height: 106%;
+      filter: saturate(0.72) brightness(0.54) contrast(1.04);
+    }
+
+    .scene-wash {
+      background:
+        linear-gradient(180deg, rgba(7, 9, 12, 0.3), rgba(7, 9, 12, 0.48)),
+        radial-gradient(65% 48% at 50% 48%, transparent, rgba(7, 9, 12, 0.5));
+    }
+
+    .is-night .scene-artwork {
+      top: -4%;
+      left: -16%;
+      width: 132%;
+      height: 108%;
+      /* The SVG's base is the same #111021 as the content. Filtering the whole
+         object also filtered that base and created a dark horizontal seam on
+         mobile before any footer artwork had risen into view. */
+      filter: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-artwork {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // External SVG documents keep gradient ids isolated and avoid tripling the
+  // payload. Signal their parent controllers once the internal nodes exist.
+  const prepareParallaxArtwork = (scene: HTMLElement) => {
+    if (scene.dataset.artworkBound === 'true') return;
+    scene.dataset.artworkBound = 'true';
+
+    const artwork = scene.querySelector<HTMLObjectElement>('[data-scene-artwork]');
+    if (!artwork) return;
+
+    const ready = () => {
+      const document = artwork.contentDocument;
+      if (!document?.documentElement) return;
+
+      for (const id of ['info', 'info2', 'dinoL', 'dinoR', 'fstar']) {
+        const node = document.getElementById(id);
+        if (node) node.style.display = 'none';
+      }
+
+      if (scene.classList.contains('is-night')) {
+        const background = document.getElementById('bg');
+        const scene1 = document.getElementById('scene1');
+        const scene2 = document.getElementById('scene2');
+        const scene3 = document.getElementById('scene3');
+        const nightBackdrop = document.getElementById('bg2');
+        const stars = document.getElementById('stars');
+
+        if (background) {
+          background.style.display = '';
+          background.setAttribute('fill', '#111021');
+          background.setAttribute('opacity', '1');
+        }
+        if (scene1) scene1.style.display = 'none';
+        if (scene2) scene2.style.display = 'none';
+        if (scene3) scene3.style.visibility = 'visible';
+        if (nightBackdrop) nightBackdrop.style.opacity = '0';
+        if (stars) stars.style.opacity = '0.55';
+      }
+
+      scene.classList.add('is-loaded');
+      scene.dispatchEvent(new CustomEvent('o89:artwork-ready', { bubbles: true }));
+    };
+
+    artwork.addEventListener('load', ready);
+    if (artwork.contentDocument?.documentElement) ready();
+  };
+
+  document
+    .querySelectorAll<HTMLElement>('[data-parallax-scene]')
+    .forEach(prepareParallaxArtwork);
+</script>

@@ -1,0 +1,35 @@
+---
+interface Props {
+  interactive?: boolean;
+  compact?: boolean;
+}
+const { interactive = false, compact = false } = Astro.props;
+---
+<div class:list={['dashboard', { compact }]} data-dashboard>
+  <div class="dash-top"><img src={art.plate} width="35" height="21" alt="" /><span>Offgrid</span><span class="sample-label">Sample site</span></div>
+  <div class="dash-heading"><div><span class="dash-overline">YOUR SITE / OVERVIEW</span><h3>North cottage</h3></div><span class="site-weather">☀ <span>18°</span></span></div>
+  <div class="dash-status"><span class="status-dot"></span> <span data-reading-status>Readings updated 4 s ago</span></div>
+  <div class="battery-card"><div><span>Battery reserve</span><strong><span data-battery>78</span><small data-battery-unit>%</small></strong><span class="battery-note" data-battery-note>Measured · SmartShunt</span></div><div class="battery-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <div class="dash-pair"><div><span>Solar production</span><strong>2.4 <small>kW</small></strong><div class="spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="reading-time">Updated 4 s ago</span></div><div><span>Cottage</span><strong>18.4 <small>°C</small></strong><span class="temperature-line" aria-hidden="true"></span><span class="reading-time">Updated 4 s ago</span></div></div>
+  <div class="dash-event"><span class="event-icon" aria-hidden="true">↳</span><div><strong>Generator stopped</strong><span>Charge cycle completed · 10:42</span></div><span aria-hidden="true">↗</span></div>
+  <div class="dash-buddy"><BuddyAvatar size={42} alt="Buddy" /><div><strong>A clearer next step.</strong><span>Help with readings and checks.</span></div></div>
+  {interactive && <div class="demo-controls"><span class="eyebrow">Try a sample state</span><div><button type="button" data-scenario="current" aria-pressed="true">Current reading</button><button type="button" data-scenario="missing" aria-pressed="false">Missing reading</button></div><p aria-live="polite" data-demo-explanation>This is a design preview with sample data. No equipment is connected.</p></div>}
+  {!interactive && <div class="dash-caption">Design preview · sample data</div>}
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-dashboard]').forEach((dashboard) => {
+    dashboard.querySelectorAll<HTMLButtonElement>('[data-scenario]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const missing = button.dataset.scenario === 'missing';
+        const set = (selector: string, value: string) => { const el = dashboard.querySelector(selector); if (el) el.textContent = value; };
+        dashboard.classList.toggle('is-missing', missing);
+        set('[data-battery]', missing ? '—' : '78');
+        set('[data-battery-unit]', missing ? '' : '%');
+        set('[data-battery-note]', missing ? 'No current battery reading' : 'Measured · SmartShunt');
+        set('[data-reading-status]', missing ? 'Battery last reported 12 min ago' : 'Readings updated 4 s ago');
+        set('[data-demo-explanation]', missing ? 'The battery reading is missing, not 0%. Check its connection and whether readings resume. Sample data only.' : 'This is a design preview with sample data. No equipment is connected.');
+        dashboard.querySelectorAll('[data-scenario]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      });
+    });
+  });
+</script>

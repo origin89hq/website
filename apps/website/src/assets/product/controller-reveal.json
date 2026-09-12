@@ -1,0 +1,11 @@
+{
+  "width": 1200,
+  "height": 1824,
+  "crop": [
+    195,
+    35,
+    1238,
+    1620
+  ],
+  "pcb_sha256": "36dd9b2bd17666da48dedbe704e6ce8f5d29558beba39459faf885ba20ff91f9"
+}

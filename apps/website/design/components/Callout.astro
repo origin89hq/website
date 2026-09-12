@@ -1,0 +1,9 @@
+---
+import { type Direction } from "../lib/content";
+
+interface Props {
+  direction: Direction;
+}
+const { direction } = Astro.props;
+---
+<section class="callout wrap"><div><span class="eyebrow">Start with your site</span><h2>What’s your corner<br />of the world?</h2><p>Tell us what is installed, what you want to understand,<br class="desktop-break" /> and what you would like to make easier.</p></div><div><a class="button" href={href(direction, 'contact')}>Tell us about your setup <span aria-hidden="true">↗</span></a><span class="note">Origin89 is in active development.</span></div></section>

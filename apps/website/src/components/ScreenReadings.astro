@@ -1,0 +1,90 @@
+---
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+  active?: boolean;
+}
+const { copy, active = false } = Astro.props;
+const { phone } = copy;
+
+// The ring is drawn from the number, not sized by hand, so the arc and the
+// digits can never disagree.
+const R = 42;
+const CIRCUMFERENCE = 2 * Math.PI * R;
+const _socDash = CIRCUMFERENCE * (1 - phone.state.socValue / 100);
+---
+
+<div class:list={['o89-view px-4', active && 'is-on']} data-screen="readings">
+  <p class="px-1 pt-5 font-mono text-[0.58rem] tracking-widest uppercase text-white/40">
+    {phone.state.label}
+  </p>
+  <p class="mt-0.5 px-1 text-[1.25rem] leading-none font-medium tracking-tight text-white">
+    {phone.siteName}
+  </p>
+
+  <div class="mt-5 rounded-[1.3rem] border border-white/10 bg-white/[0.06] px-4 py-5">
+    <div class="flex items-center gap-4">
+      <div class="relative shrink-0">
+        <svg viewBox="0 0 100 100" class="h-[4.6rem] w-[4.6rem] -rotate-90">
+          <circle cx="50" cy="50" r={R} fill="none" class="stroke-white/12" stroke-width="9"></circle>
+          <circle
+            cx="50"
+            cy="50"
+            r={R}
+            fill="none"
+            class="stroke-warning"
+            stroke-width="9"
+            stroke-linecap="round"
+            stroke-dasharray={CIRCUMFERENCE}
+            stroke-dashoffset={socDash}></circle>
+        </svg>
+        <span
+          class="absolute inset-0 flex items-center justify-center font-mono text-[1.05rem] font-medium text-white tabular-nums"
+        >
+          {phone.state.socValue}%
+        </span>
+      </div>
+
+      <div class="min-w-0">
+        <p class="text-[0.7rem] leading-tight text-white/60">{phone.state.socLabel}</p>
+        <p class="mt-0.5 flex items-center gap-1.5">
+          <span class={`h-1 w-1 shrink-0 rounded-full ${QUALITY_DOT[phone.state.socQuality]}`}></span>
+          <span class="font-mono text-[0.54rem] leading-tight text-white/40">
+            {phone.state.socNote}
+          </span>
+        </p>
+        <p class="mt-3 text-[0.7rem] leading-tight text-white/60">{phone.state.voltageLabel}</p>
+        <p class="font-mono text-[1.35rem] leading-tight text-white tabular-nums">
+          {phone.state.voltageValue}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <dl class="mt-2.5 space-y-2.5">
+    {
+      phone.state.rows.map((row) => (
+        <div class="flex items-baseline justify-between gap-3 rounded-[1.15rem] border border-white/10 bg-white/[0.06] px-4 py-3">
+          <dt class="min-w-0">
+            <span class="block text-[0.72rem] leading-tight text-white/65">{row.label}</span>
+            {row.note && (
+              <span class="mt-0.5 flex items-center gap-1">
+                <span class={`h-1 w-1 shrink-0 rounded-full ${QUALITY_DOT[row.quality]}`} />
+                <span class="font-mono text-[0.54rem] leading-tight text-white/40">{row.note}</span>
+              </span>
+            )}
+          </dt>
+          <dd
+            class:list={[
+              'shrink-0 font-mono text-[0.95rem] tabular-nums',
+              row.quality === 'missing' ? 'text-white/35' : 'text-white',
+            ]}
+          >
+            {row.value}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>

@@ -1,0 +1,16 @@
+{
+  "name": "origin89-website-repository",
+  "private": true,
+  "packageManager": "pnpm@12.3.4",
+  "scripts": {
+    "dev": "pnpm --filter origin89-website dev",
+    "check": "pnpm lint && pnpm --filter origin89-website test && pnpm --filter origin89-website check && pnpm --filter origin89-website build",
+    "lint": "biome ci . --error-on-warnings",
+    "build": "pnpm --filter origin89-website build",
+    "deploy": "pnpm build && pnpm --filter origin89-website deploy:cf"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.13"
+  },
+  "license": "UNLICENSED"
+}

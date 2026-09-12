@@ -1,0 +1,51 @@
+---
+const _confidenceLabel = (value: string) =>
+  ({
+    "vendor-doc": "Vendor documentation",
+    "community-crosschecked": "Community cross-checked",
+    "community-single": "Single community source",
+  })[value] ?? "Unverified research";
+---
+<Shell title="Find your equipment">
+<section class="frame page-heading"><span class="micro">Equipment research / Exact models matter</span><h1>Start with what<br />you already own.</h1><p>Search {counts.entries.toLocaleString('en')} catalogue entries, from solar controllers and batteries to pumps and sensors. Find the research behind a model, then ask about your setup.</p><div class="research-note" id="status"><strong>A research catalogue, with integration work ahead.</strong> {counts.connected} entries cover communication and local I/O; {counts.passive} cover passive equipment. Entries can include series and repeated models. A listing or vendor document does not mean an Origin89 driver is shipped or hardware-tested.</div></section>
+<section class="frame page-body"><div class="catalogue-tools"><label>Search model, maker or protocol profile<input type="search" id="equipment-search" placeholder="Try Victron, EPEver or EG4" autocomplete="off" /></label><label>Catalogue group<select id="equipment-family"><option value="">All equipment</option>{catalogueGroups.map(g=><option value={g.family}>{g.family} ({g.entries})</option>)}</select></label><label>Research evidence<select id="equipment-confidence"><option value="">All evidence levels</option><option value="vendor-doc">Vendor documentation</option><option value="community-crosschecked">Community cross-checked</option><option value="community-single">Single community source</option><option value="unverified">Unverified research</option></select></label></div>
+<div class="catalogue-results" id="catalogue-count" role="status" aria-live="polite">Showing 24 of {counts.entries.toLocaleString('en')} catalogue entries</div>
+<div class="equipment-table"><div class="equipment-row table-heading" aria-hidden="true"><span>Model / Profile</span><span>Catalogue group</span><span>Research evidence</span><span>Next step</span></div><div id="equipment-rows">{catalogue.slice(0,24).map(e=><article class="equipment-row"><div><h2>{e.model}</h2><p>{e.profile}</p></div><span>{e.family}<small>{e.passive?'No data interface':'Integration unconfirmed'}</small></span><span>{confidenceLabel(e.confidence)}</span><a href={`/next/plan/?equipment=${encodeURIComponent(e.model)}&profile=${encodeURIComponent(e.profile)}`}>Ask about this model ↗</a></article>)}</div></div>
+<p id="catalogue-empty" class="empty-result" hidden>No matching entries. <a class="text-action" href="/next/plan/">Tell us your model ↗</a></p><button class="load-more" id="equipment-more" type="button">Show 24 more</button><noscript><p class="research-note">This preview shows the first 24 entries. Enable JavaScript to search the full catalogue, or <a href="/next/plan/">ask about your equipment</a>.</p><style>#equipment-more,.catalogue-tools{display:none}</style></noscript>
+<p class="small-note">Research-group names follow the source catalogue; the exact electrical interface can differ by model. Brand names identify catalogued equipment and do not imply a partnership.</p></section>
+<script is:inline type="application/json" id="equipment-data" set:html={JSON.stringify(catalogue).replace(/</g,'\\u003c')}></script>
+<script>
+import type {EquipmentEntry} from '../../../src/react/lib/catalogue';
+const dataNode=document.getElementById('equipment-data');
+const entries:EquipmentEntry[]=JSON.parse(dataNode?.textContent??'[]');
+const search=document.getElementById('equipment-search') as HTMLInputElement;
+const family=document.getElementById('equipment-family') as HTMLSelectElement;
+const confidence=document.getElementById('equipment-confidence') as HTMLSelectElement;
+const rows=document.getElementById('equipment-rows')!;
+const more=document.getElementById('equipment-more') as HTMLButtonElement;
+const evidence:Record<string,string>={'vendor-doc':'Vendor documentation','community-crosschecked':'Community cross-checked','community-single':'Single community source'};
+let limit=24;
+function draw(){
+  const words=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const found=entries.filter(e=>words.every(w=>`${e.model} ${e.profile} ${e.family}`.toLowerCase().includes(w))&&(!family.value||e.family===family.value)&&(!confidence.value||e.confidence===confidence.value));
+  const fragment=document.createDocumentFragment();
+  found.slice(0,limit).forEach(e=>{
+    const article=document.createElement('article');article.className='equipment-row';
+    const description=document.createElement('div');const heading=document.createElement('h2');heading.textContent=e.model;const profile=document.createElement('p');profile.textContent=e.profile;description.append(heading,profile);
+    const group=document.createElement('span');group.textContent=e.family;const state=document.createElement('small');state.textContent=e.passive?'No data interface':'Integration unconfirmed';group.append(state);
+    const proof=document.createElement('span');proof.textContent=evidence[e.confidence]??'Unverified research';
+    const link=document.createElement('a');link.href=`/next/plan/?equipment=${encodeURIComponent(e.model)}&profile=${encodeURIComponent(e.profile)}`;link.textContent='Ask about this model ↗';
+    article.append(description,group,proof,link);fragment.append(article);
+  });
+  rows.replaceChildren(fragment);
+  document.getElementById('catalogue-count')!.textContent=`Showing ${Math.min(limit,found.length).toLocaleString('en')} of ${found.length.toLocaleString('en')} matching catalogue entries`;
+  document.getElementById('catalogue-empty')!.hidden=found.length>0;
+  more.hidden=limit>=found.length;
+  const params=new URLSearchParams();if(search.value)params.set('q',search.value);if(family.value)params.set('group',family.value);if(confidence.value)params.set('evidence',confidence.value);
+  history.replaceState(null,'',`${location.pathname}${params.size?'?'+params:''}${location.hash}`);
+}
+const initial=new URLSearchParams(location.search);search.value=initial.get('q')??'';family.value=initial.get('group')??'';confidence.value=initial.get('evidence')??'';
+search.addEventListener('input',()=>{limit=24;draw();});family.addEventListener('change',()=>{limit=24;draw();});confidence.addEventListener('change',()=>{limit=24;draw();});
+more.addEventListener('click',()=>{const prior=rows.children.length;limit+=24;draw();const firstNew=rows.children[prior]?.querySelector('a');firstNew?.focus({preventScroll:true});});draw();
+</script>
+</Shell>

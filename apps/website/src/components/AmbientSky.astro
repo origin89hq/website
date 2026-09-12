@@ -1,0 +1,192 @@
+---
+interface Props {
+  variant: "cloud" | "sun" | "dusk" | "stars";
+  class?: string;
+}
+
+const { variant, class: className } = Astro.props;
+const _stars = Array.from({ length: 28 }, (_, index) => ({
+  x: (index * 37 + 11) % 97,
+  y: (index * 53 + 7) % 72,
+  size: 1 + (index % 3) * 0.55,
+  delay: -((index * 0.73) % 7),
+  duration: 5.5 + (index % 5) * 1.1,
+}));
+---
+
+<div class:list={['ambient-sky', `is-${variant}`, className]} aria-hidden="true">
+  {
+    variant === 'cloud' && (
+      <>
+        <span class="cloud cloud-near"></span>
+        <span class="cloud cloud-far"></span>
+      </>
+    )
+  }
+
+  {variant === 'sun' && <span class="sun"></span>}
+  {variant === 'dusk' && <span class="dusk"></span>}
+
+  {
+    variant === 'stars' && (
+      <div class="stars">
+        {stars.map((star) => (
+          <span
+            style={`--star-x:${star.x}%;--star-y:${star.y}%;--star-size:${star.size}px;--star-delay:${star.delay}s;--star-duration:${star.duration}s`}
+          ></span>
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .ambient-sky {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .cloud {
+    position: absolute;
+    display: block;
+    height: clamp(5rem, 12vw, 10rem);
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(144, 158, 184, 0.16),
+      rgba(91, 104, 139, 0.055) 48%,
+      transparent 72%
+    );
+    filter: blur(18px);
+    will-change: transform;
+  }
+
+  .cloud-near {
+    top: 14%;
+    left: -8%;
+    width: clamp(24rem, 48vw, 50rem);
+    animation: cloud-drift 38s ease-in-out infinite alternate;
+  }
+
+  .cloud-far {
+    top: 38%;
+    right: -14%;
+    width: clamp(20rem, 38vw, 40rem);
+    opacity: 0.58;
+    animation: cloud-drift-reverse 47s ease-in-out infinite alternate;
+  }
+
+  .sun {
+    position: absolute;
+    top: 10%;
+    right: 7%;
+    display: block;
+    width: clamp(12rem, 24vw, 25rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(233, 161, 60, 0.15) 0%,
+      rgba(203, 121, 67, 0.065) 32%,
+      transparent 70%
+    );
+    filter: blur(5px);
+    animation: sun-breathe 13s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+
+  .sun::after {
+    position: absolute;
+    inset: 35%;
+    border: 1px solid rgba(239, 181, 98, 0.12);
+    border-radius: 50%;
+    content: '';
+  }
+
+  .dusk {
+    position: absolute;
+    right: -18%;
+    bottom: -38%;
+    display: block;
+    width: min(78rem, 92vw);
+    aspect-ratio: 1.75;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(113, 73, 157, 0.15),
+      rgba(125, 58, 101, 0.07) 42%,
+      transparent 72%
+    );
+    filter: blur(16px);
+    animation: dusk-breathe 18s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+
+  .stars {
+    position: absolute;
+    inset: 0;
+    opacity: 0.58;
+    mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 75%, transparent);
+  }
+
+  .stars span {
+    position: absolute;
+    top: var(--star-y);
+    left: var(--star-x);
+    width: var(--star-size);
+    height: var(--star-size);
+    border-radius: 50%;
+    background: rgba(213, 211, 230, 0.72);
+    box-shadow: 0 0 7px rgba(149, 137, 198, 0.22);
+    animation: star-breathe var(--star-duration) ease-in-out var(--star-delay) infinite alternate;
+  }
+
+  @keyframes cloud-drift {
+    to {
+      transform: translate3d(7vw, 1.2rem, 0);
+    }
+  }
+
+  @keyframes cloud-drift-reverse {
+    to {
+      transform: translate3d(-5vw, -0.8rem, 0);
+    }
+  }
+
+  @keyframes sun-breathe {
+    from {
+      opacity: 0.72;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes dusk-breathe {
+    to {
+      opacity: 0.72;
+      transform: translate3d(-2vw, -1rem, 0) scale(1.04);
+    }
+  }
+
+  @keyframes star-breathe {
+    from {
+      opacity: 0.2;
+      transform: scale(0.75);
+    }
+    to {
+      opacity: 0.9;
+      transform: scale(1.15);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ambient-sky * {
+      animation: none !important;
+    }
+  }
+</style>

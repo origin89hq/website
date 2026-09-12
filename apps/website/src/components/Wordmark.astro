@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'font-display leading-none font-normal tracking-[0.055em] whitespace-nowrap uppercase',
+    className,
+  ]}
+>
+  Origin 89
+</span>

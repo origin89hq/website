@@ -1,0 +1,32 @@
+---
+interface Props {
+  size?: "sm" | "md";
+  class?: string;
+}
+
+const { size = "md", class: className } = Astro.props;
+
+// The badge is the P-89 structure plate, not a logo somebody drew — which is
+// what BridgePlate.astro has said in a comment since before this was blue. The
+// name comes off that plate, so the mark carries its colours: blue field, thin
+// white rim, white legend.
+//
+// A control uses the same plate. They are told apart the way they are on the
+// road, by what is written on them: a plate names a thing, a control names an
+// action. That needs no styling rule, which is why there isn't one.
+//
+// The radius is tighter than a web badge's on purpose. Stamped steel has a
+// small corner; a soft one reads as an app icon.
+const _frameSize = size === "sm" ? "h-7 w-7 rounded-[0.3rem]" : "h-8 w-8 rounded-[0.35rem]";
+const _markSize = size === "sm" ? "h-6 w-6" : "h-7 w-7";
+---
+
+<span
+  class:list={[
+    'grid shrink-0 place-items-center border border-on-fill/85 bg-action shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_5px_14px_rgb(0_0_0/0.32)]',
+    frameSize,
+    className,
+  ]}
+>
+  <LogoMark class={`${markSize} text-on-fill`} />
+</span>

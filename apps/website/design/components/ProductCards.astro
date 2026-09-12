@@ -1,0 +1,13 @@
+---
+import { type Direction } from "../lib/content";
+
+interface Props {
+  direction: Direction;
+}
+const { direction } = Astro.props;
+---
+<div class="product-grid">{products.map(product => <a class:list={['product-card', product.slug]} href={href(direction, `products/${product.slug}`)}>
+  <div class="card-top"><span class="eyebrow">{product.number} / {product.type}</span><span class="round-arrow" aria-hidden="true">↗</span></div>
+  <div class="product-art"><img src={art[product.art]} alt={product.name === 'Controller' ? 'Origin89 Controller CAD render with earlier enclosure artwork' : `Origin89 ${product.name}`} loading="lazy" /></div>
+  <div class="product-copy"><h3>{product.name}</h3><p>{product.short}</p><span class="text-link">Explore {product.name} <span aria-hidden="true">↗</span></span></div>
+</a>)}</div>

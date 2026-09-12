@@ -1,0 +1,9 @@
+---
+interface Props {
+  theme?: string;
+  scene?: "overview" | "energy" | "care";
+  site?: "cottage" | "mining" | "telecom";
+  id?: string;
+}
+---
+<BuddyApp {...Astro.props} buddyUrl={conceptArt.buddy} client:load/>

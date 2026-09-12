@@ -1,0 +1,289 @@
+@import "tailwindcss";
+
+/* A winter night in an electrical room: near-black with a blue cast, one warm
+   accent for the things that make heat.
+
+   The palette itself is no longer written here. It lives in @origin89/brand,
+   one set of values for this site, the docs and the controller UI, and each one
+   is measured there against the contrast floor it claims — which is how a
+   caption colour that had been failing AA at 4.07:1 was found. Change a colour
+   there, not here. */
+@import "@origin89/brand/tokens/tailwind.css";
+
+/* What stays local is what is not a design token. The hero sky is a scene
+   rather than a state, and the three faces are this site's typography rather
+   than the system's. Anything that is a measurement gets the mono face, so a
+   number never reads as prose. */
+@theme {
+  --color-content-sky: #111021;
+
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-michroma), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-page);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Mobile has no fixed header; keep only a small breathing gap there. */
+  [id] {
+    scroll-margin-top: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    /* Every desktop anchor jump lands under the fixed header otherwise. */
+    [id] {
+      scroll-margin-top: 6rem;
+    }
+  }
+
+  ::selection {
+    background-color: var(--color-action);
+    color: var(--color-on-fill);
+  }
+
+  /* Achromatic, and deliberately not the action colour. The ring used to be
+     brand green drawn around a brand green button, so the indicator was
+     invisible on the one control that most needs it. White is 19.9:1 against
+     the page and cannot collide with whatever it is ringing. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* One optical voice for every major heading. Size and line-height still belong
+   to each composition; weight and width-feel do not change between sections. */
+@utility headline {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+
+/* The P-89 structure plate. Not a lens: a solid field, a thin white rim, a tight
+   corner, and one faint sheen along the top edge — the way stamped steel answers
+   a headlight.
+
+   This was glass for one afternoon, and glass was wrong twice over. It lightened
+   the fill: white specular highlights over a blue-violet navy land near #6b7fc4,
+   which reads periwinkle rather than navy, and the hero sky behind it is #111021
+   with saturate() on the backdrop boosting that further — three things leaning
+   the same way. Rendered side by side against the real band, only the solid
+   field read as the plate. It also hid the object: the product is named after
+   this plate, and a refracting lens is not one.
+
+   Green was wrong before that, for a different reason. It was the same hex as
+   the healthy state, so a call to action and "the site is fine" competed for the
+   same glance, and both sit on the arc that red-green colour blindness
+   collapses — nominal and alarm are about 13 apart for a deuteranope.
+
+   The legend is white at 8.30:1 on the fill. The rim carries the component
+   boundary, because the fill is 2.40:1 against its own ground and cannot. That
+   makes the rim a safety element rather than styling: a control whose edge
+   disappears is a control nobody presses. */
+.plate {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-on-fill) 85%, transparent);
+  border-radius: 0.375rem;
+  background-color: var(--color-action);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.34),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    transform 220ms ease;
+}
+
+.plate::before {
+  position: absolute;
+  z-index: 0;
+  inset: 1px;
+  border-radius: calc(0.375rem - 1px);
+  /* A highlight is the colour of the light falling on the plate, not of the
+     plate. One edge of it, and nothing else. */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 42%);
+  pointer-events: none;
+  content: '';
+}
+
+/* Lit, the way the plate answers a headlight. Nothing white is laid over it
+   here, so it stays a blue instead of lifting toward periwinkle. */
+.plate:hover,
+.plate:focus-visible {
+  background-color: var(--color-action-lit);
+  border-color: var(--color-on-fill);
+  transform: translateY(-1px);
+}
+
+.plate:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* The companion control uses smoked glass: enough density to stay legible over
+   the warm mobile landscape, but quieter than the plate, and still glass because it is not the plate. */
+.glass-secondary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(225, 234, 242, 0.22);
+  background:
+    linear-gradient(145deg, rgba(31, 38, 47, 0.76), rgba(8, 11, 15, 0.68));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.38),
+    0 10px 30px rgba(0, 0, 0, 0.28),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.glass-secondary::before {
+  position: absolute;
+  z-index: 0;
+  inset: 1px;
+  border-radius: calc(0.75rem - 1px);
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.1), transparent 38% 72%, rgba(127, 176, 212, 0.06)),
+    radial-gradient(65% 100% at 18% 0%, rgba(230, 244, 255, 0.12), transparent 62%);
+  pointer-events: none;
+  content: '';
+}
+
+.glass-secondary:hover,
+.glass-secondary:focus-visible {
+  border-color: rgba(225, 234, 242, 0.4);
+  background-color: rgba(18, 24, 31, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.34),
+    0 14px 36px rgba(0, 0, 0, 0.34),
+    0 3px 7px rgba(0, 0, 0, 0.32);
+  transform: translateY(-1px);
+}
+
+.glass-secondary:active {
+  transform: translateY(0) scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate,
+  .glass-secondary {
+    transition: none;
+  }
+}
+
+/* The phone cycles three screens: the lock screen, what it is reading now, and
+   where the watts are going. Only the phone moves. An earlier version rotated
+   the headline too and it cost the page its best sentence, so nothing above the
+   fold animates any more. */
+@keyframes o89-screen {
+  0%,
+  1% {
+    opacity: 0;
+  }
+  3%,
+  30% {
+    opacity: 1;
+  }
+  33%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The desktop scroll acts animate up from hidden, and "hidden" lives here rather
+   than in the markup for one reason: a phone, a visitor with JavaScript off, or
+   somebody who asks for reduced motion has to get the finished drawing and not
+   an empty column. The inline script sets data-motion only for desktop motion,
+   so none of this applies otherwise and the page renders as written.
+
+   The one exception is the pulses travelling along the wires in the gear act.
+   They carry no information on their own, so they keep an opacity attribute and
+   simply never appear without JavaScript. */
+@media (min-width: 1024px) and (min-height: 800px) {
+  [data-motion] [data-act-body],
+  [data-motion] [data-alone-phone],
+  [data-motion] [data-alone-link],
+  [data-motion] [data-alone-cut],
+  [data-motion] [data-alone-entry],
+  [data-motion] [data-alone-note],
+  [data-motion] [data-gear-wire],
+  [data-motion] [data-gear-chip],
+  [data-motion] [data-health-panel],
+  [data-motion] [data-health-verdict],
+  [data-motion] [data-health-row],
+  [data-motion] [data-open-line],
+  [data-motion] [data-open-caret],
+  [data-motion] [data-open-file] {
+    opacity: 0;
+  }
+}
+
+@layer components {
+  /* Every screen in the same grid cell, so the phone is as tall as the tallest
+     one and nothing resizes as they swap. */
+  .o89-screens {
+    display: grid;
+  }
+
+  .o89-screens > * {
+    grid-area: 1 / 1;
+  }
+
+  .o89-screen {
+    opacity: 0;
+    animation: o89-screen 24s infinite;
+  }
+
+  .o89-screen:nth-child(2) {
+    animation-delay: 8s;
+  }
+
+  .o89-screen:nth-child(3) {
+    animation-delay: 16s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .o89-screen {
+      animation: none;
+      opacity: 0;
+    }
+
+    .o89-screen:first-child {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+---
+// The MTQ structure plate that names a bridge. The camp road crosses P-89, and
+// that is where Origin 89 got its name, so this is the mark rather than a logo
+// somebody drew.
+
+interface Props {
+  label?: string;
+  class?: string;
+}
+const { label = "P-89", class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center justify-center rounded-[0.07em] border-[0.045em] border-white/85 bg-mtq-blue px-[0.34em] py-[0.16em] leading-none font-semibold tracking-[0.02em] whitespace-nowrap text-white tabular-nums',
+    className,
+  ]}
+  role="img"
+  aria-label={`Structure plate ${label}`}
+>
+  {label}
+</span>

@@ -1,0 +1,54 @@
+---
+import { catalogue } from "../../src/react/lib/catalogue";
+
+interface Props {
+  direction: "journal" | "desk" | "assembly";
+  site?: "cottage" | "mining" | "telecom";
+}
+const { direction, site = "cottage" } = Astro.props;
+const _nav = [
+  ["Products", "/next/system/"],
+  ["Equipment", "/next/equipment/"],
+  ["Open source", "/next/open/"],
+];
+const exampleModels = [
+  "SmartSolar MPPT 100/30",
+  "EG4-LL 48V 100Ah (server rack)",
+  "Tracer 4215BN",
+  "SmartSolar MPPT 75/15",
+];
+const _examples = exampleModels.flatMap((model) => {
+  const entry = catalogue.find((e) => e.model === model);
+  return entry ? [entry] : [];
+});
+---
+{direction==='journal'?<SiteJournal site={site} assets={{...conceptArt,logo:art.logoBlue,plate:art.plate}} client:load/>:<div class:list={['website-concept',`web-${direction}`]}>
+  <header class="concept-header">
+    <a class="concept-logo" href="/concepts/" target="_top" aria-label="Origin89 concept comparison"><img src={direction==='assembly'||direction==='desk'?art.logoWhite:art.logoBlue} alt="Origin89" width="186" height="32"/></a>
+    <nav aria-label="Website navigation">{nav.map(([title,href])=><a href={href} target="_top">{title}</a>)}</nav>
+    <a class="nav-cta" href="/next/plan/" target="_top">Tell us about your site <span>↗</span></a>
+    <details class="concept-menu"><summary>Menu <span>+</span></summary><nav aria-label="Mobile website navigation">{nav.map(([title,href])=><a href={href} target="_top">{title}</a>)}<a href="/next/plan/" target="_top">Tell us about your site ↗</a></nav></details>
+    {direction==='desk'&&<div class="rail-bottom"><span class="micro">01 — YOUR EQUIPMENT</span><p>Built for the way<br/>real sites grow.</p><span class="rail-coordinate">ORIGIN89 / QUÉBEC</span></div>}
+  </header>
+  <main id="main">
+  {direction==='desk'&&<>
+    <section class="desk-opening"><div class="desk-topline"><span class="micro">YOUR SITE / CONNECTED PIECE BY PIECE</span><span class="micro">ORIGIN89 — 01</span></div><div class="desk-intro"><h1>Different brands.<br/>One place to understand them.</h1><p>You built your setup around what worked and what you could afford. Start there.</p></div>
+      <div class="desk-workspace"><section class="equipment-ledger"><div class="ledger-heading"><h2>What’s at your site?</h2><span class="micro">EQUIPMENT RESEARCH</span></div><label class="ledger-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Find a make or model" aria-label="Search equipment research examples" data-equipment-search/></label><div class="ledger-labels"><span>MAKE / MODEL</span><span>STATUS</span></div><div data-equipment-rows>{examples.map(e=><a class="ledger-row" href={`/next/equipment/?q=${encodeURIComponent(e.model)}`} target="_top" data-model={e.model.toLowerCase()}><span><strong>{e.model}</strong><small>{e.family}</small></span><span>Research <b>↗</b></span></a>)}</div><p class="ledger-empty" hidden>No matching example. <a href="/next/equipment/" target="_top">Search the full catalogue ↗</a></p><div class="ledger-total"><strong>{counts.entries.toLocaleString('en')}</strong><p>catalogue entries to explore<br/><small>Research coverage. Support is verified model by model.</small></p></div><a class="underlined-action" href="/next/equipment/" target="_top">Browse the full catalogue <span>↗</span></a></section>
+      <div class="desk-app"><div class="desk-app-title"><span class="micro">THE PAYOFF / YOUR SITE, EXPLAINED</span><h2>From readings<br/>to a useful next step.</h2></div><BuddyApp theme="desk" scene="energy" id="desk-site"/><span class="scene-footnote">Origin89 Offgrid with Buddy · Sample data</span></div></div>
+    </section>
+    <section class="desk-principles"><span class="micro">ROOM TO GROW</span><div><h2>One useful connection<br/>is a good place to start.</h2><p>Add supported equipment as your needs change. The controller connects the site; the app brings it into view; Buddy helps make sense of it.</p></div><a href="/next/system/" target="_top">Meet the products <span>↗</span></a></section>
+  </>}
+  {direction==='assembly'&&<>
+    <section class="assembly-opening"><div class="assembly-title"><span class="micro">OPEN CONTROL / REMOTE & OFF-GRID</span><h1>Your site.<br/>Your system.</h1><div><p>Connect the equipment that makes sense for your site. Keep the freedom to understand, adapt and maintain the system around it.</p><a class="assembly-link" href="/next/open/" target="_top">Open from the board up <span>↗</span></a></div></div>
+      <div class="assembly-specimen"><div class="specimen-heading"><span>01 / THE CONTROLLER</span><span>HARDWARE — EXPOSED VIEW</span></div><div class="specimen-body"><div class="specimen-note"><span class="spec-number">01</span><h2>The connection<br/>at your site.</h2><p>One local controller.<br/>Equipment from many makers.</p><a href="/next/controller/" target="_top">Inside the controller ↗</a></div><img src={art.board} alt="The real Origin89 controller PCB, rendered from its editable CAD model" width="620" height="500"/><div class="specimen-legend"><span>LOCAL EQUIPMENT</span><p>Solar<br/>Batteries<br/>Generators<br/>Sensors</p><span>CAD-DERIVED CONCEPT</span></div></div></div>
+      <div class="assembly-firmware"><span class="micro">02 / FIRMWARE</span><h2>Understand what’s running.<br/>Keep control at the site.</h2><p>Open firmware is part of the ownership story. Local control gives the site a foundation beyond a cloud connection.</p></div>
+    </section>
+    <section class="assembly-app-section"><div class="assembly-app-copy"><span class="micro">03 / APPS + BUDDY</span><h2>Open systems.<br/>Clear answers.</h2><p>Buddy makes the technical parts easier to understand, from a changing power balance to the maintenance your battery needs.</p><div class="assembly-care"><span class="micro">EQUIPMENT-SPECIFIC GUIDANCE</span><p>A flooded lead-acid battery and a sealed battery need different care. The advice should know the difference.</p></div><a class="assembly-link" href="/concepts/app/assembly/" target="_top">Explore the app <span>↗</span></a></div><div class="assembly-app-visual"><BuddyApp theme="assembly" scene="care" id="assembly-site"/><span class="scene-footnote">Origin89 Offgrid / App concept / Sample site</span></div></section>
+  </>}
+  </main>
+  <footer class="concept-footer"><div><img src={direction==='assembly'?art.logoWhite:art.logoBlue} alt="Origin89" width="180" height="31"/><p>Open hardware. Open firmware. Open apps.</p></div><nav aria-label="Product links"><a href="/next/controller/" target="_top">Controller ↗</a><a href="/next/offgrid/" target="_top">Offgrid app ↗</a><a href="/next/buddy/" target="_top">Buddy ↗</a></nav><p class="concept-disclosure">Design concepts · Products in development. App readings are illustrative. Catalogue entries are research, not confirmed support. Full-stack source releases and licences are being prepared.</p><a href="/concepts/" target="_top">Compare the concepts ↗</a></footer>
+</div>}
+<script>
+  const search=document.querySelector<HTMLInputElement>('[data-equipment-search]');
+  search?.addEventListener('input',()=>{let visible=0;document.querySelectorAll<HTMLElement>('[data-model]').forEach(row=>{row.hidden=!row.dataset.model!.includes(search.value.trim().toLowerCase());if(!row.hidden)visible++;});const empty=document.querySelector<HTMLElement>('.ledger-empty');if(empty)empty.hidden=visible!==0;});
+</script>

@@ -1,0 +1,200 @@
+---
+// A green checkmark says very little about a power system. This scene instead
+// shows the question an owner actually asks at the end of the day: what the site
+// consumed, where the energy came from and whether the balance is positive.
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+const { siteEnergy } = copy;
+---
+
+<div class="w-full max-w-[28rem]">
+  <div
+    data-health-panel
+    class="overflow-hidden rounded-[1.4rem] border border-line-strong bg-linear-to-b from-surface-raised to-surface shadow-2xl shadow-black/30"
+    role="img"
+    aria-label={`${siteEnergy.inputLabel}: ${siteEnergy.inputValue}, ${siteEnergy.consumptionLabel}: ${siteEnergy.consumptionValue}, ${siteEnergy.balanceLabel}: ${siteEnergy.balanceValue}.`}
+  >
+    <div class="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5">
+      <p class="font-mono text-[0.65rem] tracking-[0.14em] text-faint uppercase">
+        {siteEnergy.label}
+      </p>
+      <p class="flex shrink-0 items-center gap-2 font-mono text-[0.62rem] tracking-[0.12em] text-muted uppercase">
+        <span class="size-1.5 rounded-full bg-action-lit"></span>
+        {siteEnergy.connection}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 border-b border-line" data-health-stats>
+      <div class="border-r border-line px-5 py-4">
+        <p class="font-mono text-[0.61rem] tracking-[0.12em] text-faint uppercase">
+          {siteEnergy.inputLabel}
+        </p>
+        <p data-health-count class="mt-1.5 text-[1.65rem] leading-none font-medium tracking-[-0.035em] text-fg tabular-nums">
+          {siteEnergy.inputValue}
+        </p>
+        <p class="mt-2 font-mono text-[0.59rem] text-faint">
+          <span class="text-nominal">{siteEnergy.solarValue}</span> solar
+          <span class="mx-1 text-line-strong">·</span>
+          <span class="text-warning">{siteEnergy.generatorValue}</span> gen
+        </p>
+      </div>
+
+      <div class="px-5 py-4">
+        <p class="font-mono text-[0.61rem] tracking-[0.12em] text-faint uppercase">
+          {siteEnergy.consumptionLabel}
+        </p>
+        <p data-health-count class="mt-1.5 text-[1.65rem] leading-none font-medium tracking-[-0.035em] text-fg tabular-nums">
+          {siteEnergy.consumptionValue}
+        </p>
+        <p class="mt-2 flex items-center gap-1.5 font-mono text-[0.59rem] text-nominal">
+          <span class="inline-block size-1 rounded-full bg-nominal"></span>
+          {siteEnergy.balanceLabel}
+          <span data-health-count>{siteEnergy.balanceValue}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="px-4 pt-4 pb-3">
+      <div class="mb-1 flex items-center justify-between px-1">
+        <p class="font-mono text-[0.62rem] tracking-[0.11em] text-faint uppercase">
+          {siteEnergy.chartLabel}
+        </p>
+        <p class="font-mono text-[0.58rem] tracking-[0.1em] text-faint uppercase">kW</p>
+      </div>
+
+      <svg
+        viewBox="0 0 400 210"
+        class="block h-auto w-full overflow-visible"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="health-solar-fill" x1="0" y1="18" x2="0" y2="178" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--color-nominal)" stop-opacity="0.34"></stop>
+            <stop offset="1" stop-color="var(--color-nominal)" stop-opacity="0"></stop>
+          </linearGradient>
+          <linearGradient id="health-generator-fill" x1="0" y1="106" x2="0" y2="178" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--color-warning)" stop-opacity="0.25"></stop>
+            <stop offset="1" stop-color="var(--color-warning)" stop-opacity="0"></stop>
+          </linearGradient>
+          <filter id="health-line-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.5" result="blur"></feGaussianBlur>
+            <feMerge>
+              <feMergeNode in="blur"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+          <clipPath id="health-chart-reveal">
+            <rect data-health-clip x="0" y="0" width="400" height="184"></rect>
+          </clipPath>
+        </defs>
+
+        <!-- The low-contrast grid gives the curves scale without turning the
+             product scene into an analytics dashboard screenshot. -->
+        <g stroke="currentColor" class="text-line">
+          <path d="M24 18H384" opacity="0.38"></path>
+          <path d="M24 58H384" opacity="0.28"></path>
+          <path d="M24 98H384" opacity="0.28"></path>
+          <path d="M24 138H384" opacity="0.28"></path>
+          <path d="M24 178H384" opacity="0.45"></path>
+          <path d="M24 18V178" opacity="0.22"></path>
+          <path d="M114 18V178" opacity="0.18"></path>
+          <path d="M204 18V178" opacity="0.18"></path>
+          <path d="M294 18V178" opacity="0.18"></path>
+          <path d="M384 18V178" opacity="0.22"></path>
+        </g>
+
+        <g clip-path="url(#health-chart-reveal)">
+          <!-- Generator ran briefly before dawn. It is an area rather than a
+               second smooth bell, so the chart reads as an engine cycle. -->
+          <path
+            d="M24 178H78V137C78 126 84 120 94 120H112C123 120 130 127 130 138V178H384Z"
+            fill="url(#health-generator-fill)"
+          ></path>
+          <path
+            data-health-line
+            pathLength="1"
+            stroke-dasharray="1"
+            d="M24 178H78V137C78 126 84 120 94 120H112C123 120 130 127 130 138V178H384"
+            stroke="var(--color-warning)"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+
+          <!-- Solar is deliberately the visual mass: most of the day's input
+               should be readable before someone reaches the legend. -->
+          <path
+            d="M24 178C79 178 95 175 113 148C133 116 150 61 181 35C208 12 235 35 257 80C278 122 292 160 318 173C335 179 358 178 384 178V184H24Z"
+            fill="url(#health-solar-fill)"
+          ></path>
+          <path
+            data-health-line
+            pathLength="1"
+            stroke-dasharray="1"
+            d="M24 178C79 178 95 175 113 148C133 116 150 61 181 35C208 12 235 35 257 80C278 122 292 160 318 173C335 179 358 178 384 178"
+            stroke="#36b474"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            filter="url(#health-line-glow)"
+          ></path>
+
+          <!-- Load is the comparison line. Small irregular peaks make it feel
+               observed rather than like a decorative sine wave. -->
+          <path
+            data-health-line
+            pathLength="1"
+            stroke-dasharray="1"
+            d="M24 137C43 132 59 143 78 137C97 130 112 128 130 137C147 145 165 143 181 129C197 116 215 133 233 139C253 146 274 132 291 119C309 106 325 131 342 125C358 119 371 132 384 124"
+            stroke="var(--color-info)"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            filter="url(#health-line-glow)"
+          ></path>
+
+          <g data-health-point>
+            <circle cx="204" cy="23" r="7" fill="#36b474" fill-opacity="0.12"></circle>
+            <circle cx="204" cy="23" r="2.5" fill="#36b474"></circle>
+          </g>
+          <g data-health-point>
+            <circle cx="103" cy="120" r="6" fill="var(--color-warning)" fill-opacity="0.12"></circle>
+            <circle cx="103" cy="120" r="2.3" fill="var(--color-warning)"></circle>
+          </g>
+          <g data-health-point>
+            <circle cx="291" cy="119" r="6" fill="var(--color-info)" fill-opacity="0.12"></circle>
+            <circle cx="291" cy="119" r="2.3" fill="var(--color-info)"></circle>
+          </g>
+        </g>
+
+        <g class="fill-faint font-mono text-[9px] tracking-[0.08em]">
+          <text x="24" y="201" text-anchor="middle">00</text>
+          <text x="114" y="201" text-anchor="middle">06</text>
+          <text x="204" y="201" text-anchor="middle">12</text>
+          <text x="294" y="201" text-anchor="middle">18</text>
+          <text x="384" y="201" text-anchor="middle">24</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line bg-page/30 px-5 py-3">
+      <p data-health-legend class="flex items-center gap-2 font-mono text-[0.6rem] text-muted">
+        <span class="h-px w-4 bg-nominal"></span>
+        {siteEnergy.solarLabel}
+      </p>
+      <p data-health-legend class="flex items-center gap-2 font-mono text-[0.6rem] text-muted">
+        <span class="h-px w-4 bg-warning"></span>
+        {siteEnergy.generatorLabel}
+      </p>
+      <p data-health-legend class="flex items-center gap-2 font-mono text-[0.6rem] text-muted">
+        <span class="h-px w-4 bg-info"></span>
+        {siteEnergy.consumptionLabel}
+      </p>
+      <p class="ml-auto font-mono text-[0.58rem] text-faint">{siteEnergy.checked}</p>
+    </div>
+  </div>
+</div>

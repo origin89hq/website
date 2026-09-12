@@ -1,0 +1,115 @@
+---
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+  class?: string;
+  /** The desktop presentation is a physical phone. On an actual phone the same
+   *  chrome creates a phone-inside-a-phone, including a second clock. */
+  chrome?: boolean;
+}
+const { copy, class: className, chrome = true } = Astro.props;
+const { phone } = copy;
+---
+
+<div class:list={['w-full max-w-[19rem]', className]}>
+  <div
+    class:list={[
+      'relative bg-[#0a0d11] shadow-2xl shadow-black/70',
+      chrome
+        ? 'rounded-[2.7rem] border border-white/12 p-2.5'
+        : 'overflow-hidden rounded-[1.6rem] border border-white/10',
+    ]}
+  >
+    <!-- The wallpaper is the same dusk the hero sits in, so the phone reads as
+         being at the installation rather than pasted on from a stock render. -->
+    <div
+      class:list={[
+        'relative aspect-[9/19.5] overflow-hidden bg-[radial-gradient(82%_58%_at_74%_12%,rgba(72,108,190,0.28),transparent_68%),radial-gradient(74%_62%_at_22%_86%,rgba(39,76,145,0.24),transparent_72%),linear-gradient(#0c121d,#05070b)]',
+        chrome ? 'rounded-[2.15rem]' : 'rounded-[1.55rem]',
+      ]}
+    >
+      {
+        chrome && (
+          <div class="absolute top-2.5 left-1/2 z-10 h-[1.15rem] w-[4.6rem] -translate-x-1/2 rounded-full bg-black" />
+        )
+      }
+
+      {
+        chrome && (
+          <div
+            data-lock-status
+            class="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-6 pt-[0.7rem] text-[0.6rem] font-medium text-white/90"
+          >
+            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 fill-none stroke-current" stroke-width="1.9">
+              <path d="M8.2 17h7.6M10.2 20h3.6M6.7 14.8V10a5.3 5.3 0 0 1 .4-2M9.1 5.4A5.3 5.3 0 0 1 17.3 10v4.8l1.7 2.1H8.8M3 3l18 18" />
+            </svg>
+            <span class="flex items-center gap-1.5" aria-hidden="true">
+              <span class="font-sans font-semibold">SOS</span>
+              <svg viewBox="0 0 20 14" class="h-2.5 w-3.5 fill-none stroke-current" stroke-width="1.7">
+                <path d="M2 4.2a12 12 0 0 1 16 0M5 7.3a7.6 7.6 0 0 1 10 0M8.2 10.4a2.8 2.8 0 0 1 3.6 0" stroke-linecap="round" />
+                <circle cx="10" cy="12.1" r="0.8" class="fill-current stroke-none" />
+              </svg>
+              <span class="rounded-[0.32rem] bg-white/90 px-1 py-[0.1rem] font-mono text-[0.48rem] leading-none text-black">
+                77
+              </span>
+            </span>
+          </div>
+        )
+      }
+
+      {
+        chrome && (
+          <div
+            data-phone-status
+            class="invisible absolute inset-x-0 top-0 z-20 flex items-center justify-between px-6 pt-[0.7rem] font-mono text-[0.6rem] text-white/85 opacity-0"
+          >
+            <span>{phone.lockTime.replace(' h ', ':')}</span>
+            <span class="flex items-center gap-1" aria-hidden="true">
+              <svg viewBox="0 0 18 12" class="h-2.5 w-4 fill-white/85">
+                <rect x="0" y="8" width="3" height="4" rx="0.6" />
+                <rect x="5" y="5.5" width="3" height="6.5" rx="0.6" />
+                <rect x="10" y="3" width="3" height="9" rx="0.6" class="fill-white/35" />
+                <rect x="15" y="0.5" width="3" height="11.5" rx="0.6" class="fill-white/35" />
+              </svg>
+              <svg viewBox="0 0 24 12" class="h-2.5 w-4 fill-white/85">
+                <rect
+                  x="0.5"
+                  y="1.5"
+                  width="18"
+                  height="9"
+                  rx="2.5"
+                  fill="none"
+                  class="stroke-white/50"
+                  stroke-width="1.2"
+                />
+                <rect x="2.2" y="3.2" width="11" height="5.6" rx="1.2" />
+                <rect x="20.5" y="4.2" width="2" height="3.6" rx="0.9" class="fill-white/50" />
+              </svg>
+            </span>
+          </div>
+        )
+      }
+
+      <div class:list={['grid h-full [&>*]:col-start-1 [&>*]:row-start-1', chrome && 'pt-8']}>
+        <slot />
+      </div>
+
+      <!-- A short-lived edge treatment while mobile screens page upward. The
+           blur belongs to the glass, not to either screen, so the last page can
+           leave cleanly into the wallpaper instead of exposing a hard seam. -->
+      <div
+        data-phone-glass
+        class="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-24 bg-[linear-gradient(to_top,rgba(7,10,15,0.82),rgba(18,28,45,0.32)_48%,transparent)] opacity-0 backdrop-blur-[2px]"
+        aria-hidden="true"
+      >
+      </div>
+
+      {
+        chrome && (
+          <div class="absolute bottom-1.5 left-1/2 z-10 h-1 w-28 -translate-x-1/2 rounded-full bg-white/35" />
+        )
+      }
+    </div>
+  </div>
+</div>

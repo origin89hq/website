@@ -1,0 +1,30 @@
+---
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+const { privacy } = copy;
+---
+
+<section class="privacy-continuity relative overflow-hidden">
+  <div class="relative mx-auto max-w-4xl px-6 pt-28 pb-14 text-center lg:pt-40 lg:pb-20">
+    <p class="eyebrow">{privacy.kicker}</p>
+    <p
+      class="headline mt-6 text-[clamp(1.7rem,3.8vw,2.7rem)] leading-[1.12] text-balance"
+    >
+      {privacy.title}
+    </p>
+    <p class="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted text-pretty">
+      {privacy.body}
+    </p>
+  </div>
+</section>
+
+<style>
+  .privacy-continuity {
+    background: transparent;
+  }
+
+</style>

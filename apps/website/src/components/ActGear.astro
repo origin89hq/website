@@ -1,0 +1,206 @@
+---
+// Power and industrial brands wired into one box. The pulses run from the gear
+// inward and never outward: this drawing promises that the controller can bring
+// those signals together, not that every item shown is safe to command without
+// an application-specific interlock.
+//
+// All ten established solar and generator marks stay as compatibility proof.
+// Four industrial manufacturers extend the picture to heater/load control,
+// valves, drives and instrumentation without taking anything away.
+import type { Copy } from "../i18n/copy";
+import { BRANDS, INDUSTRIAL_BRANDS, LOGOS } from "../lib/brands";
+
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+
+const ITEMS = [...BRANDS, ...INDUSTRIAL_BRANDS].map((brand) => ({
+  ...brand,
+  logo: LOGOS[brand.key],
+}));
+
+// Bus names stay off the chips: at this size the eye should first recognize a
+// system or a physical device. `bus` remains on every item for a future detailed
+// compatibility view where protocol-level qualification belongs.
+const CHIP_W = 128;
+const CHIP_H = 40;
+const GAP = 10;
+
+const PITCH = CHIP_H + GAP;
+
+// Two columns, however many items there are. A chip, wire and pulse all derive
+// from the same node, so changing the mix cannot leave part of the drawing
+// behind.
+const diagram = (items: typeof ITEMS) => {
+  const rows = Array.from({ length: Math.ceil(items.length / 2) }, (_, i) => i * PITCH);
+  const columnH = rows.length * PITCH - GAP;
+
+  // The box is centred against the columns, not against a guessed number. A
+  // chip landing at the same height is fine — it sits at the far edge and its
+  // wire simply runs straight in.
+  const box = { x: 182, y: (columnH - 56) / 2, w: 56, h: 56 };
+  const nodes = items.map((item, i) => {
+    const left = i % 2 === 0;
+    const x = left ? 2 : 290;
+    const y = rows[Math.floor(i / 2)] ?? 0;
+    const from = { x: left ? x + CHIP_W : x, y: y + CHIP_H / 2 };
+    const to = { x: left ? box.x : box.x + box.w, y: box.y + box.h / 2 };
+    return { ...item, x, y, from, to, dx: to.x - from.x, dy: to.y - from.y };
+  });
+
+  // Ten units of headroom for the fade-in, six to spare.
+  return { box, nodes, canvasH: columnH + 16 };
+};
+
+const _DIAGRAMS = [
+  { key: "full", ...diagram(ITEMS) },
+  // On a short desktop, the top solar row is the least useful repetition. The
+  // full drawing remains in the DOM and is restored as soon as height permits.
+  { key: "compact", ...diagram(ITEMS.slice(2)) },
+] as const;
+---
+
+<div class="flex w-full max-w-104 flex-col items-center gap-5">
+  <!-- Hidden from screen readers on purpose. The drawing says nothing the
+       headline and the paragraph beside it do not already say. -->
+  <!-- The canvas carries headroom below the last row. The chips fade in from ten
+       units under their resting place, and at a viewBox that ended exactly at
+       the last row the bottom two were clipped in half for that whole tween. -->
+  {
+    DIAGRAMS.map(({ key, box, nodes, canvasH }) => (
+      <svg
+        viewBox={`0 0 420 ${canvasH}`}
+        class="h-auto w-full"
+        data-gear-diagram={key}
+        aria-hidden="true"
+      >
+        <defs>
+          <!-- Native SVG colour conversion is reliable on iOS Safari, where a
+               CSS filter on an external image can be ignored. The matrix sets
+               every visible pixel to white while preserving its alpha edge. -->
+          <filter
+            id={`o89-logo-monochrome-${key}`}
+            color-interpolation-filters="sRGB"
+          >
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 1 0"
+            />
+          </filter>
+          <filter
+            id={`o89-logo-grayscale-${key}`}
+            color-interpolation-filters="sRGB"
+          >
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+        </defs>
+
+        {nodes.map((node) => (
+          <path
+            data-gear-wire
+            d={`M${node.from.x} ${node.from.y} L${node.to.x} ${node.to.y}`}
+            class="stroke-line-strong"
+            stroke-width="1.2"
+            fill="none"
+          />
+        ))}
+
+        <image
+          href={origin89Badge.src}
+          x={box.x}
+          y={box.y}
+          width={box.w}
+          height={box.h}
+          preserveAspectRatio="xMidYMid meet"
+        />
+
+        {nodes.map((node) => (
+          <g data-gear-chip>
+            <rect
+              x={node.x}
+              y={node.y}
+              width={CHIP_W}
+              height={CHIP_H}
+              rx="7"
+              class="fill-surface stroke-line-strong"
+              stroke-width="1.2"
+            />
+            {node.logo ? (
+              // Transparent marks use the white silhouette matrix. Danfoss has
+              // an opaque coloured badge behind white lettering, so flattening
+              // every opaque pixel would erase the word; grayscale preserves
+              // that internal contrast while still removing the brand colour.
+              //
+              // `xMidYMid meet` centres and never stretches. Fitting marks of
+              // different proportions into one box is the single thing the
+              // trademark note in src/assets/logos/README.md asks us not to do.
+              <image
+                href={node.logo}
+                x={node.x + 12}
+                y={node.y + 7}
+                width={CHIP_W - 24}
+                height="26"
+                preserveAspectRatio="xMidYMid meet"
+                filter={`url(#o89-logo-${node.key === 'danfoss' ? 'grayscale' : 'monochrome'}-${key})`}
+                opacity={node.key === 'danfoss' ? '0.82' : '0.72'}
+              />
+            ) : (
+              <text
+                x={node.x + CHIP_W / 2}
+                y={node.y + 27}
+                text-anchor="middle"
+                class="fill-fg/70 text-[12px]"
+              >
+                {node.name}
+              </text>
+            )}
+          </g>
+        ))}
+
+        {nodes.map((node) => (
+          <circle
+            data-gear-pulse
+            data-dx={node.dx}
+            data-dy={node.dy}
+            cx={node.from.x}
+            cy={node.from.y}
+            r="2.6"
+            class="fill-faint"
+            opacity="0"
+          />
+        ))}
+      </svg>
+    ))
+  }
+
+  <p class="flex items-baseline gap-2.5">
+    <span data-gear-count class="font-mono text-[2.2rem] leading-none text-warning tabular-nums"
+      >{CATALOGUED_MODELS.toLocaleString('en-CA')}+</span
+    >
+    <span class="eyebrow">{copy.actLabels.dialects}</span>
+  </p>
+
+  <p class="-mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1 text-center font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">
+    {copy.actLabels.markets.map((market) => <span>{market}</span>)}
+  </p>
+</div>
+
+<style>
+  [data-gear-diagram='compact'] {
+    display: none;
+  }
+
+  @media (min-width: 1024px) and (max-height: 799px) {
+    [data-gear-diagram='full'] {
+      display: none;
+    }
+
+    [data-gear-diagram='compact'] {
+      display: block;
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+const { meet } = copy;
+---
+
+<section id="controller" class="meet-continuity relative">
+  <div class="relative mx-auto max-w-6xl px-6 py-28 lg:py-40">
+    <div class="mx-auto max-w-4xl text-center">
+      <p class="eyebrow">{meet.kicker}</p>
+      <h2
+        class="headline mt-6 text-[clamp(2.7rem,7vw,4.75rem)] leading-[0.98] text-balance"
+      >
+        {meet.title}
+      </h2>
+      <p class="mt-7 text-[1.22rem] leading-relaxed text-muted text-pretty">
+        <BrandText text={meet.body} />
+      </p>
+    </div>
+
+    <ControllerReveal meet={meet} />
+
+    <!-- What the ports actually are, from docs/CONTROLLER-V1.md's interface
+         map -- numbers come from the design doc and the code's named caps,
+         never invented here -->
+    <dl class="mx-auto mt-4 grid max-w-4xl gap-x-10 gap-y-7 text-left sm:grid-cols-2 lg:mt-6 lg:grid-cols-3">
+      {
+        meet.specs.map((spec) => (
+          <div>
+            <dt class="flex items-baseline gap-2.5 font-mono text-[0.7rem] tracking-[0.18em] text-fg uppercase">
+              <span>{spec.label}</span>
+              {
+                spec.badge && (
+                  <span class="rounded-full border border-line-strong px-2 py-0.5 text-[0.58rem] tracking-[0.08em] text-warning tabular-nums">
+                    {spec.badge}
+                  </span>
+                )
+              }
+            </dt>
+            <dd class="mt-1.5 text-sm leading-relaxed text-muted text-pretty">{spec.detail}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p class="mx-auto mt-8 max-w-4xl text-center font-mono text-[0.62rem] tracking-[0.08em] text-faint">
+      {meet.specsNote}
+    </p>
+  </div>
+</section>
+
+<style>
+  .meet-continuity {
+    background: transparent;
+  }
+</style>

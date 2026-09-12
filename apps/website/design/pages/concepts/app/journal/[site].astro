@@ -1,0 +1,8 @@
+---
+import { journalSites } from "../../../../../src/react/lib/journal-sites";
+export function getStaticPaths() {
+  return journalSites.map((site) => ({ params: { site: site.id }, props: { site } }));
+}
+const { site } = Astro.props;
+---
+<Shell title={`${site.label} / Offgrid app`} direction="journal"><main id="main" class:list={['standalone-app',`standalone-${site.id}`]}><BuddyApp theme="journal" site={site.id} scene="overview" id={`app-${site.id}`}/><div class="app-review-note"><strong>Origin89 Offgrid + Buddy</strong><span>{site.label} · Interactive concept · Sample data</span><a href={`/concepts/journal/?site=${site.id}`} target="_top">See this site on the website ↗</a></div></main></Shell>

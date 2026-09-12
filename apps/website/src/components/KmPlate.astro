@@ -1,0 +1,38 @@
+---
+// The MTQ repère kilométrique: a green plate, 300 × 1000 mm, that tells you how
+// far you are from the road's point of origin. The site is at km 43, and the
+// plate is why the wire protocol crate is called km43.
+//
+// Digits stack, and the tenth carries a prime the way the real sign does: the
+// marker for 27,5 reads km / 2 / 7 / 5´.
+
+interface Props {
+  /** A tenth is written the Québec way, with a comma: "43,5". */
+  km: string;
+  class?: string;
+  /** Planted in the treeline rather than presented as a graphic. */
+  weathered?: boolean;
+}
+const { km, class: className, weathered = false } = Astro.props;
+
+const [whole, tenth] = km.split(",");
+const digits = [...(whole ?? "")];
+if (tenth) digits.push(`${tenth}´`);
+---
+
+<div
+  class:list={[
+    'flex flex-col items-center gap-[0.14em] rounded-[0.14em] border-[0.05em] border-white/85 px-[0.16em] py-[0.3em] leading-none text-white',
+    weathered ? 'bg-mtq-green shadow-lg shadow-black/50' : 'bg-mtq-green-lit',
+    className,
+  ]}
+  role="img"
+  aria-label={`Kilometre marker ${km}`}
+>
+  <span class="mb-[0.1em] text-[0.3em] font-medium tracking-tight">km</span>
+  {
+    digits.map((digit) => (
+      <span class="text-[0.62em] font-semibold tracking-[-0.04em] tabular-nums">{digit}</span>
+    ))
+  }
+</div>

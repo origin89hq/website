@@ -1,0 +1,64 @@
+---
+import type { Copy } from "../i18n/copy";
+
+// The four behaviours live in the hero now: it pins, and scrolling through it
+// opens one description at a time while the phone shows the matching screen.
+// A separate section repeated the hero's job with smaller type.
+//
+// Two sections were cut rather than rewritten. The comparison against the old
+// installation went because nobody at the end of a bush road buys a machine for
+// replacing another one. The abstract pull-quote about never depending on a
+// client went because saying that to a camp owner explains nothing; the hero
+// shows it instead, in a phone that reports rather than commands.
+//
+// Privacy sits between what it does and what it talks to on purpose. The hero
+// shows worldwide notifications while the offline scene says the link can
+// disappear; this section explains the boundary: control stays local and cloud
+// sync catches up when connectivity returns.
+//
+// The compatibility wall went the same way as those two, and for the same
+// reason: once the scroll acts drew all ten manufacturer logos, the page showed
+// the same ten marks twice, under a heading — "It reads what is already on your
+// wall" — that had become almost word for word the act's own paragraph. The nav
+// entry for it now points at the act instead of a section that no longer exists.
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+---
+
+<Base copy={copy}>
+  <Hero copy={copy} />
+  <div class="content-continuity">
+    <Acts copy={copy} />
+    <Meet copy={copy} />
+    <Privacy copy={copy} />
+    <Status copy={copy} />
+    <Faq copy={copy} />
+  </div>
+</Base>
+
+<style>
+  .content-continuity {
+    position: relative;
+    isolation: isolate;
+    background: var(--color-content-sky);
+  }
+
+  .content-continuity::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: clamp(-8rem, -10vw, -5rem);
+    right: 0;
+    left: 0;
+    height: clamp(5rem, 10vw, 8rem);
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent, var(--color-content-sky));
+  }
+
+  .content-continuity > * {
+    position: relative;
+    z-index: 1;
+  }
+</style>

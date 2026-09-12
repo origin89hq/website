@@ -1,0 +1,819 @@
+---
+import type { Copy } from "../i18n/copy";
+
+interface Props {
+  copy: Copy;
+}
+const { copy } = Astro.props;
+const { hero, walkthrough } = copy;
+const [_mobileIntro, ..._mobileSteps] = walkthrough.steps;
+---
+
+<section id="what-it-does" class="relative" data-hero>
+  <!-- Pinned. The content and phone hold while the four screens advance. The
+       landscape behind them moves continuously at several depths, so even the
+       reading space between screen transitions keeps a visible scroll response. -->
+  <div
+    data-pin
+    data-desktop-story
+    class="relative hidden min-h-svh items-center overflow-hidden lg:flex"
+  >
+    <ParallaxScene id="hero-desktop" />
+
+    <div
+      class="relative mx-auto grid w-full max-w-6xl gap-4 px-5 py-4 sm:gap-8 sm:px-6 sm:py-8 lg:grid-cols-[1.1fr_auto] lg:items-center lg:gap-16 lg:py-16 2xl:max-w-[min(82vw,110rem)] 2xl:grid-cols-[minmax(0,52rem)_auto] 2xl:justify-between 2xl:gap-24 2xl:px-8"
+    >
+      <div class="desktop-hero-copy text-center lg:text-left">
+        <p
+          class="eyebrow 2xl:text-[clamp(0.6875rem,0.38vw,0.8125rem)]"
+          data-hero-reveal
+        >
+          {hero.eyebrow}
+        </p>
+
+        <!-- The headline swaps too. Several statements land harder than one
+             statement plus several captions, and the first one rendered is what a
+             crawler reads, so it is a real h1 rather than a decorated div. -->
+        <div
+          class="o89-heads mt-3 grid sm:mt-5 [&>*]:col-start-1 [&>*]:row-start-1"
+          data-hero-reveal
+        >
+          {
+            walkthrough.steps.map((step, i) => (
+              <div class:list={['o89-head', i === 0 && 'is-on']} data-head={step.key}>
+                <h1 class="headline text-[clamp(1.7rem,7vw,2.35rem)] leading-[1.03] text-balance lg:text-[clamp(2rem,4.6vw,3.35rem)] 2xl:text-[clamp(3.35rem,2.1vw,4.25rem)]">
+                  {step.title}
+                </h1>
+                <p class="mx-auto mt-3 max-w-lg text-[clamp(0.86rem,3.6vw,1rem)] leading-[1.5] text-fg/80 text-pretty sm:mt-4 lg:mx-0 lg:mt-5 lg:text-[1.08rem] lg:leading-relaxed 2xl:max-w-2xl 2xl:text-[clamp(1.08rem,0.62vw,1.25rem)]">
+                  <BrandText text={step.body} />
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Where you are in the story. Also the fallback list when scripting is
+             off, which is why every title is in the markup. -->
+        <ol class="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:mt-5 lg:mt-9 lg:justify-start lg:gap-x-5">
+          {
+            walkthrough.steps.map((step, i) => (
+              <li
+                class="o89-tick"
+                data-step={step.key}
+                data-active={i === 0 ? '' : undefined}
+              >
+                <span class="font-mono text-[0.7rem] tracking-[0.2em] tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="sr-only">{step.title}</span>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div
+          class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:mt-6 lg:mt-8 lg:justify-start lg:gap-3"
+          data-hero-reveal
+        >
+          <a
+            href="#setup"
+            class="plate px-4 py-2.5 text-sm font-medium text-on-fill lg:px-5 lg:py-3 lg:text-base 2xl:px-6 2xl:py-3.5 2xl:text-[1.05rem]"
+          >
+            <span class="relative z-10">{hero.primary}</span>
+          </a>
+          <a
+            href="#act-gear"
+            class="glass-secondary rounded-xl px-4 py-2.5 text-sm font-medium text-fg lg:px-5 lg:py-3 lg:text-base 2xl:px-6 2xl:py-3.5 2xl:text-[1.05rem]"
+          >
+            <span class="relative z-10">
+              Meet <span class="font-display text-[0.78em] font-normal tracking-[0.04em] whitespace-nowrap">
+                Origin 89
+              </span>
+            </span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="lg:justify-self-end" data-hero-phone>
+        <PhoneFrame
+          copy={copy}
+          class="hero-phone-frame mx-auto lg:mx-0 lg:max-w-66 2xl:max-w-[clamp(16.5rem,9vw,20rem)]"
+        >
+          <ScreenLock copy={copy} active />
+          <ScreenFrost copy={copy} />
+          <ScreenReadings copy={copy} />
+          <ScreenSafety copy={copy} />
+        </PhoneFrame>
+      </div>
+    </div>
+
+    <div
+      class="pointer-events-none absolute bottom-[calc(99px+1.75rem)] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 text-faint"
+      aria-hidden="true"
+      data-hero-scroll-cue
+    >
+      <span class="font-mono text-[0.62rem] tracking-[0.18em] uppercase">Scroll</span>
+      <svg viewBox="0 0 64 38" class="h-auto w-7" fill="none">
+        <path d="m8 7 24 24L56 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Mobile leads with the promise in normal document flow. The first version
+       put that card at the bottom of a 100svh overlay; mobile previews and
+       browser chrome can disagree about how tall that unit is, leaving a large
+       phone on screen while the actual headline sits below the visible area.
+
+       One landscape now stays sticky behind both the introduction and the
+       proof, so its parallax does not begin late or restart at the phone. The
+       copy can always be read, even if JavaScript never starts; the enhancement
+       changes the landscape and phone screen as each claim arrives. -->
+  <div class="relative lg:hidden" data-mobile-story>
+    <div
+      class="sticky top-0 h-svh overflow-hidden"
+      data-mobile-scene-stage
+      aria-hidden="true"
+    >
+      <ParallaxScene id="hero-mobile" />
+    </div>
+
+    <div class="relative z-10 -mt-[100svh]" data-mobile-content>
+      {
+        mobileIntro && (
+          <article class="mobile-intro-copy relative isolate overflow-hidden px-5 py-10 text-center sm:py-14" data-mobile-intro>
+            <p class="flex items-center justify-center gap-3 font-mono text-[0.65rem] tracking-[0.18em] uppercase text-fg/65">
+              <span>{hero.eyebrow}</span>
+              <span class="tabular-nums text-action-lit">
+                01 / {String(walkthrough.steps.length).padStart(2, '0')}
+              </span>
+            </p>
+
+            <h1 class="headline mt-4 text-[clamp(2.2rem,10vw,3.2rem)] leading-[1.01] text-balance">
+              {mobileIntro.title}
+            </h1>
+
+            <p class="mx-auto mt-5 max-w-xl text-[1.02rem] leading-relaxed text-fg/80 text-pretty">
+              <BrandText text={mobileIntro.body} />
+            </p>
+
+            <div class="mt-6 flex flex-wrap justify-center gap-2">
+              <a
+                href="#setup"
+                class="plate px-4 py-2.5 text-sm font-medium text-on-fill"
+              >
+                <span class="relative z-10">{hero.primary}</span>
+              </a>
+              <a
+                href="#act-gear"
+                class="glass-secondary rounded-xl px-4 py-2.5 text-sm font-medium text-fg"
+              >
+                <span class="relative z-10">
+                  Meet <span class="font-display text-[0.78em] font-normal tracking-[0.04em] whitespace-nowrap">
+                    Origin 89
+                  </span>
+                </span>
+              </a>
+            </div>
+          </article>
+        )
+      }
+
+      <div
+        data-mobile-phone-stage
+        class="sticky top-0 h-svh overflow-hidden"
+        aria-hidden="true"
+      >
+
+        <div class="relative flex justify-center pt-3 sm:pt-5" data-mobile-phone>
+          <PhoneFrame copy={copy} class="mobile-story-phone" chrome={false}>
+            <ScreenLock copy={copy} active embedded />
+            <ScreenFrost copy={copy} />
+            <ScreenReadings copy={copy} />
+            <ScreenSafety copy={copy} />
+          </PhoneFrame>
+        </div>
+      </div>
+
+      <div
+        data-mobile-steps
+        class="relative z-10 -mt-[100svh]"
+      >
+        {
+          mobileSteps.map((step, i) => (
+            <article
+              data-mobile-step={step.key}
+              class="flex min-h-svh items-end px-5 py-6"
+            >
+              <div
+                data-mobile-card
+                class="mobile-card relative w-full overflow-hidden rounded-[1.35rem] border border-white/[0.09] p-4 text-left backdrop-blur-xl sm:p-5"
+              >
+                <p class="relative z-10 flex items-center justify-between gap-4 font-mono text-[0.58rem] tracking-[0.15em] uppercase text-faint sm:text-[0.65rem] sm:tracking-[0.18em]">
+                  <span class="min-w-0">{hero.eyebrow}</span>
+                  <span
+                    class="shrink-0 rounded-full border border-action-lit/25 bg-action-lit/10 px-2 py-1 tabular-nums text-action-lit"
+                  >
+                    {String(i + 2).padStart(2, '0')} / {String(walkthrough.steps.length).padStart(2, '0')}
+                  </span>
+                </p>
+
+                <h2 class="headline relative z-10 mt-4 text-[clamp(1.7rem,7.2vw,2.15rem)] leading-[1.04] text-pretty">
+                  {step.title}
+                </h2>
+
+                <p class="relative z-10 mt-2.5 text-[0.94rem] leading-[1.6] text-muted text-pretty sm:text-[0.98rem] sm:leading-relaxed">
+                  <BrandText text={step.body} />
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Only one screen is visible. These are the starting values and the no-script
+     fallback; GSAP owns opacity and visibility once it loads, so there is
+     deliberately no transition here to fight the tween. */
+  :global(.o89-view) {
+    min-height: 100%;
+    background:
+      radial-gradient(120% 60% at 50% 100%, rgba(233, 161, 60, 0.22), transparent 60%),
+      linear-gradient(#0d141c, #070a0e);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(.o89-view.is-on) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Headlines stack in one grid cell so the buttons below never move as the
+     text changes length. GSAP owns opacity here, so no CSS transition. */
+  .o89-head {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .o89-head.is-on {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .o89-tick {
+    color: color-mix(in oklab, var(--color-faint) 65%, transparent);
+    transition: color 0.35s ease;
+  }
+
+  .o89-tick[data-active] {
+    color: var(--color-action-lit);
+  }
+
+  .mobile-card {
+    border-color: rgba(211, 229, 239, 0.14);
+    background:
+      radial-gradient(105% 135% at 100% 0%, rgba(63, 97, 179, 0.17), transparent 48%),
+      linear-gradient(145deg, rgba(17, 24, 31, 0.84), rgba(5, 8, 11, 0.74) 70%);
+    box-shadow:
+      0 30px 86px rgba(0, 0, 0, 0.5),
+      0 8px 24px rgba(0, 0, 0, 0.26),
+      inset 0 1px 0 rgba(238, 249, 255, 0.13),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.48);
+    -webkit-backdrop-filter: blur(24px) saturate(1.25);
+    backdrop-filter: blur(24px) saturate(1.25);
+  }
+
+  .mobile-card::before {
+    position: absolute;
+    z-index: 0;
+    inset: 1px;
+    border-radius: calc(1.35rem - 1px);
+    background:
+      linear-gradient(112deg, rgba(255, 255, 255, 0.075), transparent 30% 70%, rgba(127, 176, 212, 0.04)),
+      radial-gradient(70% 100% at 12% 0%, rgba(225, 245, 255, 0.09), transparent 62%);
+    pointer-events: none;
+    content: '';
+  }
+
+  .mobile-card::after {
+    position: absolute;
+    z-index: 1;
+    top: -1px;
+    right: 1.5rem;
+    left: 1.5rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(113, 223, 163, 0.72), transparent);
+    pointer-events: none;
+    content: '';
+  }
+
+  /* The continuous mobile landscape can be pale behind the first claim. This
+     has no card edge: it is only a soft pool of contrast beneath the words, so
+     the scene stays present without becoming the copy's background colour. */
+  .mobile-intro-copy::before {
+    position: absolute;
+    z-index: 0;
+    inset: -28% -12%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(7, 9, 12, 0.7) 0%,
+      rgba(7, 9, 12, 0.48) 48%,
+      rgba(7, 9, 12, 0.14) 72%,
+      transparent 86%
+    );
+    filter: blur(10px);
+    pointer-events: none;
+    content: '';
+  }
+
+  .mobile-intro-copy > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .mobile-intro-copy h1,
+  .mobile-intro-copy > p {
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.72),
+      0 8px 24px rgba(0, 0, 0, 0.48);
+  }
+
+  .desktop-hero-copy h1,
+  .desktop-hero-copy .o89-head p {
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.86),
+      0 6px 18px rgba(0, 0, 0, 0.62);
+  }
+
+  /* On a real phone this is an app surface, not another physical handset. It is
+     intentionally wide, and the sticky stage may crop the bottom on a short
+     viewport rather than shrinking the readings into a miniature. */
+  :global(.mobile-story-phone) {
+    width: min(23rem, calc(100vw - 1rem));
+    max-width: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .o89-tick {
+      transition: none;
+    }
+
+    /* With no scroll choreography, every claim is laid out in normal document
+       flow. Reduced motion must not mean reduced content. */
+    .o89-heads {
+      display: block;
+    }
+
+    .o89-head {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .o89-head + .o89-head {
+      margin-top: 2.5rem;
+    }
+
+    .o89-tick {
+      display: none;
+    }
+
+    :global([data-hero-phone]) {
+      display: none;
+    }
+
+    :global([data-hero-scroll-cue]) {
+      display: none;
+    }
+
+    :global([data-mobile-phone-stage]) {
+      position: relative;
+      top: auto;
+      height: auto;
+      padding-block: 1.5rem;
+    }
+
+    :global([data-mobile-scene-stage]) {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 100svh;
+    }
+
+    :global([data-mobile-content]) {
+      margin-top: 0;
+    }
+
+    :global([data-mobile-steps]) {
+      margin-top: 0;
+    }
+
+    :global([data-mobile-step]) {
+      min-height: 0;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const desktop = window.matchMedia('(min-width: 1024px)').matches;
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktopStory = hero?.querySelector<HTMLElement>('[data-desktop-story]');
+
+  // Drive the original licensed artwork directly inside its same-origin SVG
+  // document. This keeps the author's sun, clouds and detailed landscape
+  // shapes intact while our four-step progress remains the one scroll
+  // authority for the content, phone and background.
+  const sceneController = (id: string) => {
+    const scene = hero?.querySelector<HTMLElement>(`[data-parallax-scene='${id}']`);
+    if (!scene) return (_progress: number) => undefined;
+
+    const artwork = scene.querySelector<HTMLObjectElement>('[data-scene-artwork]');
+    const clamp = (value: number) => Math.max(0, Math.min(1, value));
+    const smoothStep = (start: number, end: number, value: number) => {
+      const t = clamp((value - start) / (end - start));
+      return t * t * (3 - 2 * t);
+    };
+    const hill1Motion = [
+      { id: 'h1-1', x: 100, y: 300, scale: 0.9 },
+      { id: 'h1-2', x: -60, y: 260, scale: 1 },
+      { id: 'h1-3', x: 120, y: 170, scale: 1 },
+      { id: 'h1-4', x: 100, y: 300, scale: 1 },
+      { id: 'h1-5', x: 100, y: 200, scale: 1 },
+      { id: 'h1-6', x: -250, y: 230, scale: 1 },
+      { id: 'h1-7', x: 160, y: 500, scale: 1 },
+      { id: 'h1-8', x: 20, y: 350, scale: 1 },
+      { id: 'h1-9', x: -20, y: 350, scale: 1 },
+    ];
+    const hill2Starts = [500, 500, 700, 700, 800, 900];
+    let nodes: {
+      bgGradient: SVGElement | null;
+      bgStops: SVGStopElement[];
+      sun: SVGStopElement | null;
+      scene1: SVGElement | null;
+      scene2: SVGElement | null;
+      scene3: SVGElement | null;
+      hills1: (SVGElement | null)[];
+      hills2: (SVGElement | null)[];
+      hills3: (SVGElement | null)[];
+      cloudBanks: (SVGElement | null)[];
+      bird: SVGElement | null;
+      stars: SVGElement | null;
+    } | null = null;
+    let lastProgress = 0;
+
+    const bind = () => {
+      const document = artwork?.contentDocument;
+      if (!document?.documentElement) return null;
+      const byId = <T extends SVGElement>(nodeId: string) =>
+        document.getElementById(nodeId) as T | null;
+
+      nodes = {
+        bgGradient: byId('bg_grad'),
+        bgStops: [...document.querySelectorAll<SVGStopElement>('#bg_grad stop')],
+        sun: byId<SVGStopElement>('sun'),
+        scene1: byId('scene1'),
+        scene2: byId('scene2'),
+        scene3: byId('scene3'),
+        hills1: hill1Motion.map(({ id: nodeId }) => byId(nodeId)),
+        hills2: hill2Starts.map((_, index) => byId(`h2-${index + 1}`)),
+        hills3: [1, 2, 3, 4, 5].map((index) => byId(`h3-${index}`)),
+        cloudBanks: [byId('cloudsBig-L'), byId('cloudsBig-R')],
+        bird: byId('bird'),
+        stars: byId('stars'),
+      };
+
+      if (nodes.scene3) nodes.scene3.style.visibility = 'visible';
+      return nodes;
+    };
+
+    const render = (progress: number) => {
+      const p = clamp(progress);
+      lastProgress = p;
+      const art = nodes ?? bind();
+      if (!art) return;
+
+      // The first two authored landscapes span the four product states. The
+      // original artwork's third, star-filled scene is deliberately reserved
+      // for the real footer, where its reveal belongs in the source piece.
+      // Smoothstep keeps the daytime-to-sunset handoff continuous instead of
+      // snapping at a phone-screen boundary.
+      const day = smoothStep(0, 0.28, p);
+      const secondScene = smoothStep(0.16, 0.34, p);
+      const sunGrow = smoothStep(0.5, 0.92, p);
+      const birdProgress = clamp((p - 0.07) / 0.25);
+      const birdOpacity = Math.sin(birdProgress * Math.PI) * 0.5;
+
+      gsap.set(artwork, {
+        x: 10 * p,
+        y: -8 * p,
+        scale: 1 + p * 0.028,
+        transformOrigin: '50% 60%',
+      });
+
+      if (art.bgGradient) {
+        art.bgGradient.setAttribute('cy', String(-50 + day * 380));
+      }
+      if (art.sun) {
+        art.sun.setAttribute('offset', String(0.1 + sunGrow * 1.3));
+        art.sun.setAttribute('stop-color', gsap.utils.interpolate('#F5C54E', '#ffff00', sunGrow));
+      }
+      const offsets = [
+        0.1 + sunGrow * 1.3,
+        0.1 + day * 0.05 + sunGrow * 0.55,
+        day * 0.18,
+        day * 0.25,
+        day * 0.46,
+        0.8,
+      ];
+      art.bgStops.forEach((stop, index) => stop.setAttribute('offset', String(offsets[index] ?? 0.8)));
+      art.bgStops.at(-1)?.setAttribute(
+        'stop-color',
+        gsap.utils.interpolate('#FFAB93', '#45224A', clamp((p - 0.35) / 0.55)),
+      );
+
+      art.hills1.forEach((hill, index) => {
+        const motion = hill1Motion[index];
+        if (!hill || !motion) return;
+        gsap.set(hill, {
+          x: motion.x * day,
+          y: motion.y * day,
+          scale: 1 + (motion.scale - 1) * day,
+          transformOrigin: '50% 100%',
+        });
+      });
+      art.cloudBanks.forEach((cloud) => gsap.set(cloud, { x: -20 * day, y: 450 * day }));
+
+      art.hills2.forEach((hill, index) => {
+        if (!hill) return;
+        gsap.set(hill, {
+          y:
+            (hill2Starts[index] ?? 500) * (1 - secondScene) -
+            sunGrow * (8 + index * 4),
+          opacity: index === 0 ? secondScene : 1,
+        });
+      });
+      gsap.set(art.scene1, { opacity: 1 - secondScene });
+      gsap.set(art.scene2, { opacity: 1 });
+
+      gsap.set(art.scene3, { y: 500, opacity: 0 });
+      art.hills3.forEach((hill, index) => {
+        if (!hill) return;
+        gsap.set(hill, {
+          x: 0,
+          y: 100 + index * 72,
+        });
+      });
+      gsap.set(art.stars, { y: 70, opacity: 0 });
+      gsap.set(art.bird, {
+        x: 650 * birdProgress,
+        y: -180 * birdProgress,
+        opacity: birdOpacity,
+      });
+
+    };
+
+    scene.addEventListener('o89:artwork-ready', () => {
+      nodes = null;
+      render(lastProgress);
+    });
+    return render;
+  };
+
+  if (hero && desktopStory && desktop && !still) {
+    const pin = desktopStory.querySelector<HTMLElement>('[data-pin]') ?? desktopStory;
+    const steps = [...desktopStory.querySelectorAll<HTMLElement>('[data-step]')];
+    const heads = [...desktopStory.querySelectorAll<HTMLElement>('[data-head]')];
+    const views = [...desktopStory.querySelectorAll<HTMLElement>('[data-screen]')];
+    const lockStatus = desktopStory.querySelector<HTMLElement>('[data-lock-status]');
+    const phoneStatus = desktopStory.querySelector<HTMLElement>('[data-phone-status]');
+    const scrollCue = desktopStory.querySelector<HTMLElement>('[data-hero-scroll-cue]');
+    const renderDesktopScene = sceneController('hero-desktop');
+
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Each segment begins by sliding the current phone screen upward to reveal
+      // the next one underneath. The rest of the segment is quiet reading time.
+      // Because the first transition begins at scroll position zero, even a
+      // small wheel or trackpad gesture moves something on screen.
+      const segmentScroll = desktop ? 54 : 72;
+      const transitionScroll = desktop ? 24 : 34;
+      const finalHold = desktop ? 30 : 42;
+      const transitionCount = Math.max(0, steps.length - 1);
+      const storyScroll = transitionCount * segmentScroll + finalHold;
+      const totalScroll = storyScroll;
+      const render = (progress: number) => {
+        if (steps.length === 0) return;
+
+        const travelled = progress * totalScroll;
+        const storyProgress = Math.min(1, travelled / storyScroll);
+        renderDesktopScene(storyProgress);
+        if (scrollCue) {
+          const cue = Math.max(0, Math.min(1, 1 - progress / 0.08));
+          gsap.set(scrollCue, { y: -8 * (1 - cue), autoAlpha: cue });
+        }
+
+        const current = Math.min(
+          steps.length - 1,
+          Math.floor(travelled / segmentScroll),
+        );
+        const incoming = Math.min(steps.length - 1, current + 1);
+        const rawTransition =
+          current === incoming
+            ? 0
+            : Math.min(1, (travelled - current * segmentScroll) / transitionScroll);
+        const transition = still ? (rawTransition >= 1 ? 1 : 0) : rawTransition;
+        const active = transition >= 0.5 ? incoming : current;
+        const outgoingHead =
+          current === incoming ? 1 : Math.max(0, Math.min(1, (0.5 - transition) / 0.15));
+        const incomingHead =
+          current === incoming ? 0 : Math.max(0, Math.min(1, (transition - 0.5) / 0.15));
+        const currentKey = steps[current]?.dataset.step;
+        const incomingKey = steps[incoming]?.dataset.step;
+        const activeKey = steps[active]?.dataset.step;
+        const lockStatusOpacity =
+          currentKey === 'generator'
+            ? 1 - transition
+            : incomingKey === 'generator'
+              ? transition
+              : 0;
+
+        if (lockStatus) gsap.set(lockStatus, { autoAlpha: lockStatusOpacity });
+        if (phoneStatus) gsap.set(phoneStatus, { autoAlpha: 1 - lockStatusOpacity });
+
+        for (const step of steps) {
+          step.toggleAttribute('data-active', step.dataset.step === activeKey);
+        }
+
+        for (const view of views) {
+          view.setAttribute('aria-hidden', String(view.dataset.screen !== activeKey));
+
+          if (view.dataset.screen === currentKey) {
+            gsap.set(view, {
+              autoAlpha: current === incoming || transition < 1 ? 1 : 0,
+              yPercent: current === incoming ? 0 : -100 * transition,
+              zIndex: 2,
+            });
+          } else if (view.dataset.screen === incomingKey) {
+            gsap.set(view, {
+              autoAlpha: 1,
+              yPercent: 100 * (1 - transition),
+              zIndex: 3,
+            });
+          } else {
+            gsap.set(view, {
+              autoAlpha: 0,
+              yPercent: view.dataset.screen === activeKey ? 0 : 100,
+              zIndex: 0,
+            });
+          }
+        }
+
+        for (const head of heads) {
+          if (head.dataset.head === currentKey) {
+            gsap.set(head, {
+              autoAlpha: outgoingHead,
+              y: -10 * (1 - outgoingHead),
+            });
+          } else if (head.dataset.head === incomingKey) {
+            gsap.set(head, {
+              autoAlpha: incomingHead,
+              y: 10 * (1 - incomingHead),
+            });
+          } else {
+            gsap.set(head, { autoAlpha: 0, y: 12 });
+          }
+        }
+      };
+
+      const trigger = ScrollTrigger.create({
+        trigger: desktopStory,
+        pin,
+        pinSpacing: true,
+        // The fixed desktop header is 99px tall, so align the story directly
+        // beneath it and begin responding to the first wheel movement.
+        start: 'top top+=99',
+        // Resolve the percentage against the viewport explicitly. A relative
+        // percentage string is measured against the trigger element, which
+        // changes once its pin spacer exists and makes refreshes unstable.
+        end: () => `+=${window.innerHeight * (totalScroll / 100)}`,
+        onUpdate: (self) => render(self.progress),
+      });
+
+      render(0);
+      return () => trigger.kill();
+    });
+
+  }
+
+  const mobileStory = hero?.querySelector<HTMLElement>('[data-mobile-story]');
+
+  if (mobileStory && !desktop && !still) {
+    const steps = [...mobileStory.querySelectorAll<HTMLElement>('[data-mobile-step]')];
+    const views = [...mobileStory.querySelectorAll<HTMLElement>('[data-screen]')];
+    const lockStatus = mobileStory.querySelector<HTMLElement>('[data-lock-status]');
+    const phoneStatus = mobileStory.querySelector<HTMLElement>('[data-phone-status]');
+    const renderMobileScene = sceneController('hero-mobile');
+    let activeIndex = 0;
+
+    const show = (nextIndex: number, direction: 1 | -1, immediate = false) => {
+      const incoming = views[nextIndex];
+      const outgoing = views[activeIndex];
+      if (!incoming) return;
+
+      const activeKey = incoming.dataset.screen;
+      const step = steps.find((candidate) => candidate.dataset.mobileStep === activeKey);
+
+      for (const candidate of steps) {
+        candidate.toggleAttribute('data-active', candidate === step);
+      }
+
+      const card = step?.querySelector<HTMLElement>('[data-mobile-card]');
+      if (card && !immediate) {
+        gsap.fromTo(
+          card,
+          { y: 22, opacity: 0.62 },
+          { y: 0, opacity: 1, duration: 0.48, ease: 'power2.out', overwrite: true },
+        );
+      }
+
+      const generatorActive = incoming.dataset.screen === 'generator';
+      if (lockStatus) gsap.to(lockStatus, { autoAlpha: generatorActive ? 1 : 0, duration: immediate ? 0 : 0.25 });
+      if (phoneStatus) gsap.to(phoneStatus, { autoAlpha: generatorActive ? 0 : 1, duration: immediate ? 0 : 0.25 });
+
+      if (nextIndex === activeIndex || !outgoing) {
+        for (const [index, view] of views.entries()) {
+          const active = index === nextIndex;
+          view.setAttribute('aria-hidden', String(!active));
+          gsap.set(view, {
+            autoAlpha: active ? 1 : 0,
+            yPercent: active ? 0 : 100,
+            zIndex: active ? 2 : 0,
+          });
+        }
+        return;
+      }
+
+      gsap.killTweensOf(views);
+      for (const [index, view] of views.entries()) {
+        if (index === activeIndex || index === nextIndex) continue;
+        view.setAttribute('aria-hidden', 'true');
+        gsap.set(view, { autoAlpha: 0, yPercent: direction * 100, zIndex: 0 });
+      }
+
+      incoming.setAttribute('aria-hidden', 'false');
+      outgoing.setAttribute('aria-hidden', 'true');
+      gsap.set(incoming, { autoAlpha: 1, yPercent: direction * 100, zIndex: 3 });
+      gsap.to(outgoing, {
+        yPercent: direction * -100,
+        autoAlpha: 0,
+        duration: 0.62,
+        ease: 'power2.inOut',
+        overwrite: true,
+      });
+      gsap.to(incoming, {
+        yPercent: 0,
+        duration: 0.62,
+        ease: 'power2.inOut',
+        overwrite: true,
+        onComplete: () => gsap.set(incoming, { zIndex: 2 }),
+      });
+      activeIndex = nextIndex;
+    };
+
+    show(0, 1, true);
+
+    ScrollTrigger.create({
+      trigger: mobileStory,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.8,
+      onUpdate: (self) => renderMobileScene(self.progress),
+    });
+    renderMobileScene(0);
+
+    for (const step of steps) {
+      const index = views.findIndex((view) => view.dataset.screen === step.dataset.mobileStep);
+      const card = step.querySelector<HTMLElement>('[data-mobile-card]');
+      if (!card || index < 0) continue;
+
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 82%',
+        end: 'bottom 18%',
+        onEnter: () => show(index, 1),
+        onEnterBack: () => show(index, -1),
+      });
+    }
+
+  }
+
+</script>
