@@ -6,6 +6,7 @@ import telecom from "../../assets/art/telecom.webp?url";
 import buddy from "../generated/buddy.webp?url";
 export const journalAssets = { buddy, logo, plate, cottage, mining, telecom };
 
+export { default as buddyFullBody } from "@origin89/brand/art/studio-transparent.webp?url";
 export { default as boardImage } from "../../assets/product/controller-reveal-base-1200.webp?url";
 export { default as controllerImage } from "../../assets/product/controller-reveal-closed-1200.webp?url";
 export { default as studyBoardSmall } from "../../assets/product/controller-study-base-640.webp?url";

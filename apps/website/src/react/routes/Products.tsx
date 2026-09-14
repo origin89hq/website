@@ -30,7 +30,7 @@ export function ProductsPage() {
           plateUrl={journalAssets.plate}
         />
       </div>
-      <ProductFamily />
+      <ProductFamily linkToProducts={false} />
       <MultiSiteNote />
       <section className="content-section">
         <div className="section-heading">

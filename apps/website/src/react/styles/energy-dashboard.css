@@ -175,7 +175,7 @@
 }
 .solar-history-metric > span { display: flex; align-items: center; gap: 3px; }
 .solar-chart-footer > span:last-child { display: flex; align-items: center; gap: 5px; }
-.buddy-app.energy-app { --app-muted: color-mix(in srgb, var(--app-ink) 72%, var(--app-bg)); }
+.buddy-app.energy-app, .mini-app { --app-muted: color-mix(in srgb, var(--app-ink) 72%, var(--app-bg)); }
 .solar-history-metric > span { font-size: 9px; color: var(--app-muted); }
 .solar-history-metric > span svg { color: var(--solar-production); }
 .solar-history-load > span svg { color: var(--solar-use); }
