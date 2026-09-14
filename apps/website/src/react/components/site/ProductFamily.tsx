@@ -1,73 +1,99 @@
 import { ArrowUpRight } from "lucide-react";
-import { products } from "../../lib/products";
-import { controllerImage, journalAssets } from "../../lib/react-assets";
-import { BuddyAvatar } from "../buddy/BuddyAvatar";
-export function ProductFamily() {
+import { type ProductId, products } from "../../lib/products";
+import { buddyFullBody, controllerImage } from "../../lib/react-assets";
+import { EquipmentIllustration } from "./EquipmentIllustration";
+import "../../styles/energy-dashboard.css";
+
+const actionLabels: Record<ProductId, string> = {
+  controller: "Explore the Controller",
+  offgrid: "Explore the app",
+  buddy: "Explore Buddy",
+};
+
+// Sample readings from the cottage app overview.
+const sampleFlow = [
+  { kind: "solar", reading: "2.10", unit: "kW", label: "Solar production" },
+  { kind: "generator", reading: "Standby", unit: null, label: "Generator" },
+  { kind: "cottage", reading: "0.85", unit: "kW", label: "Cottage use" },
+  { kind: "battery", reading: "76", unit: "%", label: "Charging" },
+] as const;
+
+function FamilyArt({ productId }: { productId: ProductId }) {
+  switch (productId) {
+    case "controller":
+      return (
+        <img
+          src={controllerImage}
+          alt="Origin89 Controller CAD concept"
+          width="1200"
+          height="1824"
+          loading="lazy"
+        />
+      );
+    case "offgrid":
+      return (
+        <div className="mini-app app-journal app-site-cottage" aria-hidden="true">
+          <div className="mini-app-top">
+            <div>
+              <span className="mini-app-wordmark">
+                ORIGIN89 <b>OFFGRID</b>
+              </span>
+              <strong className="mini-app-site">Lac des Pins</strong>
+            </div>
+            <span className="mini-app-avatar">LP</span>
+          </div>
+          <div className="mini-app-fresh">
+            <span className="live-dot" />
+            Sample cottage · Readings 8 sec ago
+          </div>
+          <span className="mini-app-eyebrow">YOUR ENERGY / NOW</span>
+          <strong className="mini-app-title">Running on sunshine.</strong>
+          <div className="mini-app-flow">
+            {sampleFlow.map(({ kind, reading, unit, label }) => (
+              <div key={kind}>
+                <EquipmentIllustration kind={kind} />
+                <strong className={unit ? undefined : "mini-app-state"}>
+                  {reading}
+                  {unit && <small>{unit}</small>}
+                </strong>
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    case "buddy":
+      return <img src={buddyFullBody} alt="Buddy" width="1280" height="1434" loading="lazy" />;
+  }
+}
+
+export function ProductFamily({ linkToProducts = true }: { linkToProducts?: boolean }) {
   return (
-    <section className="product-family" id="products">
-      <div className="section-heading">
-        <span className="micro">THE ORIGIN89 SYSTEM</span>
-        <h2>Local control, with an app to check in.</h2>
-        <a className="underlined-action" href="/products/">
-          Explore the products <ArrowUpRight size={16} aria-hidden="true" />
-        </a>
+    <section className="product-family" id="products" aria-labelledby="product-family-title">
+      <div className="product-family-heading">
+        <div>
+          <span className="micro">THE ORIGIN89 SYSTEM</span>
+          <h2 id="product-family-title">Local control, with an app to check in.</h2>
+        </div>
+        {linkToProducts && (
+          <a className="text-action" href="/products/">
+            Explore the products <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+        )}
       </div>
       <div className="product-family-grid">
         {products.map((product, index) => (
-          <article key={product.id}>
-            <a
-              className={`family-art family-${product.id}`}
-              href={`/products/${product.id}/`}
-              aria-label={`Explore ${product.name}`}
-            >
-              {product.id === "controller" ? (
-                <img
-                  src={controllerImage}
-                  alt="Origin89 Controller CAD concept"
-                  width="340"
-                  height="240"
-                  loading="lazy"
-                />
-              ) : product.id === "buddy" ? (
-                <BuddyAvatar
-                  src={journalAssets.buddy}
-                  alt="Buddy"
-                  loading="lazy"
-                  framing="avatar"
-                  size={128}
-                  sizes="(max-width: 760px) 112px, 128px"
-                />
-              ) : (
-                <div className="mini-app" aria-hidden="true">
-                  <span>OFFGRID / SAMPLE</span>
-                  <strong>
-                    Your site.
-                    <br />
-                    At a glance.
-                  </strong>
-                  <div>
-                    <span>Battery</span>
-                    <b>76%</b>
-                  </div>
-                  <small>Updated 8 sec ago</small>
-                </div>
-              )}
-            </a>
+          <article key={product.id} className="family-card">
+            <div className={`family-art family-${product.id}`}>
+              <FamilyArt productId={product.id} />
+            </div>
             <span className="micro">
               0{index + 1} / {product.role}
             </span>
             <h3>{product.name}</h3>
             <p>{product.summary}</p>
-            <a href={`/products/${product.id}/`}>
-              <span>
-                Explore{" "}
-                {product.id === "offgrid"
-                  ? "the app"
-                  : product.id === "controller"
-                    ? "the Controller"
-                    : "Buddy"}
-              </span>
-              <ArrowUpRight size={14} aria-hidden="true" />
+            <a className="family-link" href={`/products/${product.id}/`}>
+              {actionLabels[product.id]} <ArrowUpRight size={14} aria-hidden="true" />
             </a>
           </article>
         ))}

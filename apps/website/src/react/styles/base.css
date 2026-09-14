@@ -304,7 +304,8 @@ summary:focus-visible {
 .journal-app-visual .buddy-app {
   box-shadow: 0 18px 45px #1f312713;
 }
-.buddy-app {
+.buddy-app,
+.mini-app {
   --app-bg: #f8f7f3;
   --app-surface: #fff;
   --app-ink: #20302d;
@@ -312,6 +313,8 @@ summary:focus-visible {
   --app-line: #dbe1db;
   --app-accent: #2b4a97;
   --app-soft: #eff2e9;
+}
+.buddy-app {
   width: 390px;
   max-width: 100%;
   border: 1px solid #ccd3ce;
@@ -813,12 +816,6 @@ summary:focus-visible {
   text-decoration: underline;
   text-underline-offset: 3px;
   margin-top: 5px;
-}
-@media (min-width: 1700px) {
-  .website-concept {
-    max-width: 1700px;
-    margin: auto;
-  }
 }
 @media (max-width: 1200px) {
   .journal-opening {

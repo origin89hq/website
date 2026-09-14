@@ -2,7 +2,6 @@ import { ArrowUpRight } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { type JournalSite, journalSites } from "../../lib/journal-sites";
 import { siteConfig } from "../../lib/site-config";
-import { BuddyAvatar } from "../buddy/BuddyAvatar";
 import { BuddyApp } from "./BuddyApp";
 import { ControllerStudy } from "./ControllerStudy";
 import { GitHubIcon } from "./GitHubIcon";
@@ -209,22 +208,6 @@ export function SiteJournal({
           <SourceProjects compact />
         </section>
         <MultiSiteNote />
-        <section className="buddy-setup-intro" id="show-buddy">
-          <BuddyAvatar
-            src={assets.buddy}
-            alt="Buddy"
-            size={88}
-            sizes="(max-width: 760px) 56px, (max-width: 1050px) 90px, 88px"
-          />
-          <div className="buddy-setup-copy">
-            <span className="micro">IDENTIFY YOUR EQUIPMENT</span>
-            <h2>Show Buddy your setup.</h2>
-            <p>Upload an equipment label and work through the details with Buddy.</p>
-          </div>
-          <button className="concept-action" type="button" data-open-setup onClick={openChat}>
-            Start with a photo <ArrowUpRight size={16} aria-hidden="true" />
-          </button>
-        </section>
         <dialog
           ref={dialog}
           className="setup-dialog"
