@@ -3,11 +3,12 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
   group: check-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   node:
     runs-on: ubuntu-latest
@@ -32,3 +33,38 @@ jobs:
           pnpm --filter origin89-website verify:website
           pnpm --filter origin89-website verify:storybook
           pnpm --filter origin89-website verify:buddy-assets
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    needs: node
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: website-production
+    concurrency:
+      group: website-production
+      cancel-in-progress: false
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      WEBSITE_WORKER_NAME: ${{ vars.WEBSITE_WORKER_NAME }}
+      BUDDY_WORKER_NAME: ${{ vars.BUDDY_WORKER_NAME }}
+      BUDDY_HOSTNAME: ${{ vars.BUDDY_HOSTNAME }}
+    steps:
+      - name: Require the current main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          current=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
+          test "$current" = "$GITHUB_SHA" || { echo 'Deploy the current main commit; this run is stale.'; exit 1; }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-node
+      - run: pnpm --filter origin89-website deploy:config
+      - run: pnpm build
+      - name: Deploy website
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo 'Configure the organization CLOUDFLARE_API_TOKEN secret.'; exit 1; }
+          pnpm --filter origin89-website deploy:cf
