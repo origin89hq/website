@@ -122,11 +122,11 @@ importers:
         specifier: 0.2.0
         version: 0.2.0
       '@origin89/buddy':
-        specifier: https://github.com/origin89hq/buddy/releases/download/v0.1.0/origin89-buddy-0.1.0.tgz
-        version: https://github.com/origin89hq/buddy/releases/download/v0.1.0/origin89-buddy-0.1.0.tgz
+        specifier: 0.1.1
+        version: 0.1.1
       '@origin89/ui-react':
-        specifier: https://github.com/origin89hq/ui/releases/download/v0.1.0/origin89-ui-react-0.1.0.tgz
-        version: https://github.com/origin89hq/ui/releases/download/v0.1.0/origin89-ui-react-0.1.0.tgz(react@19.3.0)
+        specifier: 0.1.1
+        version: 0.1.1(react@19.3.0)
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.2.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))
@@ -1129,13 +1129,11 @@ packages:
     resolution: {integrity: sha512-H0d49I0nWyYmq9CPr/4e8/lo1yRUYyaEMhqqNxxvM5xvk3ujnnvSZP02t1Zp7ncCjwRW4ihVzPmL5RXIwxP13Q==}
     engines: {node: '>=22.12.0'}
 
-  '@origin89/buddy@https://github.com/origin89hq/buddy/releases/download/v0.1.0/origin89-buddy-0.1.0.tgz':
-    resolution: {integrity: sha512-thEWMp8lObwLXJibFgJ7v+IipHXoE77g6gCgKszep6IhUSGjwG6awAA5tWyELuMzUbb657du+5B++aEGJXQ6jQ==, tarball: https://github.com/origin89hq/buddy/releases/download/v0.1.0/origin89-buddy-0.1.0.tgz}
-    version: 0.1.0
+  '@origin89/buddy@0.1.1':
+    resolution: {integrity: sha512-OjXWcr6nyrSBVszJxPVk3REQE9MgAvBZe457eFA5oAi9F8HN5XaaVCulQi9Cbebm3600tHsAOeivpocDrHZONg==}
 
-  '@origin89/ui-react@https://github.com/origin89hq/ui/releases/download/v0.1.0/origin89-ui-react-0.1.0.tgz':
-    resolution: {integrity: sha512-k9TXP8/EvIikWZBR5xmMUWufNmOpwzBtQ1ZyW9uR9ZoKu+G/oxsA835NlnmR9tL+Esk/WsYacRJXTcXUL4jz9w==, tarball: https://github.com/origin89hq/ui/releases/download/v0.1.0/origin89-ui-react-0.1.0.tgz}
-    version: 0.1.0
+  '@origin89/ui-react@0.1.1':
+    resolution: {integrity: sha512-OhEQscFT2MofKd3FroUGXsq8IQY67XxVivdaUBHHRHgDCBoz/g24OOCJPHo+ZF/ZThBHP9CeuAlObB/2BCNtLw==}
     peerDependencies:
       react: ^19.2.8
 
@@ -4445,11 +4443,11 @@ snapshots:
 
   '@origin89/brand@0.3.1': {}
 
-  '@origin89/buddy@https://github.com/origin89hq/buddy/releases/download/v0.1.0/origin89-buddy-0.1.0.tgz':
+  '@origin89/buddy@0.1.1':
     dependencies:
       zod: 4.5.4
 
-  '@origin89/ui-react@https://github.com/origin89hq/ui/releases/download/v0.1.0/origin89-ui-react-0.1.0.tgz(react@19.3.0)':
+  '@origin89/ui-react@0.1.1(react@19.3.0)':
     dependencies:
       '@origin89/brand': 0.3.1
       react: 19.3.0
