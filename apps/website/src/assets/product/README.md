@@ -36,9 +36,10 @@ not a mechanical disassembly simulation. Reduced motion uses immediate controls.
 
 `controller-reveal-closed-1200.webp` and `controller-reveal-base-1200.webp` show
 the closed controller and the board with the cover hidden, harness and sleeve
-included, from the scene's saved Hero camera. Both plates share one crop taken
-from the union of their alpha bounds. `controller-reveal.json` records the crop
-and PCB hash; the packager adds the scene hash from the next render.
+included, from the scene's saved Hero camera. Both plates share one crop: the
+union of their alpha bounds at the sides and top, and the full height because
+the harness runs off the bottom of the frame. `controller-reveal.json` records
+the crop with the scene and PCB hashes.
 
 ```sh
 blender --background --python-exit-code 1 --python scripts/render-controller-reveal.py -- \
