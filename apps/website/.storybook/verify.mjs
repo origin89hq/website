@@ -42,6 +42,8 @@ try {
     assert.equal(await page.locator(".sb-errordisplay").isVisible(), false, story.id);
     for (const frame of page.frames()) {
       const broken = await frame.evaluate(async () => {
+        // Lazy images below the fold never start in a headless frame; load them so they are checked too.
+        for (const image of document.images) if (image.loading === "lazy") image.loading = "eager";
         await Promise.all(
           [...document.images]
             .filter((image) => image.getClientRects().length > 0 && !image.complete)
@@ -122,13 +124,10 @@ try {
   assert.match(await frame.locator(".care-note").innerText(), /Do not open sealed/);
   await open("app-offgrid--battery-care");
   await page.locator('[data-panel="care"]:visible').waitFor();
-  await open("website-site-journal--cottage");
+  await open("website-homepage--desktop");
   frame = page;
-  await frame.locator('[data-journal-site="telecom"]').click();
-  assert.equal(
-    await frame.locator(".journal-examples").getAttribute("data-active-site"),
-    "telecom",
-  );
+  await frame.getByRole("tab", { name: "ESP32-C6", exact: true }).click();
+  assert.equal(await frame.locator("#mcu-esp32").isVisible(), true);
   await frame.locator("[data-open-setup]").first().click();
   await frame.locator("[data-setup-dialog][open]").waitFor();
   await frame.getByRole("button", { name: "Try a solar example" }).click();
@@ -137,7 +136,9 @@ try {
     await frame.getByRole("button", { name: "Tracer 10415AN", exact: true }).isVisible(),
     true,
   );
-  checks.push("Shared React app navigation and battery care; website theme and Buddy chat");
+  checks.push(
+    "Shared React app navigation and battery care; homepage processor tabs and Buddy chat",
+  );
 
   await page.goto(`${base}/?path=/story/buddy-setup-conversation--phone`, {
     waitUntil: "load",

@@ -26,11 +26,7 @@ blender --background --python-exit-code 1 --python scripts/render-controller-stu
 node scripts/package-controller-study.mjs /tmp/controller-study
 ```
 
-The render script reads the scene without saving it. The homepage uses these
-plates for a reversible scroll reveal and explicit open/zoom controls. Connection
-points lead to equipment searches; their positions illustrate the terminal row,
-not pin-level wiring instructions. Cover movement is a presentation animation,
-not a mechanical disassembly simulation. Reduced motion uses immediate controls.
+The render script reads the scene without saving it.
 
 ## Products page stills
 
@@ -49,12 +45,15 @@ node scripts/package-controller-reveal.mjs /tmp/controller-reveal
 
 ## Website consumers
 
-The homepage uses the aligned `controller-study-*` plates in
-[`ControllerStudy.tsx`](../../react/components/site/ControllerStudy.tsx).
-`react-assets.ts` also exposes the closed controller and board stills from the
-`controller-reveal-*` set. Keep each set with its JSON record so the camera,
-crop and source geometry remain traceable. The React reveal has explicit open
-and zoom controls and respects reduced motion; it does not operate equipment.
+The homepage port explorer draws its terminal labels over
+`controller-study-closed-1200.webp`; the label coordinates in
+[`home/data.ts`](../../react/components/home/data.ts) are in that plate's
+1200 × 1350 frame, so re-render it with the same camera when the CAD changes.
+The base and cover study plates are kept with their JSON record but are not
+currently shown. `react-assets.ts` exposes the closed controller and board stills
+from the `controller-reveal-*` set for the Products page and design guide. The
+homepage film, board close-ups and site miniatures live in
+[`../home/`](../home/README.md).
 
 ## What the object is
 
