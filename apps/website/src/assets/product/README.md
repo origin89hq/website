@@ -1,16 +1,14 @@
 # Product renders
 
-`controller.webp` (still, status lamp lit) and `controller-live.webp`
-(two-frame heartbeat: 160 ms on, 1140 ms off — "slow blink = running", the
-lamp vocabulary in [controller documentation](https://docs.origin89.com))
-are **rendered in Blender from the real CAD**: the enclosure from `shoe.py` and
-board A from its EasyEDA STEP export, both in
-[origin89hq/hardware](https://github.com/origin89hq/hardware). The Blender
-scene itself is not published; it carries satin-black nylon, clean branding and
-the production transfers as a switchable alternative.
+The controller images are **rendered in Blender from the real CAD**: the
+enclosure from `shoe.py` and board A from its EasyEDA STEP export. The scene,
+[`enclosure/blender/origin89.blend`](https://github.com/origin89hq/hardware/tree/main/enclosure/blender)
+in origin89hq/hardware, carries satin-black nylon, clean branding and the
+production transfers as a switchable alternative. Its README covers cameras,
+controls and what the saved file was built from.
 
-To regenerate, render the saved scene so manual edits survive, or rebuild from
-the CAD when a dimension changes there. Do not hand-edit the webps.
+To regenerate, render the saved scene so manual edits survive, or rebuild it
+in the hardware repository when the CAD changes. Do not hand-edit the webps.
 
 ## Homepage controller study
 
@@ -33,6 +31,20 @@ plates for a reversible scroll reveal and explicit open/zoom controls. Connectio
 points lead to equipment searches; their positions illustrate the terminal row,
 not pin-level wiring instructions. Cover movement is a presentation animation,
 not a mechanical disassembly simulation. Reduced motion uses immediate controls.
+
+## Products page stills
+
+`controller-reveal-closed-1200.webp` and `controller-reveal-base-1200.webp` show
+the closed controller and the board with the cover hidden, harness and sleeve
+included, from the scene's saved Hero camera. Both plates share one crop taken
+from the union of their alpha bounds. `controller-reveal.json` records the crop
+and PCB hash; the packager adds the scene hash from the next render.
+
+```sh
+blender --background --python-exit-code 1 --python scripts/render-controller-reveal.py -- \
+  --scene /path/to/origin89.blend --output /tmp/controller-reveal
+node scripts/package-controller-reveal.mjs /tmp/controller-reveal
+```
 
 ## Website consumers
 
@@ -65,9 +77,7 @@ presentation finish and connector approximations described below:
   nothing has to colour-match the page. (An earlier version of this file
   required a baked flat background — that rule was for image-model output,
   which cannot hand back a real alpha channel. Cycles can.)
-- Both LED states are rendered directly from the saved Blender scene with
-  matching camera, seed and resolution. `blender/package_web.py` converts
-  and packages them into a still and animated WebP.
+- The status light is rendered in Blender, never painted in afterwards.
 - Crop comes from the content's alpha bbox, never from fixed numbers — a
   guessed crop has already sliced cables and mounting ears twice.
 
