@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 const input = process.argv[2];
@@ -31,7 +32,7 @@ for (const [part, plate] of plates) {
     await sharp(source)
       .resize({ width })
       .webp({ quality: 90, effort: 6 })
-      .toFile(new URL(`controller-study-${part}-${width}.webp`, output).pathname);
+      .toFile(fileURLToPath(new URL(`controller-study-${part}-${width}.webp`, output)));
   }
 }
 await writeFile(
