@@ -155,7 +155,7 @@
 .home .port-panel { position: absolute; top: 50%; width: min(480px, 40%); max-height: calc(100% - 32px); overflow: auto; background: rgba(13,17,22,.96); border: 1px solid var(--o89-line-strong); border-radius: 16px; padding: 24px; opacity: 0; pointer-events: none; transform: translateY(-50%) translateX(var(--from, 24px)); transition: opacity .35s var(--o89-ease), transform .55s var(--o89-ease); scrollbar-width: thin; }
 .home .explorer .port-panel { right: 24px; --from: 28px; }
 .home .explorer[data-active] .port-panel { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateX(0); }
-.home .panel-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.home .panel-top { position: sticky; top: -24px; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: -24px -24px 0; padding: 18px 24px 14px; background: rgb(13 17 22 / .97); border-bottom: 1px solid var(--o89-line); }
 .home .panel-kind { color: var(--o89-faint); font-size: 13px; }
 .home .panel-code { font-family: var(--font-data); font-size: 12px; color: var(--o89-signal); border: 1px solid var(--o89-line-strong); border-radius: 6px; padding: 3px 8px; }
 .home .panel-close { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--o89-line-strong); background: transparent; cursor: pointer; display: grid; place-items: center; }
