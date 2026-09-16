@@ -25,17 +25,14 @@ export function SolarDashboard() {
   return (
     <div className="solar-dashboard">
       <div className="solar-heading">
-        <div>
-          <span className="dashboard-eyebrow">YOUR ENERGY / NOW</span>
-          <h2>Running on sunshine.</h2>
-        </div>
+        <h2>Running on sunshine.</h2>
         <Sun size={22} strokeWidth={1.3} aria-hidden="true" />
       </div>
       <section className="solar-flow" aria-label="Illustrative site power flow">
         <div className="flow-topline">
           <span>
             <i />
-            ENERGY FLOW / SAMPLE
+            Energy flow · sample
           </span>
           <span>Tap equipment to inspect</span>
         </div>
@@ -78,7 +75,7 @@ export function SolarDashboard() {
           </button>
 
           <span className="flow-junction" aria-hidden="true">
-            LOCAL CONTROL
+            Local control
           </span>
           <button
             type="button"

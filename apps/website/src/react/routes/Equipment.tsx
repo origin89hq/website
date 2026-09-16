@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { PageIntro, SiteShell } from "../components/site/SiteChrome";
 import { catalogue, catalogueGroups, counts } from "../lib/catalogue";
@@ -47,19 +47,19 @@ export function EquipmentPage({
   }
   return (
     <SiteShell>
-      <PageIntro eyebrow="EQUIPMENT RESEARCH" title="Start with the equipment you have.">
+      <PageIntro title="Start with the equipment you have.">
         <p>
           Find your exact model and its documented interfaces. For specifications, source records
           and downloadable tables, visit Origin89 Data.
         </p>
-        <a className="underlined-action" href={siteConfig.data}>
+        <a className="o89-text-link" href={siteConfig.data}>
           Explore data.origin89.com <ArrowUpRight size={16} aria-hidden="true" />
         </a>
       </PageIntro>
-      <section className="catalogue-summary">
+      <section className="catalogue-summary" aria-labelledby="catalogue-summary-title">
         <strong>{counts.entries.toLocaleString("en")}</strong>
         <div>
-          <h2>catalogue entries to explore</h2>
+          <h2 id="catalogue-summary-title">catalogue entries to explore</h2>
           <p>
             {counts.connected} communication / I/O entries · {counts.passive} passive-equipment
             entries
@@ -132,7 +132,7 @@ export function EquipmentPage({
               <a
                 href={`/contact/?equipment=${encodeURIComponent(entry.model)}&profile=${encodeURIComponent(entry.profile)}`}
               >
-                Ask about this model ↗
+                Ask about this model <ArrowUpRight size={15} aria-hidden="true" />
               </a>
             </article>
           ))}
@@ -145,6 +145,7 @@ export function EquipmentPage({
               conversation.
             </p>
             <button
+              className="o89-plate o89-plate-ghost o89-plate-sm"
               type="button"
               onClick={() => {
                 const next = { q: "", group: "", evidence: "" };
@@ -158,7 +159,7 @@ export function EquipmentPage({
         )}
         {limit < found.length && (
           <button
-            className="catalogue-more"
+            className="o89-plate o89-plate-ghost catalogue-more"
             type="button"
             onClick={() => {
               const previous = limit;
@@ -170,7 +171,7 @@ export function EquipmentPage({
               );
             }}
           >
-            Show 24 more <span>↓</span>
+            Show 24 more <ArrowDown size={16} aria-hidden="true" />
           </button>
         )}
         <p className="catalogue-note">

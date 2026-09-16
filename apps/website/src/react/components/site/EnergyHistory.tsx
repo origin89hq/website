@@ -103,7 +103,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
           <>
             <div className="solar-history-metric">
               <span>
-                <ArrowUp size={10} aria-hidden="true" /> SOLAR GENERATED
+                <ArrowUp size={12} aria-hidden="true" /> Solar generated
               </span>
               <strong>
                 {first[selected].toFixed(2)}
@@ -112,7 +112,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
             </div>
             <div className="solar-history-metric solar-history-load">
               <span>
-                <ArrowDown size={10} aria-hidden="true" /> CONSUMPTION
+                <ArrowDown size={12} aria-hidden="true" /> Consumption
               </span>
               <strong>
                 {second[selected].toFixed(2)}
@@ -142,7 +142,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
         {site === "cottage" ? (
           <>
             <div className="solar-chart-caption">
-              <span>{weekly ? "DAILY ENERGY" : "POWER THROUGH THE DAY"}</span>
+              <span>{weekly ? "Daily energy" : "Power through the day"}</span>
               <span>
                 {labels[selected]} · {weekly ? "daily total" : "sample"}
               </span>
@@ -201,7 +201,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
               })}
               <path className="solar-peak-tick" d={`M${peakX} ${peakY - 4}V${peakY - 14}h-22`} />
               <text className="solar-peak-label" x={peakX - 25} y={peakY - 12} textAnchor="end">
-                PEAK {first[peakIndex].toFixed(2)}
+                Peak {first[peakIndex].toFixed(2)}
               </text>
               <path className="solar-zero" d="M0 116.5H360" />
               <path
@@ -213,7 +213,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
               </text>
               {!weekly && (
                 <text className="solar-night-label" x="10" y="84">
-                  NO SOLAR
+                  No solar
                 </text>
               )}
             </svg>

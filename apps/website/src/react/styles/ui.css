@@ -32,23 +32,35 @@
 }
 
 :root,.buddy-ui {
-  --background: #fafbf9;
-  --foreground: #213a42;
-  --card: #fff;
-  --card-foreground: #213a42;
-  --popover: #fff;
-  --popover-foreground: #213a42;
-  --primary: #2b4a97;
-  --primary-foreground: #fff;
-  --secondary: #e9eff5;
-  --secondary-foreground: #2c455b;
-  --muted: #edf2f6;
-  --muted-foreground: #627983;
-  --accent: #e3ebf5;
-  --accent-foreground: #2b4a97;
-  --destructive: #a94332;
-  --border: #c4d1d5;
-  --input: #c4d1d5;
-  --ring: #6683bd;
-  --radius: .75rem;
+  /* Component roles resolve to the dark web theme in theme.css. */
+  --background: var(--o89-page);
+  --foreground: var(--o89-fg);
+  --card: var(--o89-surface);
+  --card-foreground: var(--o89-fg);
+  --popover: var(--o89-surface-raised);
+  --popover-foreground: var(--o89-fg);
+  --primary: var(--o89-action);
+  --primary-foreground: var(--o89-on-fill);
+  --secondary: var(--o89-surface-raised);
+  --secondary-foreground: var(--o89-fg);
+  --muted: var(--o89-surface-raised);
+  --muted-foreground: var(--o89-muted);
+  --accent: var(--o89-surface-raised);
+  --accent-foreground: var(--o89-fg);
+  --destructive: var(--o89-alarm);
+  --border: var(--o89-line-strong);
+  --input: var(--o89-line-strong);
+  --ring: var(--o89-signal);
+  --radius: .625rem;
+}
+
+/* Buttons take the plate geometry; filled ones carry the plate's white rim. */
+[data-slot="button"]:not(.rounded-full) {
+  corner-shape: bevel;
+}
+[data-slot="button"][data-variant="default"]:not(:disabled) {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.85);
+}
+[data-slot="button"][data-variant="default"]:not(:disabled):hover {
+  background: var(--o89-action-lit);
 }

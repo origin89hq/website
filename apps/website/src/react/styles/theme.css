@@ -1,0 +1,202 @@
+/* Origin89 web theme: the brand's dark palette, used as the only website theme.
+   Values match @origin89/brand 0.4.0 tokens/themes.css (dark). The site uses
+   its own names because the brand file also switches to light values under a
+   light operating-system preference, and the website is dark only. */
+:root {
+  color-scheme: dark;
+  --o89-page: #07090c;
+  --o89-surface: #0d1116;
+  --o89-surface-raised: #12171e;
+  --o89-line: #1e252e;
+  --o89-line-strong: #2b343f;
+  --o89-focus: #ffffff;
+  --o89-fg: #e7eaee;
+  --o89-muted: #9aa5b1;
+  --o89-faint: #707b87;
+  --o89-action: #2b4a97;
+  --o89-action-lit: #3f61b3;
+  --o89-link: #6279ad;
+  --o89-signal: #7f9ce0;
+  --o89-on-fill: #ffffff;
+  --o89-nominal: #2f9d64;
+  --o89-warning: #e9a13c;
+  --o89-alarm: #e05a3c;
+  --o89-info: #7fb0d4;
+  --o89-max: 1320px;
+  --o89-gutter: clamp(16px, 4vw, 56px);
+  --o89-cut: 10px;
+  --o89-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-text: Concept, "Helvetica Neue", Arial, sans-serif;
+  --font-data: Technical, ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html {
+  background: var(--o89-page);
+  scrollbar-color: var(--o89-line-strong) var(--o89-page);
+}
+body.concept {
+  background: var(--o89-page);
+  color: var(--o89-fg);
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.55;
+}
+::selection {
+  background: var(--o89-action-lit);
+  color: var(--o89-on-fill);
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--o89-focus);
+  outline-offset: 3px;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+.skip-link {
+  background: var(--o89-surface-raised);
+  color: var(--o89-fg);
+}
+.micro {
+  font-family: var(--font-data);
+  font-size: 12px;
+  color: var(--o89-faint);
+}
+
+/* The old light journal palette now resolves to the dark theme. */
+.web-journal,
+.web-journal[data-active-site="mining"],
+.web-journal[data-active-site="telecom"] {
+  --journal-paper: var(--o89-page);
+  --journal-ink: var(--o89-fg);
+  --journal-muted: var(--o89-muted);
+  --journal-line: var(--o89-line-strong);
+  --journal-field: var(--o89-surface);
+  --journal-weight: 700;
+  background: var(--o89-page);
+  color: var(--o89-fg);
+}
+
+/* Plate 89 geometry: frames take the plate's clipped corner. */
+.o89-frame {
+  border: 1px solid var(--o89-line-strong);
+  border-radius: 14px;
+  corner-shape: bevel;
+  background: var(--o89-surface);
+}
+
+/* Plate buttons */
+.o89-plate {
+  --c: var(--o89-cut);
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  clip-path: polygon(
+    var(--c) 0,
+    calc(100% - var(--c)) 0,
+    100% var(--c),
+    100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%,
+    var(--c) 100%,
+    0 calc(100% - var(--c)),
+    0 var(--c)
+  );
+  transition: background 0.25s var(--o89-ease);
+}
+.o89-plate::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  clip-path: inherit;
+  transition: background 0.25s var(--o89-ease);
+}
+.o89-plate-action {
+  background: rgb(255 255 255 / 0.9);
+  color: var(--o89-on-fill);
+}
+.o89-plate-action::before {
+  background: var(--o89-action);
+}
+.o89-plate-action:hover::before {
+  background: var(--o89-action-lit);
+}
+.o89-plate-ghost {
+  background: var(--o89-line-strong);
+  color: var(--o89-fg);
+}
+.o89-plate-ghost::before {
+  background: var(--o89-page);
+}
+.o89-plate-ghost:hover {
+  background: var(--o89-muted);
+}
+.o89-plate-ghost:is([aria-pressed="true"], [aria-selected="true"]) {
+  background: var(--o89-fg);
+}
+.o89-plate-ghost:is([aria-pressed="true"], [aria-selected="true"])::before {
+  background: var(--o89-surface-raised);
+}
+.o89-plate-sm {
+  --c: 7px;
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+.o89-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--o89-fg);
+  font-weight: 600;
+  font-size: 15px;
+}
+.o89-text-link svg {
+  transition: transform 0.3s var(--o89-ease);
+}
+.o89-text-link:hover svg {
+  transform: translateX(4px);
+}
+.o89-wrap {
+  width: min(100% - 2 * var(--o89-gutter), var(--o89-max));
+  margin-inline: auto;
+}
+.o89-pending {
+  color: var(--o89-warning);
+}
+.o89-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

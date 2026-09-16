@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { PageIntro, SiteShell } from "../components/site/SiteChrome";
 import { siteConfig } from "../lib/site-config";
@@ -13,10 +14,7 @@ export function ContactPage({
   const [feedback, setFeedback] = useState("");
   return (
     <SiteShell>
-      <PageIntro
-        eyebrow="LET’S START WITH YOUR SETUP"
-        title="What would make your site easier to manage?"
-      >
+      <PageIntro title="What would make your site easier to manage?">
         <p>
           A clearer battery reading. A pump status before a trip. Equipment from different makers in
           one useful view. Start with one job that matters.
@@ -79,8 +77,8 @@ export function ContactPage({
               <option>Still deciding</option>
             </select>
           </div>
-          <button className="concept-action" type="submit">
-            Prepare my email draft <span>↗</span>
+          <button className="o89-plate o89-plate-action" type="submit">
+            Prepare my email draft <ArrowRight size={16} aria-hidden="true" />
           </button>
           <p className="form-disclosure">
             Opens an email draft for you to review and send. This form does not submit or store your
@@ -90,18 +88,17 @@ export function ContactPage({
             {feedback}
           </p>
         </form>
-        <aside>
-          <span className="micro">NOT SURE WHAT YOU HAVE?</span>
-          <h2>A label is a good place to start.</h2>
+        <aside aria-labelledby="contact-label-title">
+          <h2 id="contact-label-title">A label is a good place to start.</h2>
           <p>
             Buddy’s interactive setup demo shows how a few photos and questions can build an
             equipment map.
           </p>
-          <a className="underlined-action" href="/buddy/">
-            Try the setup conversation <span>↗</span>
+          <a className="o89-text-link" href="/buddy/">
+            Try the setup conversation <ArrowRight size={16} aria-hidden="true" />
           </a>
           <div className="contact-direct">
-            <span className="micro">PREFER EMAIL?</span>
+            <span>Prefer email?</span>
             <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
           </div>
           <p className="form-disclosure">

@@ -1,7 +1,5 @@
-@import "@origin89/brand/tokens/themes.css";
-
 /* The same instrument layout is used in the site preview and the full app. */
-.buddy-app.energy-app { --solar-production: var(--color-warning-deep); --solar-use: var(--color-mtq-blue); border-radius: 0; }
+.buddy-app.energy-app { --solar-production: var(--o89-signal); --solar-use: var(--o89-muted); border-radius: 0; }
 .buddy-app.energy-app.app-preview { border-radius: 0; box-shadow: none; padding: 24px; }
 .energy-app .site-avatar { border-radius: 0; }
 .energy-app .buddy-intro, .energy-app > .home-indicator { display: none; }
@@ -10,36 +8,36 @@
 .energy-app .ask-buddy, .energy-app .battery-summary, .energy-app .care-note, .energy-app .battery-type select, .energy-app .remote-alert, .energy-app .buddy-dialog, .energy-app .prompt-options button { border-radius: 0; }
 .energy-app > .ask-buddy { margin: 18px 0 0; min-height: 44px; padding: 11px 0; background: transparent; color: var(--app-accent); border-top: 1px solid var(--app-line); border-bottom: 1px solid var(--app-line); }
 .energy-app > .app-nav { margin-top: 0; border: 0; padding: 12px 0 0; }
-.energy-app .app-nav button { min-height: 48px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10px; }
+.energy-app .app-nav button { min-height: 48px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; }
 .energy-app .app-nav button[aria-current] { background: var(--app-soft); }
 .energy-app .app-top p > span { display: none; }
 .solar-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 3px 0 18px; }
-.dashboard-eyebrow { font: 8px/1.5 Technical, monospace; letter-spacing: .07em; color: var(--app-muted); }
-.solar-heading h2 { font-size: 27px; letter-spacing: -.045em; line-height: 1.12; margin-top: 6px; }
+.dashboard-eyebrow { font-size: 12px; line-height: 1.5; color: var(--app-muted); }
+.solar-heading h2 { font-size: 27px; letter-spacing: -.035em; line-height: 1.12; }
 .solar-heading > svg { color: var(--solar-production); flex: none; }
 @keyframes flow-travel { to { stroke-dashoffset: -42; } }
 .solar-metrics { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--app-line); padding: 18px 0; gap: 12px; }
 .solar-metrics > div + div { border-left: 1px solid var(--app-line); padding-left: 18px; }
-.solar-metrics > div > span { display: flex; align-items: center; gap: 5px; color: var(--app-muted); font-size: 10px; }
+.solar-metrics > div > span { display: flex; align-items: center; gap: 5px; color: var(--app-muted); font-size: 11px; }
 .solar-metrics strong { display: block; font-size: 31px; font-weight: 460; line-height: 1.2; letter-spacing: -.035em; margin-top: 8px; font-variant-numeric: tabular-nums; }
 .solar-metrics strong small { font-size: 12px; font-weight: 400; letter-spacing: 0; }
 .solar-metrics .solar-state { font-size: 26px; line-height: 1.43; }
-.solar-metrics p { color: var(--app-muted); font-size: 9px; margin-top: 5px; }
+.solar-metrics p { color: var(--app-muted); font-size: 11px; margin-top: 5px; }
 .power-history { margin-top: 16px; }
 .power-history-heading { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
 .power-history-heading h3 { font-size: 16px; line-height: 1.2; letter-spacing: -.02em; }
 .history-period { display: flex; gap: 0; }
-.history-period button { min-width: 44px; min-height: 44px; font-size: 10px; padding: 0 10px; background: transparent; border-bottom: 1px solid var(--app-line); color: var(--app-muted); }
-.history-period button[aria-pressed="true"] { border-bottom: 2px solid var(--app-ink); color: var(--app-ink); }
+.history-period button { min-width: 44px; min-height: 44px; font-size: 11px; padding: 0 10px; background: transparent; border-bottom: 1px solid var(--app-line); color: var(--app-muted); }
+.history-period button[aria-pressed="true"] { border-bottom: 2px solid var(--app-accent); color: var(--app-ink); }
 .history-readout { display: flex; gap: 16px; align-items: baseline; min-height: 40px; padding: 10px 0 6px; font-variant-numeric: tabular-nums; }
 .history-time { color: var(--app-muted); font: 10px Technical, monospace; margin-right: auto; }
-.history-time small { font: 9px Concept, sans-serif; margin-left: 4px; }
+.history-time small { font: 11px Concept, sans-serif; margin-left: 4px; }
 .history-value { display: flex; align-items: center; gap: 4px; font-size: 15px; white-space: nowrap; }
-.history-value small { color: var(--app-muted); font-size: 9px; }
+.history-value small { color: var(--app-muted); font-size: 11px; }
 .history-value i, .history-legend i { width: 5px; height: 5px; background: var(--solar-production); display: inline-block; }
 .history-use i { background: var(--solar-use); }
 .history-plot { position: relative; padding-top: 14px; color: var(--solar-production); }
-.history-scale { position: absolute; top: 0; left: 0; color: var(--app-muted); font: 8px Technical, monospace; }
+.history-scale { position: absolute; top: 0; left: 0; color: var(--app-muted); font: 10px Technical, monospace; }
 .history-plot svg { display: block; width: 100%; height: 128px; overflow: visible; }
 .history-grid { stroke: var(--app-line); stroke-width: .6; stroke-dasharray: 2 4; }
 .history-production { stroke: var(--solar-production); fill: none; stroke-width: 2; stroke-linejoin: round; }
@@ -49,58 +47,57 @@
 .history-use-dot { fill: var(--solar-use); }
 .history-plot input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
 .history-plot:has(input:focus-visible) { outline: 2px solid var(--app-accent); outline-offset: 4px; }
-.history-axis { display: flex; justify-content: space-between; padding-top: 4px; color: var(--app-muted); font: 8px Technical, monospace; }
-.history-legend { display: flex; gap: 16px; align-items: center; margin-top: 14px; font-size: 9px; color: var(--app-muted); }
+.history-axis { display: flex; justify-content: space-between; padding-top: 4px; color: var(--app-muted); font: 10px Technical, monospace; }
+.history-legend { display: flex; gap: 16px; align-items: center; margin-top: 14px; font-size: 11px; color: var(--app-muted); }
 .history-legend > span { display: flex; gap: 6px; align-items: center; }
 .history-legend .legend-use { background: var(--solar-use); }
-.history-legend > small { font-size: 8px; margin-left: auto; }
-.history-stale { font-size: 9px; color: var(--app-muted); border-bottom: 1px dashed var(--app-muted); }
-.history-gap { font-size: 10px; color: var(--app-muted); line-height: 1.5; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--app-line); }
+.history-legend > small { font-size: 11px; margin-left: auto; }
+.history-stale { font-size: 11px; color: var(--app-muted); border-bottom: 1px dashed var(--app-muted); }
+.history-gap { font-size: 11px; color: var(--app-muted); line-height: 1.5; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--app-line); }
 @container (max-width: 340px) {
   .solar-heading h2 { font-size: 24px; }
   .solar-heading > svg { display: none; }
-  .solar-metrics > div > span { font-size: 9px; }
+  .solar-metrics > div > span { font-size: 11px; }
   .solar-metrics > div + div { padding-left: 12px; }
   .solar-metrics strong { font-size: 28px; }
   .solar-metrics .solar-state { font-size: 24px; }
   .history-readout { gap: 8px; }
   .history-time small { display: none; }
   .history-value { font-size: 13px; }
-  .history-legend { gap: 10px; font-size: 8px; }
+  .history-legend { gap: 10px; font-size: 11px; }
 }
 @media (max-width: 760px) {
   .buddy-app.energy-app.app-preview { padding: 18px; }
 }
 
-.energy-outlook { margin-top: 22px; padding: 20px; background: var(--app-soft); border: 1px solid var(--app-line); }
+.energy-outlook { margin-top: 22px; padding: 20px; border: 1px solid var(--app-line); }
 .outlook-heading { display: flex; justify-content: space-between; align-items: center; color: var(--app-accent); }
-.outlook-heading > span { font: 8px/1.5 Technical, monospace; letter-spacing: .04em; }
-.energy-outlook h3 { font-size: 23px; line-height: 1.1; margin-top: 12px; letter-spacing: -.035em; }
+.energy-outlook h3 { font-size: 23px; line-height: 1.1; letter-spacing: -.035em; color: var(--app-ink); }
 .outlook-intro { margin-top: 7px; color: var(--app-muted); font-size: 11px; }
 .outlook-estimate { display: flex; gap: 18px; align-items: center; padding: 20px 0 15px; font-variant-numeric: tabular-nums; }
 .outlook-estimate > strong { font-size: 38px; line-height: 1; font-weight: 440; letter-spacing: -.05em; white-space: nowrap; }
 .outlook-estimate > strong small { font-size: 15px; margin-left: 1px; color: var(--app-muted); }
-.outlook-estimate > span { font-size: 10px; }
-.outlook-estimate > span small { display: block; color: var(--app-muted); font-size: 9px; margin-top: 4px; }
+.outlook-estimate > span { font-size: 11px; }
+.outlook-estimate > span small { display: block; color: var(--app-muted); font-size: 11px; margin-top: 4px; }
 .outlook-reserve { position: relative; height: 7px; background: var(--app-line); display: flex; }
 .outlook-reserve-floor { width: 20%; height: 100%; background: repeating-linear-gradient(110deg, transparent 0 3px, var(--app-muted) 3px 4px); opacity: .5; }
 .outlook-available { width: 56%; background: var(--app-accent); }
 .outlook-reserve > span { position: absolute; left: 76%; top: -3px; height: 13px; border-left: 1px solid var(--app-ink); }
-.outlook-reserve-labels { display: flex; justify-content: space-between; font-size: 8px; color: var(--app-muted); margin-top: 8px; }
+.outlook-reserve-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--app-muted); margin-top: 8px; }
 .outlook-scenarios { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
-.outlook-scenarios button { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 5px; font-size: 10px; color: var(--app-ink); border: 1px solid var(--app-line); background: transparent; }
+.outlook-scenarios button { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 5px; font-size: 11px; color: var(--app-ink); border: 1px solid var(--app-line); background: transparent; }
 .outlook-scenarios button[aria-pressed="true"] { border-color: var(--app-accent); background: var(--app-surface); color: var(--app-accent); }
 .outlook-evidence { margin-top: 12px; border-top: 1px solid var(--app-line); }
-.outlook-evidence summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; font-size: 10px; }
+.outlook-evidence summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; font-size: 11px; }
 .outlook-evidence summary::-webkit-details-marker { display: none; }
 .outlook-evidence[open] summary > svg { transform: rotate(45deg); }
 .outlook-evidence dl { margin: 0; }
-.outlook-evidence dl > div { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-top: 1px solid var(--app-line); font-size: 9px; }
+.outlook-evidence dl > div { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-top: 1px solid var(--app-line); font-size: 11px; }
 .outlook-evidence dt { color: var(--app-muted); }
 .outlook-evidence dd { margin: 0; white-space: nowrap; }
-.outlook-evidence > p { font-size: 10px; line-height: 1.6; color: var(--app-muted); margin-top: 12px; }
-.outlook-evidence a { display: flex; gap: 10px; align-items: center; justify-content: space-between; font-size: 10px; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; color: var(--app-accent); }
-.outlook-disclosure { font-size: 8px; color: var(--app-muted); line-height: 1.5; }
+.outlook-evidence > p { font-size: 11px; line-height: 1.6; color: var(--app-muted); margin-top: 12px; }
+.outlook-evidence a { display: flex; gap: 10px; align-items: center; justify-content: space-between; font-size: 11px; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; color: var(--app-accent); }
+.outlook-disclosure { font-size: 11px; color: var(--app-muted); line-height: 1.5; }
 @container (min-width: 500px) {
   .solar-dashboard { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; }
   .solar-heading { grid-column: 1 / -1; }
@@ -121,37 +118,32 @@
   .energy-outlook { padding: 15px; }
   .outlook-estimate { gap: 12px; }
   .outlook-estimate > strong { font-size: 32px; }
-  .outlook-estimate > span { font-size: 9px; }
+  .outlook-estimate > span { font-size: 11px; }
 }
 .history-period, .outlook-scenarios { border: 0; padding: 0; margin-inline: 0; min-width: 0; }
 
 .energy-app.app-preview .buddy-tip { display: flex; }
-.app-assembly.energy-app { --solar-production: var(--color-warning); --solar-use: var(--color-info); }
-.site-example-assistant { max-width: 390px; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--journal-line); }
-.site-example-assistant > .micro { font-size: 9px; color: var(--journal-muted); }
-.site-example-assistant h3 { font-size: 23px; line-height: 1.2; margin-top: 12px; letter-spacing: -.03em; }
-.site-example-assistant p { font-size: 14px; color: var(--journal-muted); line-height: 1.65; margin-top: 12px; }
 .solar-history .history-readout { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 18px 0 8px; }
-.solar-history-metric > span { display: block; color: var(--solar-production); font: 7px/1.5 Technical, monospace; letter-spacing: .03em; }
+.solar-history-metric > span { display: block; color: var(--solar-production); font-size: 11px; line-height: 1.5; }
 .solar-history-metric > strong { display: block; font-size: 35px; line-height: 1.15; font-weight: 440; letter-spacing: -.055em; margin-top: 7px; }
 .solar-history-metric > strong small { color: var(--app-muted); font: 10px Concept, sans-serif; letter-spacing: 0; margin-left: 4px; }
 .solar-history-load > span { color: var(--solar-use); }
 .solar-history .history-plot { padding-top: 12px; }
-.solar-chart-caption { display: flex; justify-content: space-between; align-items: center; gap: 8px; font: 7px/1.5 Technical, monospace; color: var(--app-muted); padding-bottom: 12px; }
+.solar-chart-caption { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; line-height: 1.5; color: var(--app-muted); padding-bottom: 12px; }
 .solar-chart-caption > span:last-child { color: var(--app-ink); }
 .solar-history .solar-balance-chart { height: 170px; }
 .solar-grid { stroke: var(--app-line); stroke-width: .5; }
 .solar-night { fill: var(--app-line); fill-opacity: .2; }
-.solar-scale-label, .solar-zero-label { fill: var(--app-muted); font: 8px Technical, monospace; }
-.solar-night-label { fill: var(--app-muted); font: 7px Technical, monospace; letter-spacing: .05em; }
+.solar-scale-label, .solar-zero-label { fill: var(--app-muted); font: 10px Technical, monospace; }
+.solar-night-label { fill: var(--app-muted); font: 11px Concept, sans-serif; }
 .solar-bar { fill: var(--solar-production); opacity: .55; }
 .solar-load-bar { fill: var(--solar-use); opacity: .35; }
 .solar-load-texture { color: var(--solar-use); opacity: .6; }
 .solar-bar-pair[data-selected="true"] .solar-bar, .solar-bar-pair[data-selected="true"] .solar-load-bar { opacity: 1; }
 .solar-zero { stroke: var(--app-muted); stroke-width: .7; }
 .solar-reading-line { stroke: var(--app-ink); stroke-width: .65; stroke-dasharray: 1 3; opacity: .6; }
-.solar-history .history-axis { font-size: 9px; padding-top: 0; }
-.solar-chart-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 13px; margin-top: 12px; border-top: 1px solid var(--app-line); font-size: 9px; color: var(--app-muted); }
+.solar-history .history-axis { font-size: 11px; padding-top: 0; }
+.solar-chart-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 13px; margin-top: 12px; border-top: 1px solid var(--app-line); font-size: 11px; color: var(--app-muted); }
 .solar-chart-footer > span:last-child { color: var(--app-ink); }
 @container (min-width: 500px) {
   .solar-history .power-history-heading h3 { font-size: 15px; }
@@ -160,48 +152,47 @@
 }
 @container (max-width: 340px) {
   .solar-history-metric > strong { font-size: 32px; }
-  .solar-history-metric > span { font-size: 6px; }
-  .solar-chart-caption { font-size: 6px; }
-  .solar-chart-footer { font-size: 8px; }
+  .solar-history-metric > span { font-size: 11px; }
+  .solar-chart-caption { font-size: 11px; }
+  .solar-chart-footer { font-size: 11px; }
 }
 .solar-peak-tick { fill: none; stroke: var(--solar-production); stroke-width: .7; }
-.solar-peak-label { fill: var(--solar-production); font: 7px Technical, monospace; letter-spacing: .03em; }
-.solar-history-metric > span { font-size: 8px; }
-.solar-chart-caption { font-size: 8px; }
+.solar-peak-label { fill: var(--solar-production); font: 10px Technical, monospace; letter-spacing: .03em; }
+.solar-history-metric > span { font-size: 11px; }
+.solar-chart-caption { font-size: 11px; }
 .solar-bar { opacity: .7; }
 .solar-load-bar { opacity: .48; }
 @container (max-width: 340px) {
-  .solar-history-metric > span, .solar-chart-caption { font-size: 7px; }
+  .solar-history-metric > span, .solar-chart-caption { font-size: 11px; }
 }
 .solar-history-metric > span { display: flex; align-items: center; gap: 3px; }
 .solar-chart-footer > span:last-child { display: flex; align-items: center; gap: 5px; }
-.buddy-app.energy-app, .mini-app { --app-muted: color-mix(in srgb, var(--app-ink) 72%, var(--app-bg)); }
-.solar-history-metric > span { font-size: 9px; color: var(--app-muted); }
+.solar-history-metric > span { font-size: 12px; color: var(--app-muted); }
 .solar-history-metric > span svg { color: var(--solar-production); }
 .solar-history-load > span svg { color: var(--solar-use); }
-.solar-chart-caption { font-size: 9px; }
-.solar-peak-label { fill: var(--app-ink); font-size: 8px; }
+.solar-chart-caption { font-size: 11px; }
+.solar-peak-label { fill: var(--app-ink); font-size: 11px; }
 .energy-app [data-panel="energy"] > .app-insight { margin-top: 20px; }
 @container (max-width: 340px) {
-  .solar-chart-caption { font-size: 8px; }
+  .solar-chart-caption { font-size: 11px; }
 }
 
 /* Equipment sits on the app's paper, with colour reserved for active power. */
-.equipment-drawing { --equipment-fill: var(--app-surface); --equipment-line: color-mix(in srgb, var(--app-ink) 55%, var(--app-bg)); overflow: visible; }
-.equipment-shadow { fill: var(--app-ink); opacity: .045; }
+.equipment-drawing { --equipment-fill: var(--o89-surface-raised); --equipment-line: color-mix(in srgb, var(--o89-fg) 45%, var(--o89-surface)); overflow: visible; }
+.equipment-shadow { fill: #000; opacity: .35; }
 .equipment-face { fill: var(--equipment-fill); stroke: var(--equipment-line); stroke-width: .7; }
-.equipment-side { fill: color-mix(in srgb, var(--app-line) 65%, var(--app-bg)); stroke: var(--equipment-line); stroke-width: .7; }
-.equipment-top { fill: var(--app-bg); stroke: var(--equipment-line); stroke-width: .7; }
+.equipment-side { fill: var(--o89-line); stroke: var(--equipment-line); stroke-width: .7; }
+.equipment-top { fill: var(--o89-line-strong); stroke: var(--equipment-line); stroke-width: .7; }
 .equipment-edge { fill: none; stroke: var(--equipment-line); stroke-width: .8; stroke-linejoin: bevel; }
-.equipment-panel { fill: var(--color-mtq-blue); fill-opacity: .75; stroke: var(--equipment-line); stroke-width: .7; }
-.equipment-panel-grid { fill: none; stroke: var(--app-surface); stroke-width: .6; opacity: .65; }
-.equipment-window { fill: var(--app-line); stroke: var(--equipment-line); stroke-width: .7; }
+.equipment-panel { fill: var(--o89-action); fill-opacity: .9; stroke: var(--o89-signal); stroke-width: .7; }
+.equipment-panel-grid { fill: none; stroke: var(--o89-signal); stroke-width: .5; opacity: .55; }
+.equipment-window { fill: var(--o89-page); stroke: var(--equipment-line); stroke-width: .7; }
 
 .energy-outlook, .energy-app .app-nav button[aria-current] { background: color-mix(in srgb, var(--app-accent) 4%, var(--app-bg)); }
 
 /* Source objects share a drawing style; active power follows the connecting lines. */
 .solar-flow { container-type: inline-size; display: flex; flex-direction: column; padding: 0; background: transparent; color: var(--app-ink); border-block: 1px solid var(--app-line); }
-.flow-topline { display: flex; align-items: center; justify-content: space-between; gap: 6px; color: var(--app-muted); font: 8px/1.5 Technical, monospace; letter-spacing: .05em; }
+.flow-topline { display: flex; align-items: center; justify-content: space-between; gap: 6px; color: var(--app-muted); font-size: 11px; line-height: 1.5; }
 .flow-topline > span { display: flex; align-items: center; gap: 6px; }
 .flow-topline i { width: 4px; height: 4px; background: currentColor; display: inline-block; }
 .flow-map { position: relative; width: 100%; height: 320px; min-height: 320px; max-height: 320px; max-width: 430px; flex: none; margin: 4px auto 0; }
@@ -215,15 +206,15 @@
 .flow-node > .equipment-drawing { width: 88px; height: 62px; margin-bottom: 5px; }
 .flow-node strong { font-size: 26px; font-weight: 450; letter-spacing: -.05em; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .flow-node small { font: 11px Concept, sans-serif; letter-spacing: 0; }
-.flow-node > span { color: var(--app-muted); font-size: 10px; margin-top: 4px; }
+.flow-node > span { color: var(--app-muted); font-size: 11px; margin-top: 4px; }
 .flow-node .flow-state { font-size: 20px; line-height: 1.43; letter-spacing: -.025em; }
 .flow-solar { top: 0; left: 25%; transform: translateX(-50%); }
 .flow-generator { top: 0; left: 75%; transform: translateX(-50%); }
 .flow-home { bottom: 0; left: 25%; transform: translateX(-50%); }
 .flow-battery { bottom: 0; left: 75%; transform: translateX(-50%); }
-.flow-junction { position: absolute; top: 52.5%; left: 50%; transform: translate(-50%, -50%); padding: 7px 9px; background: var(--app-bg); color: var(--app-muted); font: 7px/1.3 Technical, monospace; letter-spacing: .04em; white-space: nowrap; }
+.flow-junction { position: absolute; top: 52.5%; left: 50%; transform: translate(-50%, -50%); padding: 7px 9px; background: var(--app-bg); color: var(--app-muted); font-size: 11px; line-height: 1.3; white-space: nowrap; }
 .flow-detail { margin-top: auto; border-top: 1px solid var(--app-line); padding-block: 12px; min-height: 76px; }
-.flow-detail > span { color: var(--app-accent); font: 8px Technical, monospace; text-transform: uppercase; letter-spacing: .05em; }
+.flow-detail > span { color: var(--app-ink); font-size: 12px; font-weight: 600; }
 .flow-detail p { color: var(--app-muted); font-size: 11px; line-height: 1.5; margin-top: 4px; }
 @container (min-width: 500px) {
   .solar-dashboard > .solar-flow { grid-column: 1; grid-row: 2 / 4; align-self: stretch; }
@@ -231,15 +222,15 @@
 @container (max-width: 340px) {
   .flow-node { width: 88px; }
   .flow-node > .equipment-drawing { width: 76px; }
-  .flow-topline > span { font-size: 7px; }
+  .flow-topline > span { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .flow-current { animation: none; }
   .flow-node { transition: none; }
 }
-.equipment-timber { fill: color-mix(in srgb, var(--color-warning-deep) 12%, var(--app-surface)); stroke: var(--equipment-line); stroke-width: .7; }
-.equipment-inspector { position: fixed; inset: 0; margin: auto; width: min(440px, calc(100% - 24px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 26px; border: 1px solid var(--app-line); border-radius: 0; background: var(--app-bg); color: var(--app-ink); }
-.equipment-inspector::backdrop { background: color-mix(in srgb, var(--app-ink) 40%, transparent); }
+.equipment-timber { fill: var(--o89-surface-raised); stroke: var(--equipment-line); stroke-width: .7; }
+.equipment-inspector { position: fixed; inset: 0; margin: auto; width: min(440px, calc(100% - 24px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 26px; border: 1px solid var(--app-line-strong); border-radius: 14px; corner-shape: bevel; background: var(--app-surface); color: var(--app-ink); box-shadow: 0 30px 80px rgb(0 0 0 / .6); }
+.equipment-inspector::backdrop { background: rgb(3 4 6 / .72); }
 .equipment-inspector-close { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--app-ink); background: transparent; }
 .equipment-inspector > .equipment-drawing { width: 170px; height: 119px; display: block; margin: 22px auto; }
 .equipment-inspector h2 { font-size: 28px; line-height: 1.15; }
@@ -253,22 +244,22 @@
 .remote-site-model { display: flex; align-items: center; width: 100%; gap: 14px; text-align: left; padding: 0 0 18px; margin-bottom: 20px; border-bottom: 1px solid var(--app-line); background: transparent; color: var(--app-ink); }
 .remote-site-model > .equipment-drawing { width: 95px; height: 72px; flex: none; }
 .remote-site-model > span { font-size: 14px; line-height: 1.4; }
-.remote-site-model small { display: block; margin-bottom: 5px; color: var(--app-muted); font: 8px Technical, monospace; }
+.remote-site-model small { display: block; margin-bottom: 3px; color: var(--app-muted); font-size: 12px; }
 .remote-site-model > svg:last-child { margin-left: auto; flex: none; }
 .flow-topline { min-height: 44px; }
-.flow-topline > span:last-child { font: 9px Concept, sans-serif; letter-spacing: 0; }
+.flow-topline > span:last-child { font: 11px Concept, sans-serif; letter-spacing: 0; }
 .energy-app > .app-nav { grid-template-columns: repeat(4, 1fr); }
 .dashboard-control-link, .control-buddy-help { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 14px 0; margin-top: 14px; border-top: 1px solid var(--app-line); background: transparent; color: var(--app-accent); font-size: 12px; text-align: left; }
 .solar-dashboard > .dashboard-control-link { grid-column: 1 / -1; }
 .control-intro { padding-bottom: 20px; }
-.control-intro h2 { font-size: 28px; line-height: 1.15; margin-top: 8px; }
+.control-intro h2 { font-size: 28px; line-height: 1.15; }
 .control-intro > p { font-size: 13px; color: var(--app-muted); line-height: 1.6; margin-top: 10px; }
-.control-intro > small { display: block; font-size: 9px; color: var(--app-muted); margin-top: 12px; }
+.control-intro > small { display: block; font-size: 11px; color: var(--app-muted); margin-top: 12px; }
 .control-switch-row { display: flex; align-items: center; gap: 13px; padding: 18px 0; border-block: 1px solid var(--app-line); }
 .control-switch-row > svg { flex: none; }
 .control-switch-row > div { flex: 1; min-width: 0; }
 .control-switch-row strong { display: block; font-size: 14px; font-weight: 500; }
-.control-switch-row > div > span { display: block; font-size: 10px; color: var(--app-muted); margin-top: 4px; line-height: 1.5; }
+.control-switch-row > div > span { display: block; font-size: 11px; color: var(--app-muted); margin-top: 4px; line-height: 1.5; }
 .square-switch { display: flex; align-items: center; gap: 8px; min-height: 44px; background: transparent; padding: 0; color: var(--app-ink); font-size: 11px; }
 .square-switch > i { display: block; width: 38px; height: 22px; border: 1px solid var(--app-muted); position: relative; }
 .square-switch > i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: var(--app-muted); }
@@ -279,14 +270,14 @@
 .square-switch:disabled > i::after { display: none; }
 .control-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin: 24px 0 13px; }
 .control-section-heading h3 { font-size: 18px; line-height: 1.2; letter-spacing: -.025em; }
-.control-section-heading > span { color: var(--app-muted); font-size: 9px; }
-.camera-frame { width: 100%; position: relative; display: block; border: 0; padding: 0; background: var(--app-ink); overflow: hidden; text-align: left; color: var(--color-on-fill); }
+.control-section-heading > span { color: var(--app-muted); font-size: 11px; }
+.camera-frame { width: 100%; position: relative; display: block; border: 0; padding: 0; background: var(--o89-page); overflow: hidden; text-align: left; color: var(--o89-on-fill); }
 .camera-frame > img { width: 100%; height: 180px; object-fit: cover; }
-.camera-frame-top, .camera-frame-bottom { position: absolute; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px; background: #0009; }
-.camera-frame-top { top: 0; font: 7px Technical, monospace; }
-.camera-frame-bottom { bottom: 0; font-size: 9px; }
-.camera-inspector { position: fixed; inset: 0; margin: auto; width: min(820px, calc(100% - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 22px; border: 1px solid var(--app-line); border-radius: 0; background: var(--app-bg); color: var(--app-ink); }
-.camera-inspector::backdrop { background: color-mix(in srgb, var(--app-ink) 50%, transparent); }
+.camera-frame-top, .camera-frame-bottom { position: absolute; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px; background: rgb(0 0 0 / .62); }
+.camera-frame-top { top: 0; font: 10px Technical, monospace; }
+.camera-frame-bottom { bottom: 0; font-size: 11px; }
+.camera-inspector { position: fixed; inset: 0; margin: auto; width: min(820px, calc(100% - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 22px; border: 1px solid var(--app-line-strong); border-radius: 14px; corner-shape: bevel; background: var(--app-surface); color: var(--app-ink); box-shadow: 0 30px 80px rgb(0 0 0 / .6); }
+.camera-inspector::backdrop { background: rgb(3 4 6 / .78); }
 .camera-inspector > header { display: flex; justify-content: space-between; align-items: start; gap: 15px; margin-bottom: 20px; }
 .camera-inspector h2 { font-size: 25px; line-height: 1.2; margin-top: 8px; }
 .camera-inspector > header > button { display: grid; place-items: center; width: 44px; height: 44px; flex: none; background: transparent; color: inherit; }
@@ -300,15 +291,15 @@
 .automation-rule { border-top: 1px solid var(--app-line); padding: 16px 0 20px; }
 .automation-rule-title { display: flex; align-items: center; gap: 8px; }
 .automation-rule-title > svg { flex: none; }
-.automation-rule-title h4 { margin: 0; font-size: 13px; font-weight: 500; line-height: 1.4; }
-.automation-rule-title > span { margin-left: auto; color: var(--app-muted); font-size: 9px; text-align: right; }
+.automation-rule-title h4 { margin: 0; font-size: 13px; font-weight: 600; line-height: 1.4; }
+.automation-rule-title > span { margin-left: auto; color: var(--app-muted); font-size: 11px; text-align: right; }
 .automation-rule-title > span[data-needs-reading="true"] { text-decoration: underline dashed; text-underline-offset: 4px; }
 .automation-rule-condition { display: grid; grid-template-columns: 1fr 16px 1fr; align-items: center; gap: 12px; padding: 17px 0 13px; font-size: 12px; }
-.automation-rule-condition small { display: block; font: 7px Technical, monospace; color: var(--app-muted); margin-bottom: 7px; }
+.automation-rule-condition small { display: block; font: 10px Technical, monospace; color: var(--app-muted); margin-bottom: 7px; }
 .rule-evidence { font-size: 11px; color: var(--app-muted); line-height: 1.6; min-height: 36px; }
 .rule-scenarios { display: flex; gap: 7px; border: 0; padding: 0; margin: 14px 0 0; }
-.rule-scenarios legend { font-size: 9px; color: var(--app-muted); margin-bottom: 8px; }
-.rule-scenarios button { min-height: 44px; flex: 1; padding: 8px 4px; background: transparent; color: var(--app-muted); font-size: 10px; border: 1px solid var(--app-line); }
+.rule-scenarios legend { font-size: 11px; color: var(--app-muted); margin-bottom: 8px; }
+.rule-scenarios button { min-height: 44px; flex: 1; padding: 8px 4px; background: transparent; color: var(--app-muted); font-size: 11px; border: 1px solid var(--app-line); }
 .rule-scenarios button[aria-pressed="true"] { border-color: var(--app-accent); color: var(--app-accent); }
 @container (min-width: 500px) {
   .site-control { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
@@ -318,23 +309,23 @@
 }
 @container (max-width: 340px) {
   .control-switch-row { gap: 9px; }
-  .control-switch-row > div > span { font-size: 9px; }
+  .control-switch-row > div > span { font-size: 11px; }
   .control-switch-row strong { font-size: 12px; }
-  .camera-frame-top { font-size: 6px; padding: 9px; }
+  .camera-frame-top { font-size: 11px; padding: 9px; }
   .automation-rule-condition { font-size: 11px; gap: 8px; }
   .automation-rule-title h4 { font-size: 12px; }
 }
 
-.camera-connection { display: flex; justify-content: space-between; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--app-line); color: var(--app-muted); font-size: 9px; }
+.camera-connection { display: flex; justify-content: space-between; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--app-line); color: var(--app-muted); font-size: 11px; }
 .camera-connection > span:first-child { display: flex; align-items: center; gap: 6px; }
 .camera-automation { padding: 23px 0 0; }
 .camera-rule-heading { display: flex; align-items: center; gap: 12px; }
 .camera-rule-heading > svg { flex: none; color: var(--app-accent); }
-.camera-rule-heading h4 { font-size: 21px; font-weight: 480; letter-spacing: -.035em; margin: 5px 0 0; }
+.camera-rule-heading h4 { font-size: 21px; font-weight: 600; letter-spacing: -.035em; margin: 5px 0 0; }
 .camera-trigger { display: grid; grid-template-columns: 40px 1fr; margin-top: 20px; padding: 14px 0; border-block: 1px solid var(--app-line); }
-.camera-trigger small, .camera-rule-actions > small { font: 8px/1.6 Technical, monospace; color: var(--app-muted); }
+.camera-trigger small, .camera-rule-actions > small { font: 10px/1.6 Technical, monospace; color: var(--app-muted); }
 .camera-trigger strong { font-size: 13px; font-weight: 500; }
-.camera-trigger > span { grid-column: 2; font-size: 10px; color: var(--app-muted); margin-top: 5px; }
+.camera-trigger > span { grid-column: 2; font-size: 11px; color: var(--app-muted); margin-top: 5px; }
 .camera-rule-actions { display: grid; grid-template-columns: 40px 1fr; gap: 11px 0; padding: 16px 0; border-bottom: 1px solid var(--app-line); }
 .camera-rule-actions > small { grid-row: 1 / 3; }
 .camera-rule-actions > span { display: flex; align-items: center; gap: 9px; font-size: 11px; }
@@ -342,23 +333,23 @@
 .camera-rule-result { padding: 14px 0; margin-top: 13px; border-top: 1px solid var(--app-line); }
 .camera-rule-result > strong { font-size: 12px; font-weight: 500; }
 .camera-rule-result[data-triggered="true"] > strong { color: var(--app-accent); }
-.camera-rule-result > p, .camera-concept-note { font-size: 10px; line-height: 1.6; color: var(--app-muted); margin-top: 6px; }
+.camera-rule-result > p, .camera-concept-note { font-size: 11px; line-height: 1.6; color: var(--app-muted); margin-top: 6px; }
 .camera-event-log { list-style: none; margin: 15px 0 0; padding: 0; }
-.camera-event-log li { display: grid; grid-template-columns: 58px 1fr; gap: 8px; padding: 9px 0; border-top: 1px solid var(--app-line); font-size: 10px; line-height: 1.5; }
-.camera-event-log time { font: 9px/1.6 Technical, monospace; color: var(--app-muted); }
+.camera-event-log li { display: grid; grid-template-columns: 58px 1fr; gap: 8px; padding: 9px 0; border-top: 1px solid var(--app-line); font-size: 11px; line-height: 1.5; }
+.camera-event-log time { font: 11px/1.6 Technical, monospace; color: var(--app-muted); }
 
 .buddy-app.energy-app { position: relative; }
 .app-notification-slot { position: absolute; top: 44px; left: 12px; right: 12px; z-index: 8; pointer-events: none; }
-.phone-notification { position: relative; pointer-events: auto; border: 1px solid var(--app-line); background: color-mix(in srgb, var(--app-bg) 96%, transparent); backdrop-filter: blur(16px); box-shadow: 0 8px 30px #18232925; color: var(--app-ink); animation: notification-arrive .24s ease-out; }
+.phone-notification { position: relative; pointer-events: auto; border: 1px solid var(--app-line-strong); border-radius: 12px; corner-shape: bevel; background: var(--o89-surface-raised); box-shadow: 0 12px 32px rgb(0 0 0 / .55); color: var(--app-ink); animation: notification-arrive .24s ease-out; }
 .notification-open { display: block; width: 100%; padding: 13px 15px 15px; color: inherit; background: transparent; text-align: left; }
-.notification-app { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-right: 28px; font: 8px Technical, monospace; color: var(--app-muted); }
+.notification-app { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-right: 28px; font-size: 11px; color: var(--app-muted); }
 .notification-app > span { display: flex; align-items: center; gap: 7px; }
-.notification-app small { font: 9px Concept, sans-serif; }
+.notification-app small { font: 11px Concept, sans-serif; }
 .notification-content { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
 .notification-content > span { flex: 1; min-width: 0; }
 .notification-content strong { display: block; font-size: 15px; font-weight: 550; letter-spacing: -.02em; }
 .notification-content > span > span { display: block; font-size: 11px; margin-top: 3px; }
-.notification-content small { display: block; font-size: 10px; color: var(--app-muted); margin-top: 5px; }
+.notification-content small { display: block; font-size: 11px; color: var(--app-muted); margin-top: 5px; }
 .notification-content img { width: 54px; height: 54px; object-fit: cover; flex: none; }
 .notification-dismiss { position: absolute; right: 0; top: 0; width: 44px; height: 40px; display: grid; place-items: center; color: var(--app-muted); background: transparent; }
 .app-preview > .app-notification-slot { position: sticky; top: 16px; left: auto; right: auto; height: 0; flex: none; margin-left: auto; width: min(370px, 100%); }

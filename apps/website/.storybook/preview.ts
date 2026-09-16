@@ -1,11 +1,13 @@
 import type { Preview } from "@storybook/react-vite";
 import { createElement } from "react";
 import "../src/react/styles/base.css";
-import "../src/react/styles/journal.css";
 import "../src/react/styles/buddy-setup.css";
 import "./review.css";
 import "../src/react/styles/ui.css";
 import "../src/react/styles/website.css";
+import "../src/react/styles/theme.css";
+import "../src/react/styles/chrome.css";
+import "../src/react/styles/home.css";
 
 export default {
   initialGlobals: {

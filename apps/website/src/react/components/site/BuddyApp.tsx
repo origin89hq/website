@@ -1,4 +1,11 @@
-import { ArrowUpRight, ChartNoAxesCombined, House, SlidersHorizontal, Wrench } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChartNoAxesCombined,
+  Clock,
+  House,
+  SlidersHorizontal,
+  Wrench,
+} from "lucide-react";
 import { type MouseEvent, useEffect, useId, useRef, useState } from "react";
 import type { JournalSite } from "../../lib/journal-sites";
 import { BuddyAvatar } from "../buddy/BuddyAvatar";
@@ -88,22 +95,18 @@ export function BuddyApp({
   };
   const careContent: Record<string, string[]> = {
     unknown: [
-      "FIRST, IDENTIFY YOUR BATTERY",
       "Let’s check the label.",
       "Find the make, model and battery type. That tells us which maintenance guide applies.",
     ],
     flooded: [
-      "FLOODED BATTERY CARE",
       "Time for an electrolyte check?",
       "These batteries can need watering. Confirm the exact model, then follow its manufacturer’s safety, inspection and watering instructions.",
     ],
     agm: [
-      "SEALED BATTERY CARE",
       "No watering needed.",
       "Do not open sealed AGM or gel batteries or add water. Use the maintenance and charging guidance for your exact model.",
     ],
     lithium: [
-      "LITHIUM BATTERY CARE",
       "No watering needed.",
       "Check your model’s charging limits and temperature requirements. Follow its documentation for storage and maintenance.",
     ],
@@ -168,7 +171,6 @@ export function BuddyApp({
         <div className="buddy-intro">
           <BuddyAvatar src={buddyUrl} alt="Buddy, your Origin89 assistant" size={80} />
           <div>
-            <span>BUDDY / YOUR AI ASSISTANT</span>
             <strong>{settings.greeting}</strong>
             <p>{settings.intro}</p>
           </div>
@@ -198,7 +200,7 @@ export function BuddyApp({
                 appliance’s power draw before starting it.
               </p>
               <button className="inline-question" data-answer="loads" type="button">
-                Why does timing matter? <span>↗</span>
+                Why does timing matter? <ArrowUpRight size={15} aria-hidden="true" />
               </button>
             </>
           ) : (
@@ -233,12 +235,11 @@ export function BuddyApp({
             </select>
           </label>
           <div className="care-note" aria-live="polite">
-            <span className="care-tag">{careContent[chemistry][0]}</span>
-            <h3>{careContent[chemistry][1]}</h3>
-            <p>{careContent[chemistry][2]}</p>
+            <h3>{careContent[chemistry][0]}</h3>
+            <p>{careContent[chemistry][1]}</p>
           </div>
           <div className="care-reminder">
-            <span aria-hidden="true">◷</span>
+            <Clock size={20} strokeWidth={1.5} aria-hidden="true" />
             <p>
               <strong>Reminders that fit your equipment.</strong>
               <br />
@@ -251,7 +252,7 @@ export function BuddyApp({
             target="_blank"
             rel="noreferrer"
           >
-            Example manufacturer guides <span>↗</span>
+            Example manufacturer guides <ArrowUpRight size={15} aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -285,7 +286,6 @@ export function BuddyApp({
           ×
         </button>
         <BuddyAvatar src={buddyUrl} alt="" size={62} />
-        <span className="app-eyebrow">BUDDY / EXAMPLE CONVERSATION</span>
         <h2 id={`${id}-dialog-title`}>
           What would you
           <br />

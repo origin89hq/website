@@ -6,7 +6,7 @@ export const sourceProjects = [
   {
     id: "km43",
     name: "KM43",
-    category: "PROTOCOL",
+    category: "Protocol",
     repository: siteConfig.repositories.km43,
     summary: "How a controller talks to its clients, across UART, USB, BLE and the network.",
     contents:
@@ -22,7 +22,7 @@ export const sourceProjects = [
   {
     id: "data",
     name: "Equipment data",
-    category: "DATASET",
+    category: "Dataset",
     repository: siteConfig.repositories.data,
     summary: "Equipment specifications and register maps, with sources you can check.",
     contents:
@@ -38,7 +38,7 @@ export const sourceProjects = [
   {
     id: "hardware",
     name: "Controller hardware",
-    category: "ELECTRONICS & CAD",
+    category: "Electronics and CAD",
     repository: siteConfig.repositories.hardware,
     summary:
       "The controller board, separate generator board and enclosure, down to the editable files.",

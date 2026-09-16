@@ -28,7 +28,6 @@ export function SiteControl({
   return (
     <div className="site-control">
       <div className="control-intro">
-        <span className="dashboard-eyebrow">CONTROL / AT YOUR SITE</span>
         <h2>Your site, in motion.</h2>
         <p>Connect cameras, switch circuits, and build rules around what happens at your site.</p>
         <small>Interactive concept · No equipment connected.</small>

@@ -45,7 +45,7 @@ const metadata: Record<string, [string, string]> = {
   ],
   "/developers/design-guide/": [
     "Developer design guide",
-    "Origin89 identity, site palettes, typography, UI components, data states and downloadable brand assets.",
+    "Origin89 colour tokens, typography, plate buttons, reading states, render rules and downloadable brand assets.",
   ],
   "/contact/": [
     "Plan your Origin89 setup",

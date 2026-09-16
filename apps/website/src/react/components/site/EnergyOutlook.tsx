@@ -19,11 +19,10 @@ export function EnergyOutlook() {
   return (
     <section className="energy-outlook" aria-label="Buddy energy forecast example">
       <div className="outlook-heading">
-        <span>BUDDY / ENERGY OUTLOOK</span>
+        <h3>On battery alone.</h3>
         <CloudSun size={19} strokeWidth={1.4} aria-hidden="true" />
       </div>
-      <h3>On battery alone.</h3>
-      <p className="outlook-intro">How long could your battery carry the load?</p>
+      <p className="outlook-intro">Buddy’s estimate: how long could your battery carry the load?</p>
       <div className="outlook-estimate" aria-live="polite" aria-atomic="true">
         <strong>
           ≈{hours}

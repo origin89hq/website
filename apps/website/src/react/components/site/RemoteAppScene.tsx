@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Clock, TriangleAlert } from "lucide-react";
 import { useRef } from "react";
 import { EnergyHistory } from "./EnergyHistory";
 import { EquipmentIllustration } from "./EquipmentIllustration";
@@ -23,7 +23,7 @@ export function RemoteAppScene({
           >
             <EquipmentIllustration kind={site} />
             <span>
-              <small>SITE EQUIPMENT</small>
+              <small>Site equipment</small>
               {site === "mining" ? "Power, pumps & fuel" : "Shelter & backup power"}
             </span>
             <ArrowUpRight size={16} />
@@ -42,7 +42,9 @@ export function RemoteAppScene({
             Site power is available. The sump monitor reports a high level at the pump station.
           </p>
           <div className="remote-alert">
-            <span aria-hidden="true">!</span>
+            <span aria-hidden="true">
+              <TriangleAlert size={18} strokeWidth={1.6} />
+            </span>
             <p>
               <strong>Sump level: high</strong>
               <br />
@@ -73,14 +75,16 @@ export function RemoteAppScene({
           <EnergyHistory site={site} />
           <button className="buddy-tip" type="button" data-answer="alarm">
             <span className="tip-symbol" aria-hidden="true">
-              ↗
+              <ArrowUpRight size={15} />
             </span>
             <span>
-              <small>BUDDY’S NEXT CHECK</small>
+              <small>Buddy’s next check</small>
               <strong>Start with the sump reading.</strong>
               <span>See the evidence behind the alarm.</span>
             </span>
-            <b aria-hidden="true">→</b>
+            <b aria-hidden="true">
+              <ArrowRight size={16} />
+            </b>
           </button>
         </>
       )}
@@ -129,7 +133,7 @@ export function RemoteAppScene({
             usable reserve and fuel consumption matter too.
           </p>
           <button className="inline-question" data-answer="fuel" type="button">
-            What should the crew check? <span>↗</span>
+            What should the crew check? <ArrowUpRight size={15} aria-hidden="true" />
           </button>
         </>
       )}
@@ -145,7 +149,9 @@ export function RemoteAppScene({
             condition is unknown.
           </p>
           <div className="remote-alert remote-stale">
-            <span aria-hidden="true">◷</span>
+            <span aria-hidden="true">
+              <Clock size={18} strokeWidth={1.6} />
+            </span>
             <p>
               <strong>Waiting for a fresh update</strong>
               <br />
@@ -179,14 +185,16 @@ export function RemoteAppScene({
           <EnergyHistory site={site} />
           <button className="buddy-tip" type="button" data-answer="link">
             <span className="tip-symbol" aria-hidden="true">
-              ↗
+              <ArrowUpRight size={15} />
             </span>
             <span>
-              <small>BUDDY’S NEXT CHECK</small>
+              <small>Buddy’s next check</small>
               <strong>Check the update path.</strong>
               <span>See what we know—and what we don’t.</span>
             </span>
-            <b aria-hidden="true">→</b>
+            <b aria-hidden="true">
+              <ArrowRight size={16} />
+            </b>
           </button>
         </>
       )}
@@ -238,7 +246,7 @@ export function RemoteAppScene({
             power checks before treating these readings as current.
           </p>
           <button className="inline-question" data-answer="link" type="button">
-            Help me interpret this <span>↗</span>
+            Help me interpret this <ArrowUpRight size={15} aria-hidden="true" />
           </button>
         </>
       )}
