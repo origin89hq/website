@@ -17,7 +17,8 @@ for (const key of ["width", "height", "camera", "ortho_scale", "scene_sha256", "
   for (const plate of metadata) assert.deepEqual(plate[key], metadata[0][key], key);
 }
 
-// Crop both plates to the union of their alpha bounds so they stay aligned.
+// Crop both plates to the union of their alpha bounds so they stay aligned. The
+// harness leaves the bottom of the frame, so the crop keeps the full height.
 let [left, top, right] = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, -1];
 for (const plate of plates) {
   const { data, info } = await sharp(resolve(input, `${plate}.png`))
