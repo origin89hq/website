@@ -394,7 +394,7 @@
   .home .sentence .rule-cond { white-space: normal; }
 }
 .home .compare-head { display: flex; flex-wrap: wrap; align-items: end; gap: 16px 40px; }
-.home .compare-head .lede { max-width: 44ch; font-size: 16px; }
+.home .compare-head .lede { max-width: 60ch; font-size: 16px; }
 .home .table-scroll { margin-top: 44px; overflow-x: auto; border-radius: 16px; border: 1px solid var(--o89-line); scrollbar-width: thin; }
 .home .compare { width: 100%; min-width: 920px; border-collapse: collapse; font-size: 14.5px; }
 .home .compare th, .home .compare td { padding: 16px 18px; text-align: left; vertical-align: top; border-top: 1px solid var(--o89-line); }
@@ -403,8 +403,13 @@
 .home .compare tbody th { color: var(--o89-muted); font-weight: 500; width: 17%; background: var(--o89-surface); position: sticky; left: 0; }
 .home .compare td { color: var(--o89-muted); width: 20.75%; }
 .home .compare td.us { color: var(--o89-fg); background: rgba(43,74,151,.14); }
-.home .compare .mark { display: inline-flex; align-items: center; gap: 8px; }
+.home .compare .mark { display: inline-flex; align-items: flex-start; gap: 8px; }
+.home .compare .mark svg { margin-top: 1px; }
 .home .compare .mark svg { flex: none; }
+.home .compare .note { display: block; margin-top: 4px; }
+.home .compare tbody tr.group th { position: static; width: auto; padding: 30px 18px 12px; background: transparent; border-top: 0; color: var(--o89-fg); font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+.home .compare tbody:first-of-type tr.group th { padding-top: 22px; }
+.home .compare tbody tr.group + tr > * { border-top-color: var(--o89-line-strong); }
 .home .compare-notes { margin-top: 18px; display: grid; gap: 6px; color: var(--o89-faint); font-size: 13px; max-width: 110ch; }
 .home .compare-notes a { color: var(--o89-muted); }
 .home .app { position: relative; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 96px); align-items: center; padding: clamp(28px, 5vw, 72px) clamp(28px, 5vw, 72px) calc(clamp(28px, 5vw, 72px) + 28px); border-radius: 28px; background: radial-gradient(90% 120% at 0% 0%, rgba(43,74,151,.42), rgba(43,74,151,0) 60%), var(--o89-surface); border: 1px solid var(--o89-line); }
