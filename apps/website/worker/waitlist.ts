@@ -24,6 +24,14 @@ const MAX_BODY_BYTES = 4096;
 const MAX_TOKEN_LENGTH = 2048;
 const MAX_EMAIL_LENGTH = 254;
 const UPSTREAM_TIMEOUT_MS = 10_000;
+// Mailchimp refusals that depend on the contact's history in the audience rather
+// than on the address itself. They get the accepted reply, so the form never
+// reveals whether an address was ever on the list.
+const LIST_STATE_REFUSALS = new Set([
+  "Member Exists",
+  "Member In Compliance State",
+  "Forgotten Email Not Subscribed",
+]);
 
 const STATUS: Record<WaitlistError, number> = {
   invalid_request: 400,
@@ -199,9 +207,12 @@ async function subscribe(
   }
   if (response.ok) return "ok";
   const title = await problemTitle(response);
-  // An existing contact keeps its current status and gets the same reply, so
-  // the form never reveals who is on the list.
-  if (response.status === 400 && title === "Member Exists") return "ok";
+  // The contact keeps its current state. Only a permanently deleted or
+  // non-compliant contact is worth a log line: Mailchimp will not re-add it.
+  if (response.status === 400 && title !== undefined && LIST_STATE_REFUSALS.has(title)) {
+    if (title !== "Member Exists") console.warn({ event: "waitlist.mailchimp_refused", title });
+    return "ok";
+  }
   console.error({ event: "waitlist.mailchimp_error", status: response.status, title });
   return response.status === 400 ? "rejected" : "unavailable";
 }

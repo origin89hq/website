@@ -68,19 +68,31 @@ test("verifies the token, then adds the address as pending with the waitlist tag
   });
 });
 
-test("gives an existing contact the same reply without changing it", async () => {
-  const { calls, fetcher } = upstream(
-    { body: { ...passed, hostname: "www.origin89.com" } },
-    { status: 400, body: { title: "Member Exists" } },
+test("gives existing, non-compliant and permanently deleted contacts the accepted reply", async (t) => {
+  const warn = t.mock.method(console, "warn", () => {});
+  for (const title of [
+    "Member Exists",
+    "Member In Compliance State",
+    "Forgotten Email Not Subscribed",
+  ]) {
+    const { calls, fetcher } = upstream(
+      { body: { ...passed, hostname: "www.origin89.com" } },
+      { status: 400, body: { title } },
+    );
+    const response = await handleWaitlist(
+      signup({ email: "sam@example.com", token: "t" }),
+      env,
+      fetcher,
+    );
+    assert.equal(response.status, 200, title);
+    assert.deepEqual(await response.json(), { status: "ok" });
+    assert.equal(calls.length, 2);
+  }
+  // Only the contacts Mailchimp will not re-add are logged, without the address.
+  assert.equal(warn.mock.callCount(), 2);
+  assert.ok(
+    warn.mock.calls.every(({ arguments: [entry] }) => !JSON.stringify(entry).includes("@")),
   );
-  const response = await handleWaitlist(
-    signup({ email: "sam@example.com", token: "t" }),
-    env,
-    fetcher,
-  );
-  assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { status: "ok" });
-  assert.equal(calls.length, 2);
 });
 
 test("rejects malformed requests before calling Turnstile or Mailchimp", async () => {
@@ -135,11 +147,6 @@ test("reports Turnstile and Mailchimp outages as unavailable and refused address
     [[new TypeError("network down")], 503, "unavailable"],
     [[{ status: 500 }], 503, "unavailable"],
     [[{ body: passed }, { status: 400, body: { title: "Invalid Resource" } }], 422, "rejected"],
-    [
-      [{ body: passed }, { status: 400, body: { title: "Forgotten Email Not Subscribed" } }],
-      422,
-      "rejected",
-    ],
     [[{ body: passed }, { status: 401, body: { title: "API Key Invalid" } }], 503, "unavailable"],
     [[{ body: passed }, { status: 429 }], 503, "unavailable"],
     [[{ body: passed }, new TypeError("network down")], 503, "unavailable"],
