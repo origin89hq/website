@@ -3,13 +3,15 @@
 //   node scripts/site-art.mjs --brand /path/to/brand --renders /tmp/site-views
 //   node scripts/site-art.mjs --check
 //   node scripts/site-art.mjs --check --brand /path/to/brand
+//   node scripts/site-art.mjs --repoint <commit> --brand /path/to/brand
 //
 // --renders holds the output of origin89hq/brand situations/source/build_site_views.py,
 // which models each site from primitives and renders it opaque at 1536 x 1024. --brand is
 // the checkout the renders came from; its commit and the two scripts' hashes go into the
 // record. --check verifies that site-art.json covers every file in src/assets/art/ with
 // the current sha256, and runs as a test; adding --brand also verifies the recorded
-// scripts against the recorded commit in that checkout.
+// scripts against the recorded commit in that checkout. --repoint moves the record onto
+// another commit holding the same scripts, which a squash merge of the brand PR requires.
 //
 // Requires cwebp on PATH.
 import assert from "node:assert/strict";
@@ -52,24 +54,43 @@ async function assetNames(dir) {
     .sort();
 }
 
-// Every file in the directory must be recorded with its current sha256, and nothing else.
+// The directory and the record must both hold exactly the views in VIEWS, each with its
+// current sha256. Checking their overlap instead would accept a view dropped from both,
+// and would wave through a stray file whose entry simply omits `render`.
 export async function checkRecord(dir = ART) {
   const record = JSON.parse(await readFile(join(dir, RECORD), "utf8"));
+  const expected = Object.keys(VIEWS).sort();
   const names = await assetNames(dir);
   const problems = [];
-  for (const name of names) {
+  for (const name of expected) {
     const entry = record.files[name];
+    const present = names.includes(name);
+    if (!present) problems.push(`${name}: missing from the directory`);
     if (!entry) problems.push(`${name}: not recorded`);
     else if (entry.render !== VIEWS[name])
       problems.push(`${name}: recorded against ${entry.render}, not ${VIEWS[name]}`);
-    else if (entry.sha256 !== (await sha256(join(dir, name))))
+    else if (present && entry.sha256 !== (await sha256(join(dir, name))))
       problems.push(`${name}: sha256 differs`);
   }
+  for (const name of names) {
+    if (!expected.includes(name)) problems.push(`${name}: not a site view`);
+  }
   for (const name of Object.keys(record.files)) {
-    if (!names.includes(name)) problems.push(`${name}: recorded but missing`);
+    if (!expected.includes(name)) problems.push(`${name}: recorded but not a site view`);
   }
   assert.equal(problems.length, 0, `${RECORD} is out of date:\n${problems.join("\n")}`);
   return names;
+}
+
+async function scriptsAt(checkout, commit, scripts) {
+  for (const [path, entry] of Object.entries(scripts)) {
+    const blob = await run("git", ["-C", checkout, "show", `${commit}:${path}`], {
+      encoding: "buffer",
+      maxBuffer: 1 << 24,
+    });
+    const digest = createHash("sha256").update(blob.stdout).digest("hex");
+    assert.equal(digest, entry.sha256, `${path} at ${commit} is not what ${RECORD} records`);
+  }
 }
 
 // The recorded scripts must still hash the same at the recorded commit. Needs a brand
@@ -77,19 +98,20 @@ export async function checkRecord(dir = ART) {
 export async function checkBrand(checkout, dir = ART) {
   const record = JSON.parse(await readFile(join(dir, RECORD), "utf8"));
   assert.equal(record.brand.repository, "origin89hq/brand");
-  for (const [path, entry] of Object.entries(record.brand.scripts)) {
-    const blob = await run("git", ["-C", checkout, "show", `${record.brand.commit}:${path}`], {
-      encoding: "buffer",
-      maxBuffer: 1 << 24,
-    });
-    const digest = createHash("sha256").update(blob.stdout).digest("hex");
-    assert.equal(
-      digest,
-      entry.sha256,
-      `${path} at ${record.brand.commit} is not what ${RECORD} records`,
-    );
-  }
+  await scriptsAt(checkout, record.brand.commit, record.brand.scripts);
   return record.brand.commit;
+}
+
+// A squash merge replaces the commit the renders were packaged from, and deleting the
+// branch strands it, so the record has to follow the scripts to their commit on main.
+// Only the commit moves, and only to one holding the scripts byte for byte.
+export async function repoint(checkout, commit, dir = ART) {
+  const path = join(dir, RECORD);
+  const record = JSON.parse(await readFile(path, "utf8"));
+  await scriptsAt(checkout, commit, record.brand.scripts);
+  const moved = { ...record, brand: { ...record.brand, commit } };
+  await writeFile(path, `${JSON.stringify(moved, null, 2)}\n`);
+  return commit;
 }
 
 // The renders carry the hashes of the scripts that made them; the checkout being
@@ -134,9 +156,16 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       brand: { type: "string" },
       renders: { type: "string" },
       check: { type: "boolean", default: false },
+      repoint: { type: "string" },
     },
   });
-  if (values.check) {
+  if (values.repoint) {
+    assert.ok(values.brand, "Pass --brand with --repoint");
+    const moved = await repoint(resolve(values.brand), values.repoint);
+    await checkRecord();
+    await checkBrand(resolve(values.brand));
+    console.log(`${RECORD} now records ${moved.slice(0, 10)}`);
+  } else if (values.check) {
     const files = await checkRecord();
     let where = "";
     if (values.brand) where = ` at ${(await checkBrand(resolve(values.brand))).slice(0, 10)}`;

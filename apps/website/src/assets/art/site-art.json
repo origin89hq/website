@@ -1,7 +1,7 @@
 {
   "brand": {
     "repository": "origin89hq/brand",
-    "commit": "03aeae1a2e2e72d6f57233746a138e2d8ee5aac4",
+    "commit": "4c36b2eab8a8cbd2997334e48c7193abb2eea81c",
     "scripts": {
       "situations/source/site_scenes.py": {
         "sha256": "0c7b635d32100b657658805c27b174e6a17766ffbbe8438be403f636d6688201"

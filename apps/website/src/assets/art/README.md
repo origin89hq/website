@@ -57,6 +57,17 @@ needs a checkout holding that commit:
 node scripts/site-art.mjs --check --brand "$BRAND"
 ```
 
+**After the brand pull request merges**, point the record at the commit the
+scripts landed on. A squash merge writes a new commit and the branch is deleted,
+which strands the commit the renders were packaged from:
+
+```sh
+node scripts/site-art.mjs --repoint "$(git -C "$BRAND" rev-parse origin/main)" --brand "$BRAND"
+```
+
+Only the commit moves, and only to one holding both scripts byte for byte; the
+image hashes stay as packaged.
+
 Packaging requires `cwebp` and installed website dependencies. The record
 identifies what was published; it is not a promise that a later render reproduces
 those bytes.
