@@ -10,6 +10,11 @@ Changes include removing unused Streamdown plugins, adapting React form submit
 types, and applying the Origin89 site styles. Those changes do not remove the
 upstream license obligations.
 
+The homepage integration logos come from [Simple Icons](https://simpleicons.org/)
+through the `simple-icons` package. Each mark belongs to its owner. The Rust logo
+is the Rust Foundation's, under
+[CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
 The Inter Tight, IBM Plex Mono and Michroma font notices are supplied alongside
 the fonts shipped in `@origin89/brand`. Dependency packages keep their own
 licenses in the package distribution; this directory is not a replacement for
