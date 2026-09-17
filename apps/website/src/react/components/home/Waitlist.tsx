@@ -12,22 +12,23 @@ const ERRORS = [
   "unavailable",
 ] as const;
 type WaitlistError = (typeof ERRORS)[number];
-type Status = "idle" | "sending" | "done" | WaitlistError;
+type Status = "idle" | "verifying" | "sending" | "done" | WaitlistError;
 
 const NOTE: Record<Status, string> = {
   idle: "We’ll email you a link to confirm your address.",
+  verifying: "Complete the Cloudflare check below to finish joining.",
   sending: "Adding you to the waitlist…",
   done: "Check your inbox for a link to confirm your address. If you’re already on the list, there’s nothing more to do.",
   invalid_email: "Check the address and try again.",
   verification_failed:
-    "We couldn’t confirm this is a person. Complete the check if one is showing, or reload the page and try again.",
+    "We couldn’t confirm this is a person. Complete the check below, or reload the page and try again.",
   rejected: `Mailchimp didn’t accept this address. Try another one or write to ${siteConfig.email}.`,
   invalid_request: `Sign-up isn’t working right now. Try again later or write to ${siteConfig.email}.`,
   unavailable: `Sign-up isn’t working right now. Try again later or write to ${siteConfig.email}.`,
 };
 
-// Long enough to finish an interactive check if Turnstile shows one.
-const TOKEN_WAIT_MS = 20_000;
+// Turnstile can ask the visitor to tick a box, so leave time to notice and do it.
+const TOKEN_WAIT_MS = 120_000;
 const REQUEST_TIMEOUT_MS = 30_000;
 
 async function send(email: string, token: string): Promise<Status> {
@@ -49,6 +50,8 @@ export function Waitlist() {
   const widget = useRef<{ api: TurnstileApi; id: string }>(null);
   const ready = useRef<Promise<void>>(null);
   const token = useRef<string>(null);
+  // Set once a token has been sent: Siteverify accepts each token only once.
+  const spent = useRef(false);
   const waiting = useRef<(token: string | null) => void>(null);
 
   useEffect(
@@ -72,12 +75,15 @@ export function Waitlist() {
           sitekey: siteConfig.turnstileSiteKey,
           action: "waitlist",
           theme: "dark",
-          appearance: "interaction-only",
+          // Visible, so a visitor it asks to tick a box can see the box.
+          appearance: "always",
           callback: settle,
           "expired-callback": () => {
             token.current = null;
           },
-          "error-callback": () => {
+          "error-callback": (code) => {
+            // The code identifies the failure in Cloudflare's documentation.
+            console.warn("Turnstile error", code);
             settle(null);
             return true;
           },
@@ -108,20 +114,38 @@ export function Waitlist() {
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (status === "sending") return;
+    if (status === "sending" || status === "verifying") return;
     const email = new FormData(event.currentTarget).get("email");
     setStatus("sending");
-    let next: Status;
+    let next: Status = "verification_failed";
     try {
       await startCheck();
+      // Fetch a fresh token only when retrying, so the check does not reload
+      // under the reply, and never while one is still being completed.
+      if (spent.current && widget.current) {
+        spent.current = false;
+        token.current = null;
+        widget.current.api.reset(widget.current.id);
+      }
+      if (!token.current) setStatus("verifying");
       const value = await nextToken();
-      next = value && typeof email === "string" ? await send(email, value) : "verification_failed";
+      if (value && typeof email === "string") {
+        setStatus("sending");
+        spent.current = true;
+        token.current = null;
+        next = await send(email, value);
+      }
     } catch {
       next = "unavailable";
     }
-    // Each token is accepted once, so fetch a fresh one for the next attempt.
-    token.current = null;
-    if (widget.current) widget.current.api.reset(widget.current.id);
+    // Once someone is on the list the check has done its job; a later
+    // submission renders a new one.
+    if (next === "done" && widget.current) {
+      widget.current.api.remove(widget.current.id);
+      widget.current = null;
+      ready.current = null;
+      spent.current = false;
+    }
     setStatus(next);
   };
 
@@ -161,7 +185,7 @@ export function Waitlist() {
           <button
             className="o89-plate o89-plate-action"
             type="submit"
-            disabled={status === "sending"}
+            disabled={status === "sending" || status === "verifying"}
           >
             Join the waitlist
           </button>
@@ -172,7 +196,7 @@ export function Waitlist() {
           data-state={
             status === "done"
               ? "done"
-              : status === "idle" || status === "sending"
+              : status === "idle" || status === "verifying" || status === "sending"
                 ? undefined
                 : "error"
           }

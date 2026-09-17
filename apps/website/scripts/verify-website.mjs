@@ -126,17 +126,22 @@ try {
     false,
   );
   // Turnstile loads on first use of the form. Stub it and the API so the check
-  // stays offline and covers a sign-up, a refused retry and the fresh token each needs.
+  // stays offline. The stub issues a token only when told to, like a visitor
+  // ticking the box, and counts resets and removals.
   const turnstileScript = "https://challenges.cloudflare.com/turnstile/v0/api.js*";
   await page.route(turnstileScript, (route) =>
     route.fulfill({
       contentType: "text/javascript",
       body: `let issued = 0, options;
-        const issue = () => setTimeout(() => options.callback("stub-token-" + ++issued), 50);
+        window.turnstileStub = {
+          resets: 0,
+          removals: 0,
+          issue: () => options.callback("stub-token-" + ++issued),
+        };
         window.turnstile = {
-          render(element, value) { options = value; issue(); return "stub"; },
-          reset() { issue(); },
-          remove() {},
+          render(element, value) { options = value; return "stub"; },
+          reset() { turnstileStub.resets++; setTimeout(turnstileStub.issue, 50); },
+          remove() { turnstileStub.removals++; },
         };`,
     }),
   );
@@ -147,19 +152,40 @@ try {
     return route.fulfill(waitlistReply);
   });
   const waitlist = page.locator("#waitlist");
+  const note = waitlist.locator(".waitlist-note");
   const join = waitlist.getByRole("button", { name: "Join the waitlist", exact: true });
+  const stub = () =>
+    page.evaluate(() => ({ resets: turnstileStub.resets, removals: turnstileStub.removals }));
+  const tick = () => page.evaluate(() => window.turnstileStub.issue());
+  // The form waits for the check instead of giving up or resetting it.
   await page.locator("#waitlistEmail").fill("sam@example.com");
   await join.click();
+  await waitlist.getByText("Complete the Cloudflare check below").waitFor();
+  assert.equal(signups.length, 0);
+  await tick();
   await waitlist.locator('.waitlist-note[data-state="done"]').waitFor();
+  assert.deepEqual(await stub(), { resets: 0, removals: 1 });
+  // A refused sign-up leaves the check alone until the retry needs a new token.
   const refusedAt = errors.length;
   waitlistReply = { status: 503, json: { error: "unavailable" } };
   await join.click();
+  await waitlist.getByText("Complete the Cloudflare check below").waitFor();
+  await tick();
   await waitlist.locator('.waitlist-note[data-state="error"]').waitFor();
-  assert.match(await waitlist.locator(".waitlist-note").innerText(), /hello@origin89\.com/);
-  assert.deepEqual(signups, [
-    { email: "sam@example.com", token: "stub-token-1" },
-    { email: "sam@example.com", token: "stub-token-2" },
-  ]);
+  assert.match(await note.innerText(), /hello@origin89\.com/);
+  assert.equal((await stub()).resets, 0);
+  waitlistReply = { status: 200, json: { status: "ok" } };
+  await join.click();
+  await waitlist.locator('.waitlist-note[data-state="done"]').waitFor();
+  assert.deepEqual(await stub(), { resets: 1, removals: 2 });
+  assert.deepEqual(
+    signups.map(({ email, token }) => `${email} ${token}`),
+    [
+      "sam@example.com stub-token-1",
+      "sam@example.com stub-token-2",
+      "sam@example.com stub-token-3",
+    ],
+  );
   // Chromium logs the stubbed 503 itself; any other error still fails the check.
   errors.splice(
     refusedAt,
@@ -179,7 +205,7 @@ try {
   await page.keyboard.press("Escape");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   checks.push(
-    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; waitlist sign-up and refusal; film pause and reduced motion",
+    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; waitlist check, sign-up, refusal and retry; film pause and reduced motion",
   );
 
   await open("/developers/design-guide/");
