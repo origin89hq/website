@@ -56,7 +56,7 @@ export function BlogPostPage({ post, html }: { post: BlogPost; html: string }) {
         </header>
         <div
           className="blog-post-body"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: rendered at build time from Markdown committed to this repository
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: rendered at build time from repository Markdown with raw HTML and unsafe link schemes rejected
           dangerouslySetInnerHTML={{ __html: html }}
         />
         <footer>

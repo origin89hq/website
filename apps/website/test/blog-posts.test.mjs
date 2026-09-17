@@ -91,6 +91,30 @@ test("turns relative images and files into asset markers once per path", () => {
   assert.throws(() => renderPostBody("[Log](./log.txt#end)"), /query or fragment/);
 });
 
+test("rejects raw HTML and unsafe link schemes, and drops HTML comments", () => {
+  for (const [markdown, message] of [
+    [
+      '<img src="./scope.png" onerror="alert(1)">\n',
+      /raw HTML in posts: <img src="\.\/scope\.png"/,
+    ],
+    ['Idle draw <span onclick="x()">11 mA</span>\n', /raw HTML in posts: <span onclick/],
+    ["| Rail |\n| --- |\n| <b>12 V</b> |\n", /raw HTML in posts: <b>/],
+    [
+      "[Run](javascript:alert(1))\n",
+      /must use http, https, mailto or a path: javascript:alert\(1\)/,
+    ],
+    ["![Plot](data:image/png;base64,AA)\n", /must use http, https, mailto or a path: data:/],
+  ])
+    assert.throws(() => renderPostBody(markdown), message);
+  const { html } = renderPostBody(
+    "<!-- draft: add the scope capture -->\n\nMail [us](mailto:hello@origin89.com) or see [the repo](http://github.com/origin89hq) <!-- inline note -->\n",
+  );
+  assert.equal(
+    html,
+    '<p>Mail <a href="mailto:hello@origin89.com">us</a> or see <a href="http://github.com/origin89hq">the repo</a> </p>\n',
+  );
+});
+
 test("builds metadata and body modules with bundled asset imports", async () => {
   const parsed = parsePost(
     "board-a.md",

@@ -56,20 +56,32 @@ export function parsePost(file, source) {
 /**
  * Renders a post body. Links and images starting with ./ or ../ point at files beside the post;
  * they come back as markers in the HTML plus the list of paths to import.
- * Post Markdown is repository content, so raw HTML passes through unchanged.
+ * Raw HTML and link schemes other than http, https and mailto are rejected; HTML comments are
+ * dropped.
  */
 export function renderPostBody(markdown) {
   const assets = [];
   const marked = new Marked({
     gfm: true,
     walkTokens(token) {
-      if ((token.type !== "image" && token.type !== "link") || !/^\.\.?\//.test(token.href)) return;
+      if (token.type === "html") {
+        if (!/^\s*<!--[\s\S]*-->\s*$/.test(token.raw))
+          throw new Error(`Use Markdown instead of raw HTML in posts: ${token.raw.trim()}`);
+        return;
+      }
+      if (token.type !== "image" && token.type !== "link") return;
+      if (/^[a-z][a-z\d+.-]*:/i.test(token.href) && !/^(?:https?|mailto):/i.test(token.href))
+        throw new Error(`Post links must use http, https, mailto or a path: ${token.href}`);
+      if (!/^\.\.?\//.test(token.href)) return;
       if (/[?#]/.test(token.href))
         throw new Error(`Relative post files cannot use a query or fragment: ${token.href}`);
       if (!assets.includes(token.href)) assets.push(token.href);
       token.href = `__o89_asset_${assets.indexOf(token.href)}__`;
     },
     renderer: {
+      html() {
+        return "";
+      },
       table(token) {
         return `<div class="post-table">${Renderer.prototype.table.call(this, token)}</div>\n`;
       },

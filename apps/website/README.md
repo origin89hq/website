@@ -49,7 +49,7 @@ summary: One sentence for the post list, the page description and the feed.
 ---
 ```
 
-The body is GitHub-flavoured Markdown, including tables. Put photos, plots and data files in a folder beside the post and link them with a relative path such as `./idle-draw/scope.png`: the build copies them into `dist/assets/` under hashed names and fails if one is missing. Use root paths such as `/blog/other-post/` for links to website pages. Raw HTML passes through unchanged. The build rejects a missing or unknown field, an invalid date or an empty body. Run `just dev` to preview a post at `/blog/<slug>/`.
+The body is GitHub-flavoured Markdown, including tables. Put photos, plots and data files in a folder beside the post and link them with a relative path such as `./idle-draw/scope.png`: the build copies them into `dist/assets/` under hashed names and fails if one is missing. Use root paths such as `/blog/other-post/` for links to website pages. The build rejects a missing or unknown field, an invalid date, an empty body, raw HTML and link schemes other than `http`, `https` and `mailto`. HTML comments are allowed for notes and are left out of the page. Run `just dev` to preview a post at `/blog/<slug>/`.
 
 Posts are listed newest first on `/blog/`. The build writes an Atom feed of titles and summaries to `/blog/feed.xml`, and every page links it for feed readers. State the setup and conditions behind each measured value. Keep defect lists in the hardware repository's issues and link to them.
 
