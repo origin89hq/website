@@ -1,0 +1,28 @@
+{
+  "brand": {
+    "repository": "origin89hq/brand",
+    "commit": "03aeae1a2e2e72d6f57233746a138e2d8ee5aac4",
+    "scripts": {
+      "situations/source/site_scenes.py": {
+        "sha256": "0c7b635d32100b657658805c27b174e6a17766ffbbe8438be403f636d6688201"
+      },
+      "situations/source/build_site_views.py": {
+        "sha256": "96925202b18c021db92576f9a07e48c2d67d8b511cafc3022df48c273c11e8bb"
+      }
+    }
+  },
+  "files": {
+    "cottage.webp": {
+      "sha256": "1b01844e79ecedb587aa5e3d98721096e618dbfcbdf2fef25889fa34fa20ad56",
+      "render": "site-cottage.png"
+    },
+    "mining.webp": {
+      "sha256": "75684de8ccca53bc50b67754bef482274874d83266a3739657b997396875e826",
+      "render": "site-mine.png"
+    },
+    "telecom.webp": {
+      "sha256": "e126877c884e42ec46a7535505ef165cd92ccea8a442b06e0da2ebc31193851c",
+      "render": "site-telecom.png"
+    }
+  }
+}

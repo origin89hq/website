@@ -10,7 +10,11 @@ inputs, in
 [`enclosure/blender/web/`](https://github.com/origin89hq/hardware/tree/main/enclosure/blender/web).
 The audience miniatures are the exception: generic scenes modelled by
 origin89hq/brand's
-[`situations/source/build_site_miniatures.py`](https://github.com/origin89hq/brand/blob/main/situations/source/build_site_miniatures.py).
+[`situations/source/site_scenes.py`](https://github.com/origin89hq/brand/blob/main/situations/source/site_scenes.py)
+and rendered by
+[`build_site_miniatures.py`](https://github.com/origin89hq/brand/blob/main/situations/source/build_site_miniatures.py)
+beside it. The site images on `/sites/` are the same models seen wide; see
+[`../art/`](../art/README.md).
 
 [`home-media.json`](home-media.json) records each file's sha256, the script that
 produced it as `repository:path`, which hardware inputs it depends on, and the

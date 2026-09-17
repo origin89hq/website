@@ -38,7 +38,7 @@ export function SitesPage() {
                   loading="lazy"
                 />
               </a>
-              <figcaption>{site.caption} Generated concept image.</figcaption>
+              <figcaption>{site.caption}</figcaption>
             </figure>
             <div className="site-story-copy">
               <h2>{site.label}</h2>
@@ -87,9 +87,7 @@ export function SitePage({ site: siteId }: { site: JournalSite }) {
         </div>
         <figure className="site-detail-image">
           <img src={journalAssets[siteId]} alt={site.alt} width="1536" height="1024" />
-          <figcaption>
-            {site.caption} Generated concept image, not a customer installation.
-          </figcaption>
+          <figcaption>{site.caption} A rendered example, not a customer installation.</figcaption>
         </figure>
       </section>
       <section className="site-equipment" aria-labelledby="site-equipment-title">
