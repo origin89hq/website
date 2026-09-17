@@ -62,7 +62,7 @@ node scripts/package-home-media.mjs --check
 
 Packaging requires `ffmpeg` with libx264 and libsvtav1, `cwebp` and installed website
 dependencies. To repackage part of the set, pass `--only` with any of
-`film,chips,studio,dioramas,gerber,model`. Files outside those groups keep their
+`film,chips,studio,dioramas,gerber`. Files outside those groups keep their
 records, which must still match; the packager refuses if the hardware inputs
 changed for a group it is not repackaging. The record names the hardware commit
 but not the brand commit behind the miniatures.
