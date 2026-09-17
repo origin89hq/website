@@ -269,107 +269,196 @@ function OpenHardware() {
 const COLUMNS = ["origin89", "cerbo", "solarassistant", "home-assistant"] as const;
 type Mark = "yes" | "no" | "part";
 type Cell = { mark?: Mark; text: string; note?: string; pending?: boolean };
-const COMPARE: { feature: string; cells: [Cell, Cell, Cell, Cell] }[] = [
+type Row = { feature: string; cells: [Cell, Cell, Cell, Cell] };
+const COMPARE: { group: string; rows: Row[] }[] = [
   {
-    feature: "Mixed-brand gear",
-    cells: [
-      { mark: "yes", text: "Designed for it", note: "Each model verified before it’s listed" },
+    group: "Built to keep running",
+    rows: [
       {
-        mark: "part",
-        text: "Victron-first",
-        note: "Some third-party PV inverters and CAN batteries",
+        feature: "Control and networking",
+        cells: [
+          {
+            mark: "yes",
+            text: "On separate chips",
+            note: "A microcontroller decides; a radio module only talks, so a Wi-Fi fault can’t stop the rules",
+          },
+          {
+            text: "One Linux computer",
+            note: "Venus OS runs networking, the display and generator control on one dual-core processor",
+          },
+          { text: "One Raspberry Pi", note: "Linux-based image" },
+          {
+            text: "One Linux computer",
+            note: "Home Assistant OS; HA Green uses a quad-core RK3566",
+          },
+        ],
       },
-      { mark: "part", text: "20+ inverter brands", note: "EPEver and Renogy not supported" },
-      { mark: "yes", text: "Anything", note: "If you write the integration" },
-    ],
-  },
-  {
-    feature: "RS-485",
-    cells: [
-      { mark: "yes", text: "3 ports, one bus each" },
-      { mark: "part", text: "USB adapter" },
-      { mark: "part", text: "USB adapter per device" },
-      { mark: "part", text: "DIY adapters" },
-    ],
-  },
-  {
-    feature: "CAN and VE.Direct",
-    cells: [
-      { mark: "yes", text: "1 × CAN, 2 × VE.Direct" },
-      { mark: "yes", text: "2 × VE.Can, 3 × VE.Direct" },
-      { mark: "part", text: "USB adapter per device" },
-      { mark: "part", text: "DIY" },
-    ],
-  },
-  {
-    feature: "Temperature probes",
-    cells: [
-      { mark: "yes", text: "1-Wire probes on one cable" },
-      { mark: "yes", text: "4 inputs", note: "Victron sensors" },
-      { mark: "no", text: "BMS-reported only" },
-      { mark: "part", text: "DIY with ESPHome" },
-    ],
-  },
-  {
-    feature: "Tank level",
-    cells: [
-      { mark: "yes", text: "4–20 mA input" },
-      { mark: "yes", text: "4 resistive inputs", note: "4–20 mA through the GX Tank 140 add-on" },
-      { mark: "no", text: "Not stated" },
-      { mark: "part", text: "DIY" },
-    ],
-  },
-  {
-    feature: "Generator start",
-    cells: [
-      { mark: "yes", text: "Separate board", note: "Two relays in series, hardware watchdog" },
       {
-        mark: "yes",
-        text: "Built-in relay",
-        note: "State of charge, voltage, load and quiet hours",
+        feature: "After a power cut",
+        cells: [
+          {
+            mark: "yes",
+            text: "No operating system to boot",
+            note: "The firmware runs directly on the microcontroller; start-up time not yet measured",
+          },
+          {
+            mark: "part",
+            text: "Linux boots first",
+            note: "About 2 to 2.5 min, as reported on Victron’s community forum",
+          },
+          { mark: "part", text: "Linux boots first", note: "Time not stated" },
+          {
+            mark: "part",
+            text: "A few minutes",
+            note: "Up to 5 min, per Home Assistant support",
+          },
+        ],
       },
-      { mark: "no", text: "Not stated" },
-      { mark: "part", text: "DIY relay and automation" },
-    ],
-  },
-  {
-    feature: "Decides with no internet",
-    cells: [
-      { mark: "yes", text: "Yes" },
-      { mark: "yes", text: "Yes" },
-      { mark: "part", text: "Monitoring yes", note: "Offline rules not stated" },
-      { mark: "yes", text: "Yes" },
-    ],
-  },
-  {
-    feature: "Open source",
-    cells: [
-      { mark: "yes", text: "Firmware and board files" },
-      { mark: "part", text: "Partly", note: "Parts of Venus OS; no hardware files" },
-      { mark: "no", text: "No" },
-      { mark: "part", text: "Software yes", note: "Hardware varies" },
-    ],
-  },
-  {
-    feature: "Idle draw",
-    cells: [
       {
-        mark: "yes",
-        text: "About 0.5 W",
-        note: "38 mA at 13.1 V with Wi-Fi and Bluetooth on; 11 mA with the radio off. First bench readings",
+        feature: "If the controller stops",
+        cells: [
+          {
+            mark: "yes",
+            text: "The generator contact opens by itself",
+            note: "A hardware watchdog on the generator board opens two relays in series. About 4.5 s by design; bench timing pending",
+          },
+          {
+            text: "Not documented",
+            note: "Its watchdog restarts the computer; no documented interlock on the generator relay",
+          },
+          { text: "Not stated" },
+          { text: "Depends on your relay and automation" },
+        ],
       },
-      { text: "2.8 W" },
-      { text: "Not stated" },
-      { text: "About 1.7 W for HA Green, plus adapters" },
+      {
+        feature: "Temperature rating",
+        cells: [
+          {
+            mark: "yes",
+            text: "Parts rated −40 to +85 °C",
+            note: "Controller board. Generator board relays: −25 to +65 °C. Product rating pending testing",
+          },
+          { text: "−20 to +50 °C" },
+          { text: "0 to 50 °C", note: "Raspberry Pi 4 board" },
+          { text: "0 to 40 °C", note: "Indoor use only" },
+        ],
+      },
+      {
+        feature: "Idle draw",
+        cells: [
+          {
+            mark: "yes",
+            text: "About 0.5 W",
+            note: "Under a fifth of a Cerbo GX. 38 mA at 13.1 V with Wi-Fi and Bluetooth on; 11 mA with the radio off. First bench readings",
+          },
+          { text: "2.8 W", note: "At 12 V, without the GX Touch display" },
+          { text: "Not stated", note: "A Raspberry Pi board" },
+          { text: "About 1.7 W", note: "HA Green at 12 V, plus adapters" },
+        ],
+      },
     ],
   },
   {
-    feature: "Availability",
-    cells: [
-      { text: "In active development, not for sale yet", pending: true },
-      { text: "Shipping" },
-      { text: "Shipping" },
-      { text: "Shipping" },
+    group: "Connects to",
+    rows: [
+      {
+        feature: "Mixed-brand gear",
+        cells: [
+          { mark: "yes", text: "Designed for it", note: "Each model verified before it’s listed" },
+          {
+            mark: "part",
+            text: "Victron-first",
+            note: "Some third-party PV inverters and CAN batteries",
+          },
+          { mark: "part", text: "20+ inverter brands", note: "EPEver and Renogy not supported" },
+          { mark: "yes", text: "Anything", note: "If you write the integration" },
+        ],
+      },
+      {
+        feature: "RS-485",
+        cells: [
+          { mark: "yes", text: "3 ports, one bus each" },
+          { mark: "part", text: "USB adapter" },
+          { mark: "part", text: "USB adapter per device" },
+          { mark: "part", text: "DIY adapters" },
+        ],
+      },
+      {
+        feature: "CAN and VE.Direct",
+        cells: [
+          { mark: "yes", text: "1 × CAN, 2 × VE.Direct" },
+          { mark: "yes", text: "2 × VE.Can, 3 × VE.Direct" },
+          { mark: "part", text: "USB adapter per device" },
+          { mark: "part", text: "DIY" },
+        ],
+      },
+      {
+        feature: "Temperature probes",
+        cells: [
+          { mark: "yes", text: "1-Wire probes on one cable" },
+          { mark: "yes", text: "4 inputs", note: "Victron sensors" },
+          { mark: "no", text: "BMS-reported only" },
+          { mark: "part", text: "DIY with ESPHome" },
+        ],
+      },
+      {
+        feature: "Tank level",
+        cells: [
+          { mark: "yes", text: "4–20 mA input" },
+          {
+            mark: "yes",
+            text: "4 resistive inputs",
+            note: "4–20 mA through the GX Tank 140 add-on",
+          },
+          { mark: "no", text: "Not stated" },
+          { mark: "part", text: "DIY" },
+        ],
+      },
+      {
+        feature: "Generator start",
+        cells: [
+          { mark: "yes", text: "Two-wire start", note: "On its own generator board" },
+          {
+            mark: "yes",
+            text: "Built-in relay",
+            note: "State of charge, voltage, load and quiet hours",
+          },
+          { mark: "no", text: "Not stated" },
+          { mark: "part", text: "DIY relay and automation" },
+        ],
+      },
+      {
+        feature: "Decides with no internet",
+        cells: [
+          { mark: "yes", text: "Yes" },
+          { mark: "yes", text: "Yes" },
+          { mark: "part", text: "Monitoring yes", note: "Offline rules not stated" },
+          { mark: "yes", text: "Yes" },
+        ],
+      },
+    ],
+  },
+  {
+    group: "Open and available",
+    rows: [
+      {
+        feature: "Open source",
+        cells: [
+          { mark: "yes", text: "Firmware and board files" },
+          { mark: "part", text: "Partly", note: "Parts of Venus OS; no hardware files" },
+          { mark: "no", text: "No" },
+          { mark: "part", text: "Software yes", note: "Hardware varies" },
+        ],
+      },
+      {
+        feature: "Availability",
+        cells: [
+          { text: "In active development, not for sale yet", pending: true },
+          { text: "Shipping" },
+          { text: "Shipping" },
+          { text: "Shipping" },
+        ],
+      },
     ],
   },
 ];
@@ -385,12 +474,7 @@ function CompareCell({ cell, us }: { cell: Cell; us?: boolean }) {
       ) : (
         <span className={cell.pending ? "o89-pending" : undefined}>{cell.text}</span>
       )}
-      {cell.note && (
-        <>
-          <br />
-          {cell.note}
-        </>
-      )}
+      {cell.note && <span className="note">{cell.note}</span>}
     </td>
   );
 }
@@ -404,8 +488,9 @@ function Compare() {
             How it compares.
           </h2>
           <p className="lede">
-            Three common ways to monitor and control an off-grid site, checked against their makers’
-            own documentation on 16 September 2026.
+            The difference is in how it’s built. A microcontroller decides without an operating
+            system to boot, the radio can fail without taking the rules with it, and the generator
+            contact opens by itself if the Controller stops.
           </p>
         </div>
         <section
@@ -426,24 +511,34 @@ function Compare() {
                 <th scope="col">Home Assistant, DIY</th>
               </tr>
             </thead>
-            <tbody>
-              {COMPARE.map((row) => (
-                <tr key={row.feature}>
-                  <th scope="row">{row.feature}</th>
-                  {row.cells.map((cell, i) => (
-                    <CompareCell key={COLUMNS[i]} cell={cell} us={i === 0} />
-                  ))}
+            {COMPARE.map(({ group, rows }) => (
+              <tbody key={group}>
+                <tr className="group">
+                  <th scope="colgroup" colSpan={5}>
+                    {group}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
+                {rows.map((row) => (
+                  <tr key={row.feature}>
+                    <th scope="row">{row.feature}</th>
+                    {row.cells.map((cell, i) => (
+                      <CompareCell key={COLUMNS[i]} cell={cell} us={i === 0} />
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            ))}
           </table>
         </section>
         <div className="compare-notes">
           <p>
-            Sources: Victron Cerbo GX MK2 datasheet and GX manual; SolarAssistant documentation and
-            supported-inverter list; Home Assistant Green and ESPHome documentation. The Origin89
-            column comes from the revision A design files; its idle draw comes from first bench
-            readings and other values are not yet measured. Corrections welcome at{" "}
+            Checked on 17 September 2026 against Victron’s Cerbo GX datasheet, GX manual and
+            developer wiki; SolarAssistant’s documentation and supported-inverter list; the
+            Raspberry Pi 4 product brief; Home Assistant Green’s specifications and support pages;
+            and the datasheets of the Controller’s parts. The Cerbo’s boot time comes from Victron’s
+            community forum, not an official figure. The Origin89 column comes from the revision A
+            design files; temperature figures are part ratings, the idle draw is a first bench
+            reading and other values are not yet measured. Corrections welcome at{" "}
             <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
           </p>
         </div>
