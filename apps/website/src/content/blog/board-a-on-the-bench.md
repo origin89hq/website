@@ -6,6 +6,8 @@ summary: Two unattended nights, one bad reply in 58 169 Modbus polls, and a work
 
 The first revision of the Controller's main board, board A, has been on our bench since 14 September. One board from the first order runs a self-test image that exercises each circuit on a schedule and keeps the results in the board's own memory. Everything below comes from that single board on a bench, not from a site.
 
+![Board A on the bench, powered, with a green lamp lit, wire loops joining three of its RS-485 terminals and test cables attached](./board-a-on-the-bench/board-a.webp)
+
 The session logs have the wiring, firmware builds and raw readings: [14 September](https://github.com/origin89hq/hardware/blob/main/boards/controller-a/bench/2026-09-14.md), [15 to 16 September](https://github.com/origin89hq/hardware/blob/main/boards/controller-a/bench/2026-09-16.md) and [16 to 17 September](https://github.com/origin89hq/hardware/blob/main/boards/controller-a/bench/2026-09-17.md).
 
 ## Two nights without a laptop
