@@ -324,7 +324,7 @@
 .home .decode span { font-family: var(--font-data); font-size: 12.5px; color: var(--o89-faint); }
 @media (max-width: 980px) {
   .home .connect-stage { display: block; min-height: 0; }
-  .home .connect-render { position: relative; top: auto; transform: none; width: 100%; margin-top: 8px; }
+  .home .connect-render { position: relative; left: auto; right: auto; top: auto; transform: none; width: 100%; margin-top: 8px; }
   .home .connect-render img { -webkit-mask-image: linear-gradient(#000 68%, transparent 96%); mask-image: linear-gradient(#000 68%, transparent 96%); }
   .home .connect-render figcaption { right: 16px; bottom: 0; }
   .home .decode { grid-template-columns: repeat(2, auto); }

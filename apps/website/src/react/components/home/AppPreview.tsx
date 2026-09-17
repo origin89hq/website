@@ -5,10 +5,10 @@ const ago = (seconds: number) =>
 
 type Row = { what: string; value: string; via: string; age: number; limit?: number };
 const ROWS: Row[] = [
-  { what: "Battery bank", value: "12.62 V", via: "RS-485 1", age: 8 },
-  { what: "Solar charging", value: "18.4 A", via: "RS-485 1", age: 8 },
-  { what: "Fridge, middle shelf", value: "3.8 °C", via: "1-Wire", age: 41 },
-  { what: "Outdoor air", value: "−4.2 °C", via: "1-Wire", age: 890, limit: 900 },
+  { what: "Battery bank", value: "12.62 V", via: "RS-485 1", age: 8 },
+  { what: "Solar charging", value: "18.4 A", via: "RS-485 1", age: 8 },
+  { what: "Fridge, middle shelf", value: "3.8 °C", via: "1-Wire", age: 41 },
+  { what: "Outdoor air", value: "−4.2 °C", via: "1-Wire", age: 890, limit: 900 },
 ];
 
 // Sample readings age in place; one probe goes stale while the visitor watches.
@@ -80,7 +80,7 @@ export function AppPreview() {
           </div>
         </div>
         <div className="rule">
-          <b>Generator rule</b>Starts below 11.9 V, runs at least 45 min, never between 22:00 and
+          <b>Generator rule</b>Starts below 11.9 V, runs at least 45 min, never between 22:00 and
           07:00.
         </div>
         <div className="app-tabbar">

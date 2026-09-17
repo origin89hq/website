@@ -16,8 +16,8 @@ export function ContactPage({
     <SiteShell>
       <PageIntro title="What would make your site easier to manage?">
         <p>
-          A clearer battery reading. A pump status before a trip. Equipment from different makers in
-          one useful view. Start with one job that matters.
+          A clearer battery reading, a pump status before a trip or one view of equipment from
+          different makers. Start with the job that matters most.
         </p>
       </PageIntro>
       <section className="content-section contact-layout">

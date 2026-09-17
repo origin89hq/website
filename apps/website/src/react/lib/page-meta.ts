@@ -17,31 +17,31 @@ export const publicPaths = [
 const metadata: Record<string, [string, string]> = {
   "/buddy/": [
     "Understand your setup with Buddy",
-    "A photo-led installation inventory preview. Add equipment, confirm details and build your setup record.",
+    "Preview Buddy’s setup conversation. Add equipment from photos, confirm the details and build your setup record.",
   ],
   "/": [
     "One controller for the gear you already own",
     "The Origin89 Controller reads the charge controller, inverter, batteries, probes and generator on your wall and runs your rules at the site. In active development.",
   ],
   "/products/": [
-    "One connected product family",
-    "The Origin89 Controller, Offgrid app and Buddy each have a clear role. See how they fit your site.",
+    "Controller, Offgrid app and Buddy",
+    "The Origin89 Controller runs your rules at the site, the Offgrid app shows the readings and Buddy explains them.",
   ],
   "/equipment/": [
     "Find your equipment",
-    "Explore exact models, communication profiles and research evidence. Start with your existing equipment and verify compatibility model by model.",
+    "Search exact models, communication profiles and research evidence for the equipment you already own. Verify compatibility model by model.",
   ],
   "/sites/": [
-    "Built around your site",
-    "Explore cottage, mining and remote telecom setups with views that adapt to the equipment and work that matter.",
+    "Cottage, mining and telecom sites",
+    "Example cottage, mining and remote telecom setups, with app views built around each site’s equipment.",
   ],
   "/open-source/": [
     "Open-source code, data and hardware",
-    "Explore the public KM43 protocol, equipment dataset and controller hardware repositories, with editable source files and project licences.",
+    "Explore the public KM43 protocol, equipment dataset and controller hardware repositories, with editable source files and licences.",
   ],
   "/developers/": [
     "Build with Origin89",
-    "Build with the KM43 Rust crate and TypeScript bindings, download equipment data, and inspect the controller board designs on GitHub.",
+    "Use the KM43 Rust crate and TypeScript bindings, download equipment data and inspect the controller board designs on GitHub.",
   ],
   "/developers/design-guide/": [
     "Developer design guide",
@@ -49,7 +49,7 @@ const metadata: Record<string, [string, string]> = {
   ],
   "/contact/": [
     "Plan your Origin89 setup",
-    "Tell us about your equipment and the job you want it to do. Prepare an email draft for a site conversation.",
+    "Tell us about your equipment and the job you want it to do. The form prepares an email draft for you to send.",
   ],
 };
 for (const product of products)
@@ -58,7 +58,7 @@ for (const site of journalSites) {
   metadata[`/sites/${site.id}/`] = [site.label, site.body];
   metadata[`/app/${site.id}/`] = [
     `Offgrid · ${site.label}`,
-    `Explore an interactive Origin89 Offgrid app concept for ${site.label.toLowerCase()}. Sample equipment and readings.`,
+    `An interactive Origin89 Offgrid app concept for ${site.label.toLowerCase()}, with sample equipment and readings.`,
   ];
 }
 export function pageMeta(path: string) {

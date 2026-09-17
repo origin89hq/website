@@ -50,10 +50,10 @@ const rs485 = {
     "Charge controllers, inverters and energy meters that publish readings over RS-485, usually as Modbus RTU. Each of the three ports is its own bus with its own transceiver.",
   pins: pins(["1", "A", WIRE.orange], ["2", "B", WIRE.whiteOrange], ["3", "GND", WIRE.green]),
   specs: specs(
-    ["Terminal", "3-pin pluggable screw, 3.5 mm pitch"],
+    ["Terminal", "3-pin pluggable screw, 3.5 mm pitch"],
     ["Transceiver", "MAX13487E, direction switched automatically"],
-    ["Termination", "120 Ω on a jumper beside the terminal, fitted when shipped"],
-    ["Idle bias", "560 Ω fail-safe pull-up and pull-down"],
+    ["Termination", "120 Ω on a jumper beside the terminal, fitted when shipped"],
+    ["Idle bias", "560 Ω fail-safe pull-up and pull-down"],
     ["Protection", "SM712 surge clamp at the terminal"],
     ["Activity", "Receive light on the board edge"],
   ),
@@ -61,7 +61,7 @@ const rs485 = {
   limits: [
     "One bus per port. Chain devices in a line and terminate the two ends.",
     "Fit the jumper only when the Controller sits at an end of the bus.",
-    "Up to 500 kbit/s by the transceiver; Modbus gear commonly runs 9,600 to 115,200 baud.",
+    "Up to 500 kbit/s by the transceiver; Modbus gear commonly runs 9,600 to 115,200 baud.",
   ],
 };
 
@@ -73,24 +73,24 @@ export const PORTS: Port[] = [
     line: "653,1030 653,1395 690,1395",
     label: [700, 1402],
     text: "DC IN",
-    role: "12 V",
+    role: "12 V",
     kind: "Power",
-    title: "12 V straight from the battery bank.",
+    title: "12 V straight from the battery bank.",
     summary:
       "Wire it to a fused circuit on the DC panel. Nothing has to stay on, inverter included, to keep the Controller awake.",
     onWall: "A circuit on the blade fuse block.",
-    pins: pins(["1", "+12 V", WIRE.red], ["2", "GND", WIRE.black]),
+    pins: pins(["1", "+12 V", WIRE.red], ["2", "GND", WIRE.black]),
     specs: specs(
-      ["Terminal", "2-pin pluggable screw, 5.08 mm pitch"],
-      ["Input", "12 V battery bank; revision A is built for 12 V"],
-      ["Protection", "SMBJ18A clamp, 2 A resettable fuse, reverse-polarity protection"],
-      ["Rails", "5 V for the bus transceivers, 3.3 V for logic and radio"],
+      ["Terminal", "2-pin pluggable screw, 5.08 mm pitch"],
+      ["Input", "12 V battery bank; revision A is built for 12 V"],
+      ["Protection", "SMBJ18A clamp, 2 A resettable fuse, reverse-polarity protection"],
+      ["Rails", "5 V for the bus transceivers, 3.3 V for logic and radio"],
       [
         "Idle draw",
-        "38 mA at 13.1 V with Wi-Fi and Bluetooth on, 11 mA with the radio rail off; first bench readings",
+        "38 mA at 13.1 V with Wi-Fi and Bluetooth on, 11 mA with the radio rail off; first bench readings",
       ],
     ),
-    limits: ["24 V banks are planned for revision B, not supported on A."],
+    limits: ["24 V banks are planned for revision B, not supported on A."],
   },
   {
     id: "rs485-1",
@@ -136,9 +136,9 @@ export const PORTS: Port[] = [
     onWall: "Unused. Flooded lead-acid batteries have no BMS to read.",
     pins: pins(["1", "CANH", WIRE.grey], ["2", "CANL", WIRE.whiteGrey], ["3", "GND", WIRE.green]),
     specs: specs(
-      ["Terminal", "3-pin pluggable screw, 3.5 mm pitch"],
+      ["Terminal", "3-pin pluggable screw, 3.5 mm pitch"],
       ["Transceiver", "TJA1051T/3"],
-      ["Termination", "120 Ω on a jumper beside the terminal, fitted when shipped"],
+      ["Termination", "120 Ω on a jumper beside the terminal, fitted when shipped"],
       ["Protection", "PESD1CAN clamp at the terminal"],
       ["Activity", "Receive light on the board edge"],
     ),
@@ -160,11 +160,11 @@ export const PORTS: Port[] = [
     summary:
       "Digital probes of the DS18B20 kind share one three-wire cable. Each has its own address, so the fridge and the battery box never get confused.",
     onWall: "A tap near the busbars feeds the fridge shelf, the battery bank and the outdoor air.",
-    pins: pins(["1", "3.3 V", WIRE.orange], ["2", "DATA", WIRE.blue], ["3", "GND", WIRE.whiteBlue]),
+    pins: pins(["1", "3.3 V", WIRE.orange], ["2", "DATA", WIRE.blue], ["3", "GND", WIRE.whiteBlue]),
     specs: specs(
       ["Terminal", "3-pin pluggable screw at the bottom; a second landing on the right side"],
-      ["Probe supply", "3.3 V through a 100 mA resettable fuse"],
-      ["Protection", "ESD clamp at the terminal, 100 Ω series resistor"],
+      ["Probe supply", "3.3 V through a 100 mA resettable fuse"],
+      ["Protection", "ESD clamp at the terminal, 100 Ω series resistor"],
       ["Probes per bus", "Pending bench test", true],
     ),
     connect: ["Fridge and freezer", "Battery box", "Outdoor air", "Pump house"],
@@ -184,8 +184,7 @@ export const PORTS: Port[] = [
     role: "selector",
     kind: "Input",
     title: "A switch on the panel.",
-    summary:
-      "Reads a panel selector, so a manual choice made at the wall is part of what the Controller knows.",
+    summary: "Reads a panel selector, so the Controller sees a manual choice made at the wall.",
     onWall: "Unused here.",
     specs: specs(
       ["Terminal", "3-pin pluggable screw, left side"],
@@ -210,9 +209,9 @@ export const PORTS: Port[] = [
       ["Terminal", "2-pin pluggable screw, left side"],
       [
         "Measurement",
-        "100 kΩ / 10 kΩ divider into the processor's ADC, about 36 V full scale by design",
+        "100 kΩ / 10 kΩ divider into the processor's ADC, about 36 V full scale by design",
       ],
-      ["Filtering", "100 nF across the divider, read about once a second"],
+      ["Filtering", "100 nF across the divider, read about once a second"],
       ["Accuracy", "Pending bench calibration", true],
     ),
   },
@@ -225,16 +224,16 @@ export const PORTS: Port[] = [
     anchor: "end",
     text: "TNK",
     role: "tank level",
-    kind: "Analog input · 4–20 mA",
+    kind: "Analog input · 4–20 mA",
     title: "Fuel or propane level.",
-    summary: "Reads a 4–20 mA tank sender, the common output of level transmitters.",
+    summary: "Reads a 4–20 mA tank sender, the common output of level transmitters.",
     onWall: "Through the outdoor junction box to the tank.",
     specs: specs(
       ["Terminal", "3-pin pluggable screw, left side"],
-      ["Sense", "150 Ω at the terminal: 20 mA reads as 3.0 V"],
-      ["Loop supply", "From the board's 12 V"],
+      ["Sense", "150 Ω at the terminal: 20 mA reads as 3.0 V"],
+      ["Loop supply", "From the board's 12 V"],
     ),
-    connect: ["4–20 mA tank level senders"],
+    connect: ["4–20 mA tank level senders"],
   },
   {
     id: "status",
@@ -246,11 +245,11 @@ export const PORTS: Port[] = [
     text: "STATUS",
     role: "light",
     kind: "Indicator",
-    title: "One light that says it is running.",
+    title: "One light that shows it is running.",
     summary:
       "A single light pipe on the cover. A short blink every second or so means the Controller is running.",
     specs: specs(
-      ["Pattern", "160 ms on, 1,140 ms off while running"],
+      ["Pattern", "160 ms on, 1,140 ms off while running"],
       ["Other states", "Documented with the firmware"],
     ),
   },
@@ -302,7 +301,7 @@ export const PORTS: Port[] = [
       "A five-wire link to the separate generator board. The Controller sends RUN and a once-a-second KICK; the start contact closes only while both keep coming, and the relays report what they did.",
     onWall: "The generator box beside the Controller, then one pair to the generator in the shed.",
     pins: pins(
-      ["1", "+12 V", WIRE.none],
+      ["1", "+12 V", WIRE.none],
       ["2", "GND", WIRE.none],
       ["3", "RUN", WIRE.none],
       ["4", "KICK", WIRE.none],
@@ -310,14 +309,14 @@ export const PORTS: Port[] = [
     ),
     specs: specs(
       ["Link", "JST VH 5-pin, locking"],
-      ["Contact", "Two relays in series, gold-clad contacts rated from 10 µA"],
-      ["Watchdog", "Hardware timer: the contact opens about 4.5 s after the kicks stop, by design"],
-      ["Output", "Dry contact, 30 V DC max, 2 A fuse, 30 V bidirectional clamp"],
+      ["Contact", "Two relays in series, gold-clad contacts rated from 10 µA"],
+      ["Watchdog", "Hardware timer: the contact opens about 4.5 s after the kicks stop, by design"],
+      ["Output", "Dry contact, 30 V DC max, 2 A fuse, 30 V bidirectional clamp"],
       ["Watchdog timing", "Pending bench measurement", true],
     ),
     connect: ["Generators with a two-wire remote start input"],
     limits: [
-      "Relays are rated for −25 to +65 °C ambient.",
+      "Relays are rated for −25 to +65 °C ambient.",
       "The contact switches a signal, not engine current.",
     ],
     stage: "Generator board assembled; bench proof pending.",
@@ -349,7 +348,7 @@ export const PORTS: Port[] = [
     summary:
       "An ESP32-C6 module carries the radio. The processor that runs the site is separate, so the rules keep running whatever the radio is doing.",
     specs: specs(
-      ["Module", "ESP32-C6-WROOM-1: 2.4 GHz Wi-Fi 6 and Bluetooth LE"],
+      ["Module", "ESP32-C6-WROOM-1: 2.4 GHz Wi-Fi 6 and Bluetooth LE"],
       ["Antenna", "The module's own, under the cover; no external stub"],
       ["Recovery", "On a switched rail, so a stuck radio restarts without a site visit"],
       ["Range in the enclosure", "Pending bench test", true],

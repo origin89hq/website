@@ -23,7 +23,7 @@ export function SiteCamera({
     <section className="site-camera" aria-label="Camera integration concept">
       <div className="control-section-heading">
         <h3>Connected cameras</h3>
-        <span>{stale ? "Last frame · 12 min ago" : "Illustrative frame"}</span>
+        <span>{stale ? "Last frame · 12 min ago" : "Illustrative frame"}</span>
       </div>
       <button
         type="button"
@@ -37,7 +37,7 @@ export function SiteCamera({
       >
         <img
           src={journalAssets[site]}
-          alt={`Illustrative camera view of the ${label.toLowerCase()}`}
+          alt={`Illustrative camera view of ${label.toLowerCase()}`}
           loading="lazy"
         />
         <span className="camera-frame-top">
@@ -189,7 +189,7 @@ export function SiteCamera({
         <div className="camera-inspector-image" data-zoom={zoom}>
           <img
             src={journalAssets[site]}
-            alt={`Enlarged illustrative view of the ${label.toLowerCase()}`}
+            alt={`Enlarged illustrative view of ${label.toLowerCase()}`}
           />
         </div>
         <div className="camera-inspector-tools">
@@ -210,7 +210,7 @@ export function SiteCamera({
         </div>
         <p>
           Connect a supported camera on the site network, name its zone, and use its events in a
-          rule. This preview uses a sample image; no camera is connected.
+          rule. This preview uses a sample image. No camera is connected.
         </p>
       </dialog>
     </section>

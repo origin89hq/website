@@ -127,8 +127,9 @@ function WatchdogInstrument() {
         </button>
       </div>
       <p className="inst-note">
-        RUN alone isn’t enough. If the kicks stop, the Controller resets or the cable is cut, board
-        B opens the contact on its own. About 4.5 s by design; bench timing pending.
+        The contact needs RUN and a steady KICK. If the kicks stop, the Controller resets or the
+        cable is cut, board B opens the contact on its own. About 4.5 s by design; bench timing
+        pending.
       </p>
     </div>
   );
@@ -136,9 +137,9 @@ function WatchdogInstrument() {
 
 const FRAMES = [
   ["→", "01 03 01 00 00 04 45 F5", "Ask the charge controller for 4 registers"],
-  ["←", "01 03 08 04 F0 00 B8 …", "Battery 12.64 V, solar 18.4 A"],
+  ["←", "01 03 08 04 F0 00 B8 …", "Battery 12.64 V, solar 18.4 A"],
   ["→", "02 03 02 1A 00 02 E5 BD", "Ask the inverter for its load"],
-  ["←", "02 03 04 01 2C 00 00 …", "300 W out"],
+  ["←", "02 03 04 01 2C 00 00 …", "300 W out"],
 ] as const;
 
 function ModbusInstrument() {
@@ -214,15 +215,15 @@ function DecodeInstrument() {
     <div className="inst">
       <div className="decode">
         <div>
-          <b>12.64 V</b>
+          <b>12.64 V</b>
           <span>V 12640</span>
         </div>
         <div>
-          <b>−1.25 A</b>
+          <b>−1.25 A</b>
           <span>I -1250</span>
         </div>
         <div>
-          <b>87.6 %</b>
+          <b>87.6 %</b>
           <span>SOC 876</span>
         </div>
       </div>
@@ -248,8 +249,8 @@ const CONNECT = [
   {
     id: "generator",
     tab: "Generator",
-    title: "Starts the generator. Stops it if anything fails.",
-    text: "The start contact lives on its own board, behind two relays in series and a hardware watchdog. Try it.",
+    title: "A generator start that fails safe.",
+    text: "The start contact sits on its own board, behind two relays in series and a hardware watchdog. If the Controller or its cable fails, the contact opens. Try it.",
     img: renderLeft,
     alt: "The left side of the Controller with the selector, start-battery and tank-level terminals wired",
     cap: "LNK · SNS · TNK",

@@ -8,9 +8,9 @@ export function MultiSiteNote() {
     >
       <div>
         <h2 id="multiple-sites-title">
-          One account.
+          Multiple locations
           <br />
-          Multiple locations.
+          in one account.
         </h2>
         <p className="status-word" data-status="planned">
           Planned
@@ -18,9 +18,9 @@ export function MultiSiteNote() {
       </div>
       <div>
         <p>
-          We’re building Offgrid so you can manage multiple Origin89 Controllers from one account,
-          grouped by location. For mining operations, telecom networks and teams looking after
-          remote sites.
+          We’re building Offgrid so mining operations, telecom networks and teams looking after
+          remote sites can manage multiple Origin89 Controllers from one account, grouped by
+          location.
         </p>
         <p className="multi-site-local">Local control stays at each site.</p>
         <a className="o89-text-link" href="/contact/">

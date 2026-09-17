@@ -7,12 +7,12 @@ const equipment = {
     title: "Solar array",
     subtitle: "Lac des Pins · Sample readings, 8 sec ago",
     rows: [
-      ["Output", "2.10 kW"],
+      ["Output", "2.10 kW"],
       ["Array rating · sample configuration", "3.2 kWp"],
-      ["Cottage consumption", "0.85 kW"],
-      ["Available before charging losses", "1.25 kW"],
+      ["Cottage consumption", "0.85 kW"],
+      ["Available before conversion losses", "1.25 kW"],
     ],
-    note: "The array rating is a sample configuration. Actual support depends on the inverter or charge controller and its exact model.",
+    note: "The array rating is a sample configuration. Support depends on the exact inverter or charge controller model.",
     query: "solar",
   },
   generator: {
@@ -31,13 +31,13 @@ const equipment = {
     title: "Inside the cottage",
     subtitle: "Lac des Pins · Sample circuit readings, 8 sec ago",
     rows: [
-      ["Refrigerator", "120 W"],
-      ["Water pump", "400 W"],
-      ["Lights & router", "80 W"],
-      ["Other circuits", "250 W"],
-      ["Total demand", "850 W"],
+      ["Refrigerator", "120 W"],
+      ["Water pump", "400 W"],
+      ["Lights & router", "80 W"],
+      ["Other circuits", "250 W"],
+      ["Total demand", "850 W"],
     ],
-    note: "This example includes branch-circuit measurements. A site with only a main meter cannot identify individual appliances from its total demand alone.",
+    note: "This example includes branch-circuit measurements. A main meter alone cannot separate individual appliances from the total demand.",
     query: "power meter",
   },
   battery: {
@@ -46,7 +46,7 @@ const equipment = {
     rows: [
       ["State of charge", "76%"],
       ["Reported mode", "Charging"],
-      ["Usable capacity · sample configuration", "10.0 kWh"],
+      ["Usable capacity · sample configuration", "10.0 kWh"],
       ["Reserve · sample setting", "20%"],
     ],
     note: "Buddy’s example uses this capacity and reserve with the measured demand. Battery condition, temperature and conversion losses affect the estimate.",
@@ -56,25 +56,25 @@ const equipment = {
     title: "North pit utilities",
     subtitle: "Sample mining site · Readings 30 sec ago",
     rows: [
-      ["Site demand", "43 kW"],
-      ["Pump station demand", "8 kW"],
+      ["Site demand", "43 kW"],
+      ["Pump station demand", "8 kW"],
       ["Generator", "Running"],
       ["Fuel tank", "62%"],
       ["Sump level", "High · check alarm"],
     ],
-    note: "The sump input identifies the alarm, not its cause. Compare the pump and level readings, then follow the site procedure before arranging work.",
+    note: "The sump input flags the alarm but not its cause. Compare the pump and level readings, then follow the site procedure before arranging work.",
     query: "generator",
   },
   telecom: {
     title: "Tundra relay shelter",
-    subtitle: "Sample telecom site · Last heard 12 min ago",
+    subtitle: "Sample telecom site · Last heard 12 min ago",
     rows: [
       ["Current condition", "Unknown"],
       ["Battery · last known", "78%"],
-      ["Shelter · last known", "+14 °C"],
+      ["Shelter · last known", "+14 °C"],
       ["Generator · last known", "Standby"],
     ],
-    note: "These are last-known readings. Missing updates do not establish the state of the power supply or equipment. Fresh data is needed before forecasting reserve.",
+    note: "These are last-known readings. Missing updates don’t tell you the state of the power supply or equipment. Forecasting reserve needs fresh data.",
     query: "battery",
   },
 };
@@ -111,7 +111,7 @@ export function EquipmentInspector({
       </dl>
       <p className="equipment-inspector-note">{item.note}</p>
       <a href={`/equipment/?q=${encodeURIComponent(item.query)}`}>
-        Explore equipment specifications <ArrowUpRight size={15} />
+        Search the equipment catalogue <ArrowUpRight size={15} />
       </a>
     </dialog>
   );

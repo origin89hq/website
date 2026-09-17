@@ -13,7 +13,7 @@ const connections = {
     note: "Standby · Sample, 8 sec ago. Connected, but not supplying power.",
   },
   home: { label: "Cottage", note: "Cottage consumption · Sample reading, 8 sec ago." },
-  battery: { label: "Battery", note: "Charging · 1.25 kW available before conversion losses." },
+  battery: { label: "Battery", note: "Charging · 1.25 kW available before conversion losses." },
 };
 export function SolarDashboard() {
   const details = useRef<HTMLDialogElement>(null);

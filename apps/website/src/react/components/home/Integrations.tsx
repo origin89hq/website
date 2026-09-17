@@ -24,14 +24,14 @@ const RIGHT: Node[] = [
 ];
 
 const WHAT = {
-  fridge: { label: "the fridge shelf", cond: "rises above 7 °C", via: "1-Wire probe on CN8" },
+  fridge: { label: "the fridge shelf", cond: "rises above 7 °C", via: "1-Wire probe on CN8" },
   battery: {
     label: "the battery bank",
-    cond: "falls below 11.9 V",
+    cond: "falls below 11.9 V",
     via: "Charge controller on RS-485 1",
   },
-  propane: { label: "the propane tank", cond: "falls below 20 %", via: "4–20 mA sender on TNK" },
-  outdoor: { label: "the outdoor air", cond: "drops below −25 °C", via: "1-Wire probe on CN8" },
+  propane: { label: "the propane tank", cond: "falls below 20 %", via: "4–20 mA sender on TNK" },
+  outdoor: { label: "the outdoor air", cond: "drops below −25 °C", via: "1-Wire probe on CN8" },
 };
 const DO = {
   notify: {
@@ -120,7 +120,7 @@ export function Integrations() {
   const redraw = useRef(() => {});
   const [paths, setPaths] = useState<{ d: string; status: Status }[]>([]);
   const [what, setWhat] = useState<keyof typeof WHAT>("fridge");
-  const [duration, setDuration] = useState("10 min");
+  const [duration, setDuration] = useState("10 min");
   const [action, setAction] = useState<keyof typeof DO>("notify");
 
   useEffect(() => {
@@ -226,9 +226,9 @@ export function Integrations() {
               <label className="pick">
                 <span className="o89-sr">Duration</span>
                 <select id="ruleFor" value={duration} onChange={(e) => setDuration(e.target.value)}>
-                  <option>10 min</option>
-                  <option>2 min</option>
-                  <option>30 min</option>
+                  <option>10 min</option>
+                  <option>2 min</option>
+                  <option>30 min</option>
                 </select>
               </label>
               ,{" "}
