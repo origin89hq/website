@@ -208,17 +208,17 @@ async function packageFilm(renders) {
   ];
   await ffmpeg(
     ...frames("", "yuv420p10le"),
-    ...["-c:v", "libsvtav1", "-preset", "6", "-crf", "36", "-g", "240"],
+    ...["-c:v", "libsvtav1", "-preset", "6", "-crf", "40", "-g", "300"],
     ...["-movflags", "+faststart", join(out, "hero-av1.mp4")],
   );
   await ffmpeg(
     ...frames("", "yuv420p"),
-    ...["-c:v", "libx264", "-preset", "slow", "-crf", "23"],
+    ...["-c:v", "libx264", "-preset", "slow", "-crf", "26"],
     ...["-movflags", "+faststart", join(out, "hero.mp4")],
   );
   await ffmpeg(
     ...frames(",scale=1280:720", "yuv420p"),
-    ...["-c:v", "libx264", "-preset", "slow", "-crf", "23"],
+    ...["-c:v", "libx264", "-preset", "slow", "-crf", "26"],
     ...["-movflags", "+faststart", join(out, "hero-720.mp4")],
   );
   await sharp(first)
