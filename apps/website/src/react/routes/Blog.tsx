@@ -46,34 +46,24 @@ export function BlogPostPage({ post, html }: { post: BlogPost; html: string }) {
       <article className="blog-post">
         <header>
           <h1>{post.title}</h1>
+          <p>{post.summary}</p>
           <time className="micro" dateTime={post.date}>
             {post.date}
           </time>
-          <p>{post.summary}</p>
         </header>
-        <div className="blog-post-layout">
-          <nav className="blog-post-rail" aria-label="Blog">
-            <a className="o89-text-link" href="/blog/">
-              <ArrowLeft size={16} aria-hidden="true" /> All posts
-            </a>
-            <a className="o89-text-link" href={feedPath}>
-              <Rss size={16} aria-hidden="true" /> Atom feed
-            </a>
-          </nav>
-          <div
-            className="blog-post-body"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: rendered at build time from repository Markdown with raw HTML and unsafe link schemes rejected
-            dangerouslySetInnerHTML={{ __html: html }}
-          />
-          <footer>
-            <a className="o89-text-link" href="/blog/">
-              <ArrowLeft size={16} aria-hidden="true" /> All posts
-            </a>
-            <a className="o89-text-link" href={feedPath}>
-              <Rss size={16} aria-hidden="true" /> Atom feed
-            </a>
-          </footer>
-        </div>
+        <div
+          className="blog-post-body"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: rendered at build time from repository Markdown with raw HTML and unsafe link schemes rejected
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        <footer>
+          <a className="o89-text-link" href="/blog/">
+            <ArrowLeft size={16} aria-hidden="true" /> All posts
+          </a>
+          <a className="o89-text-link" href={feedPath}>
+            <Rss size={16} aria-hidden="true" /> Atom feed
+          </a>
+        </footer>
       </article>
     </SiteShell>
   );
