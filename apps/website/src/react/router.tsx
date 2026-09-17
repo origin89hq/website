@@ -15,10 +15,12 @@ import { useEffect } from "react";
 import { HomePage } from "./components/home/HomePage";
 import { BuddyApp } from "./components/site/BuddyApp";
 import { SiteShell } from "./components/site/SiteChrome";
+import { blogPosts, findBlogPost, loadBlogPostBody } from "./lib/blog";
 import { type JournalSite, journalSites } from "./lib/journal-sites";
 import { pageMeta } from "./lib/page-meta";
 import { type ProductId, products } from "./lib/products";
 import { journalAssets } from "./lib/react-assets";
+import { BlogIndexPage, BlogPostPage } from "./routes/Blog";
 import { ContactPage } from "./routes/Contact";
 import { DesignGuidePage } from "./routes/DesignGuide";
 import { DevelopersPage } from "./routes/Developers";
@@ -92,7 +94,7 @@ function Root() {
       )
         return;
       if (
-        !/^\/(?:$|products(?:\/|$)|equipment\/?$|sites(?:\/|$)|open-source\/?$|developers(?:\/|$)|contact\/?$|app(?:\/|$))/.test(
+        !/^\/(?:$|products(?:\/|$)|equipment\/?$|sites(?:\/|$)|open-source\/?$|developers(?:\/|$)|contact\/?$|app(?:\/|$)|blog(?:\/[a-z0-9-]*\/?)?$)/.test(
           url.pathname,
         )
       )
@@ -237,6 +239,24 @@ const contactRoute = createRoute({
     return <ContactPage key={`${search.equipment}-${search.profile}-${search.site}`} {...search} />;
   },
 });
+const blogRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/blog/",
+  component: () => <BlogIndexPage posts={blogPosts} />,
+});
+const blogPostRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/blog/$slug/",
+  loader: async ({ params }) => {
+    const post = findBlogPost(params.slug);
+    if (!post) throw notFound();
+    return { post, html: await loadBlogPostBody(post.slug) };
+  },
+  component: () => {
+    const { post, html } = blogPostRoute.useLoaderData();
+    return <BlogPostPage key={post.slug} post={post} html={html} />;
+  },
+});
 const appRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/app/$site/",
@@ -271,6 +291,8 @@ const routeTree = rootRoute.addChildren([
   developersRoute,
   guideRoute,
   contactRoute,
+  blogRoute,
+  blogPostRoute,
   appRoute,
   createRoute({
     getParentRoute: () => rootRoute,

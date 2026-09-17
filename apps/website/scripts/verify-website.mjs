@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 
 const { chromium } = await import(process.env.ORIGIN89_PLAYWRIGHT_PATH || "playwright");
-const { publicPaths } = await import("../.website-server/entry-server.js");
+const { blogPosts, publicPaths } = await import("../.website-server/entry-server.js");
 const base = (process.env.ORIGIN89_WEBSITE_URL || "http://127.0.0.1:4325").replace(/\/$/, "");
 const out = new URL("../dist/", import.meta.url),
   report = new URL("../website-report/", import.meta.url);
@@ -262,6 +262,22 @@ try {
   await page.reload({ waitUntil: "load" });
   await page.locator("[data-app-site=mining]").waitFor();
   checks.push("Client navigation, titles, browser back and app scene deep links");
+  const [latestPost] = blogPosts;
+  if (latestPost) {
+    await open("/blog/");
+    await page.evaluate(() => {
+      window.__sameDocument = true;
+    });
+    await page.getByRole("link", { name: latestPost.title, exact: true }).click();
+    await page.waitForURL(`**/blog/${latestPost.slug}/`);
+    assert.equal(await page.evaluate(() => window.__sameDocument), true);
+    await page.locator(".blog-post-body > *").first().waitFor();
+    assert.equal(await page.title(), `${latestPost.title} · Origin89`);
+  }
+  const feed = await page.request.get(base + "/blog/feed.xml");
+  assert.equal(feed.status(), 200);
+  assert.match(await feed.text(), /<feed xmlns="http:\/\/www\.w3\.org\/2005\/Atom">/);
+  checks.push("Blog post client navigation loads the post body; the Atom feed is served");
   await open("/app/cottage/", 320);
   const solarPreview = page.locator(".buddy-app:visible");
   await solarPreview.getByRole("button", { name: "Inspect generator standby" }).click();

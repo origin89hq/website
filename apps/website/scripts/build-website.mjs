@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { build } from "vite";
+import { atomFeed } from "./blog-posts.mjs";
 
 const root = new URL("../", import.meta.url),
   out = new URL("dist/", root),
@@ -15,7 +16,7 @@ await build({
     copyPublicDir: false,
   },
 });
-const { render, publicPaths, pageMeta, legacyRoutes } = await import(
+const { render, publicPaths, pageMeta, legacyRoutes, blogPosts } = await import(
   pathToFileURL(fileURLToPath(new URL("entry-server.js", server)))
 );
 const template = await readFile(new URL("index.html", out), "utf8");
@@ -76,6 +77,11 @@ const sitemap = publicPaths
 await writeFile(
   new URL("sitemap.xml", out),
   `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${sitemap}</urlset>`,
+);
+await mkdir(new URL("blog/", out), { recursive: true });
+await writeFile(
+  new URL("blog/feed.xml", out),
+  atomFeed(blogPosts, { origin: "https://origin89.com", now: new Date() }),
 );
 await writeFile(
   new URL("robots.txt", out),

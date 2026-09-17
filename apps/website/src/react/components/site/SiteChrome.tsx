@@ -79,6 +79,7 @@ export function SiteFooter() {
         </nav>
         <nav aria-label="Resource links">
           <b>Resources</b>
+          <a href="/blog/">Blog</a>
           <a href="/developers/">Developers</a>
           <a href="/developers/design-guide/">Design guide</a>
           <a href="/storybook/">Component library</a>
