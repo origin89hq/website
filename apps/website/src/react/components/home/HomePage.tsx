@@ -869,7 +869,7 @@ function Specs() {
         <section className="bench reveal" aria-label="Bench progress on board revision A">
           <div className="bench-head">
             <b>On the bench</b>
-            <span>Board revision A · updated 16 September 2026</span>
+            <span>Board revision A · updated 17 September 2026</span>
           </div>
           <ol className="bench-list">
             {BENCH_ITEMS.map(([title, text, done]) => (

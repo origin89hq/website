@@ -28,7 +28,7 @@ Origin89 is an off-grid controller system: the Controller on the wall, the Offgr
 ## Operating Context
 
 - A typical cottage power wall (from the owner's own photos): plywood backing, a battery state-of-charge meter, a blade fuse block, a DC breaker box, an RS-485 solar charge controller, an inverter/charger, a converter/charger, a water pump, six 6 V flooded golf-cart batteries, a generator in a shed with a two-wire start input, a propane tank, an off-grid top-freezer fridge.
-- Controller board A: STM32G0B1, ESP32-C6, 3 × RS-485, CAN, 2 × VE.Direct, 1-Wire, SEL/SNS/TNK sense inputs, a link to generator board B; 12 V. Revision A fabricated; bench measurements in progress as of 2026-09-16. Generator board B revision A: interlock proven on the bench on 2026-09-17, 68 sequences passed and the timed dropouts between 4.34 and 4.46 s after the last kick; revision A boards need four strap links each, which revision B is to fix in the footprint.
+- Controller board A: STM32G0B1, ESP32-C6, 3 × RS-485, CAN, 2 × VE.Direct, 1-Wire, SEL/SNS/TNK sense inputs, a link to generator board B; 12 V. Revision A fabricated; bench measurements in progress as of 2026-09-17. Generator board B revision A: interlock proven on the bench on 2026-09-17, 68 sequences passed and the timed dropouts between 4.34 and 4.46 s after the last kick; revision A boards need four strap links each, which revision B is to fix in the footprint.
 
 ## Capabilities and Constraints
 
