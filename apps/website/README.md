@@ -83,3 +83,5 @@ pnpm preview            # website worker plus the packaged Buddy fixture
 ```
 
 That also checks Cloudflare redirects, trailing-slash handling, headers and real 404 responses. Build success alone does not mean the site has been deployed.
+
+The Worker also answers `POST /api/waitlist` for the homepage form. It checks the visitor's Cloudflare Turnstile token, then adds the address to the Mailchimp audience in `wrangler.jsonc` as pending with the `controller-waitlist` tag, so Mailchimp sends the confirmation email. `MAILCHIMP_API_KEY` and `TURNSTILE_SECRET_KEY` are required Worker secrets; the GitHub deploy uploads them with each version from the `website-production` environment. Production accepts tokens only from the Worker's own hostnames. For local sign-ups, put both secrets in an ignored `apps/website/.dev.vars` and add `localhost` and `127.0.0.1` to the Turnstile widget. Without the secrets, the route answers 503 and the form asks visitors to write to the contact address.

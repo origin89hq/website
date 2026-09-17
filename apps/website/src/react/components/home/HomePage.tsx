@@ -1,5 +1,4 @@
-import plateWhite from "@origin89/brand/logos/plate-89-white.svg?url";
-import { type FormEvent, lazy, type ReactNode, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, type ReactNode, Suspense, useEffect, useRef, useState } from "react";
 import cottage from "../../../assets/home/audience-3d-cottage.webp?url";
 import cottageSignals from "../../../assets/home/audience-3d-cottage-signals.json";
 import mine from "../../../assets/home/audience-3d-mine.webp?url";
@@ -22,6 +21,7 @@ import { Integrations } from "./Integrations";
 import { ArrowIcon, MarkIcon, SpecIcons } from "./icons";
 import { PortExplorer } from "./PortExplorer";
 import { Viewer3D } from "./Viewer3D";
+import { Waitlist } from "./Waitlist";
 
 const BuddyWorkspace = lazy(() => import("../buddy/BuddyWorkspace"));
 
@@ -901,57 +901,6 @@ function Specs() {
             </section>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-function Waitlist() {
-  const [sent, setSent] = useState(false);
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const email = new FormData(event.currentTarget).get("email");
-    window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent("Origin89 waitlist")}&body=${encodeURIComponent(`Please add ${email} to the Origin89 Controller waitlist.`)}`;
-    setSent(true);
-  };
-  return (
-    <section className="section close" id="waitlist" aria-labelledby="close-title">
-      <div className="o89-wrap close-inner">
-        <img
-          className="plate-mark reveal"
-          src={plateWhite}
-          alt=""
-          aria-hidden="true"
-          width="96"
-          height="53"
-        />
-        <h2 id="close-title" className="h-xl reveal">
-          Be first on the wall.
-        </h2>
-        <p className="lede reveal">
-          We’ll write when bench results are in and again when boards can be reserved. Nothing else.
-        </p>
-        <form className="waitlist reveal" onSubmit={submit}>
-          <label htmlFor="waitlistEmail" className="o89-sr">
-            Email address
-          </label>
-          <input
-            id="waitlistEmail"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-            required
-          />
-          <button className="o89-plate o89-plate-action" type="submit">
-            Join the waitlist
-          </button>
-        </form>
-        <p className="waitlist-note" data-state={sent ? "done" : undefined} aria-live="polite">
-          {sent
-            ? `Your email app should open with the message ready. If it didn’t, write to ${siteConfig.email}.`
-            : `Opens an email to ${siteConfig.email} with your address. A real sign-up form comes before launch.`}
-        </p>
       </div>
     </section>
   );

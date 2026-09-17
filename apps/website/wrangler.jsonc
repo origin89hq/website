@@ -10,12 +10,21 @@
   // keeps every secret it needs out of the worker that faces the internet.
   // `deployment-config.mjs` rewrites the service name for the deployed pair.
   "services": [{ "binding": "BUDDY", "service": "origin89-buddy-poc" }],
+  // The waitlist adds addresses to this Mailchimp audience. `deployment-config.mjs`
+  // replaces the Turnstile hostnames with the production ones.
+  "vars": {
+    "MAILCHIMP_AUDIENCE_ID": "614c5bde81",
+    "TURNSTILE_HOSTNAMES": "localhost,127.0.0.1"
+  },
+  // The deploy uploads these with the version, and Wrangler refuses one without
+  // them. Local development reads them from .dev.vars and only warns when missing.
+  "secrets": { "required": ["MAILCHIMP_API_KEY", "TURNSTILE_SECRET_KEY"] },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
     // Static files are served without running this worker at all; only the API
     // paths pay for an invocation.
-    "run_worker_first": ["/api/buddy/*"],
+    "run_worker_first": ["/api/buddy/*", "/api/waitlist"],
     // React routes are pre-rendered as directories with index.html.
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
@@ -26,7 +35,12 @@
   // 503 that looks like Buddy is down rather than like a misconfigured pair.
   "env": {
     "fixture": {
-      "services": [{ "binding": "BUDDY", "service": "origin89-buddy-poc-fixture" }]
+      "services": [{ "binding": "BUDDY", "service": "origin89-buddy-poc-fixture" }],
+      // Named environments do not inherit vars.
+      "vars": {
+        "MAILCHIMP_AUDIENCE_ID": "614c5bde81",
+        "TURNSTILE_HOSTNAMES": "localhost,127.0.0.1"
+      }
     }
   }
 }

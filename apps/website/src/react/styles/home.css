@@ -493,6 +493,8 @@
 .home .waitlist input:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .home .waitlist-note { color: var(--o89-faint); font-size: 14px; max-width: 60ch; text-wrap: balance; }
 .home .waitlist-note[data-state="done"] { color: var(--o89-nominal); }
+.home .waitlist-note[data-state="error"] { color: var(--o89-warning); }
+.home .waitlist-check:empty { display: none; }
 .home .reveal { transition: opacity .9s var(--o89-ease), transform .9s var(--o89-ease); }
 .home .reveal.pre { opacity: .001; transform: translateY(28px); }
 @media (prefers-reduced-motion: reduce) {

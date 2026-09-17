@@ -12,6 +12,8 @@ export const siteConfig = {
   docs: "https://docs.origin89.com",
   protocol: "https://docs.origin89.com/km43/",
   email: "hello@origin89.com",
+  // Public Turnstile site key for the waitlist. Its secret is a Worker secret.
+  turnstileSiteKey: "0x4AAAAAAE6bTBHHAlrTHTna",
 };
 export const siteNavigation = [
   ["Products", "/products/"],

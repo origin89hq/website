@@ -39,7 +39,14 @@ test("forwards the original API request and streaming response without buffering
 });
 
 test("passes asset and non-matching API paths to the asset binding", async () => {
-  for (const path of ["/", "/missing/", "/api/buddy", "/api/buddy-other/status"]) {
+  for (const path of [
+    "/",
+    "/missing/",
+    "/api/buddy",
+    "/api/buddy-other/status",
+    "/api/waitlist/",
+    "/api/waitlist-other",
+  ]) {
     const request = new Request(`https://origin89.com${path}`);
     const response = new Response("asset result", { status: 404 });
     assert.equal(
@@ -76,4 +83,13 @@ test("preserves backend failure responses and propagates binding failures", asyn
     }),
     (error) => error === failure,
   );
+});
+
+test("handles the waitlist path in the worker without reaching Buddy or assets", async () => {
+  const response = await worker.fetch(new Request("https://origin89.com/api/waitlist"), {
+    BUDDY: { fetch: () => assert.fail("Must not forward the waitlist to Buddy") },
+    ASSETS: { fetch: () => assert.fail("Must not serve the waitlist from assets") },
+  });
+  assert.equal(response.status, 405);
+  assert.equal(response.headers.get("Allow"), "POST");
 });
