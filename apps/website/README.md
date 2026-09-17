@@ -23,7 +23,8 @@ See the [repository README](../../README.md) for root commands, fixture checks a
 ## Source map
 
 - `src/react/router.tsx`: typed routes, query validation, navigation and 404 handling.
-- `src/react/routes/`: product, equipment, site, developer, design-guide, open-source and enquiry pages.
+- `src/react/routes/`: product, equipment, site, developer, design-guide, open-source, enquiry and blog pages.
+- `src/content/blog/`: blog posts in Markdown, rendered at build time by `scripts/blog-posts.mjs`.
 - `src/react/components/site/`: the journal homepage, shared navigation/footer and Offgrid app scenes.
 - `src/react/components/buddy/`: Buddy conversation, editable equipment map, local fixtures and transport boundary.
 - `src/react/components/ai-elements/` and `ui/`: maintained AI Elements and shadcn source.
@@ -35,6 +36,22 @@ See the [repository README](../../README.md) for root commands, fixture checks a
 
 The React site and Storybook share components. `page-meta.ts` keeps legacy URLs
 pointed at their current routes.
+
+## Blog
+
+Each post is `src/content/blog/<slug>.md`; the file name becomes `/blog/<slug>/`. Start the file with front matter holding exactly these three fields:
+
+```md
+---
+title: Idle draw of board A
+date: 2026-09-24
+summary: One sentence for the post list, the page description and the feed.
+---
+```
+
+The body is GitHub-flavoured Markdown, including tables. Put photos, plots and data files in a folder beside the post and link them with a relative path such as `./idle-draw/scope.png`: the build copies them into `dist/assets/` under hashed names and fails if one is missing. Use root paths such as `/blog/other-post/` for links to website pages. The build rejects a missing or unknown field, an invalid date, an empty body, raw HTML and link schemes other than `http`, `https` and `mailto`. HTML comments are allowed for notes and are left out of the page. Run `just dev` to preview a post at `/blog/<slug>/`; restart it after adding a new post file. Posts from the same day are listed by file name.
+
+Posts are listed newest first on `/blog/`. The build writes an Atom feed of titles and summaries to `/blog/feed.xml`, and every page links it for feed readers. State the setup and conditions behind each measured value. Keep defect lists in the hardware repository's issues and link to them.
 
 ## Developer guide and brand sources
 

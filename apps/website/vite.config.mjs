@@ -2,12 +2,13 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import { blogPostsPlugin } from "./scripts/blog-posts.mjs";
 
 const absolute = (path) => fileURLToPath(new URL(path, import.meta.url));
 export default defineConfig({
   root: absolute("./src/react/"),
   publicDir: absolute("./public/"),
-  plugins: [react(), tailwindcss()],
+  plugins: [blogPostsPlugin(), react(), tailwindcss()],
   resolve: {
     alias: { "@": absolute("./src/react") },
     dedupe: ["react", "react-dom"],

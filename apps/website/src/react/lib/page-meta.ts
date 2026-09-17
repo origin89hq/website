@@ -1,3 +1,4 @@
+import { blogPosts } from "./blog";
 import { journalSites } from "./journal-sites";
 import { products } from "./products";
 export const publicPaths = [
@@ -11,6 +12,8 @@ export const publicPaths = [
   "/developers/",
   "/developers/design-guide/",
   "/contact/",
+  "/blog/",
+  ...blogPosts.map((post) => `/blog/${post.slug}/`),
   "/buddy/",
   ...journalSites.map((site) => `/app/${site.id}/`),
 ];
@@ -51,7 +54,12 @@ const metadata: Record<string, [string, string]> = {
     "Plan your Origin89 setup",
     "Tell us about your equipment and the job you want it to do. The form prepares an email draft for you to send.",
   ],
+  "/blog/": [
+    "From the bench",
+    "Notes from building Origin89 at km 43: bench tests, measurements and the design changes that follow.",
+  ],
 };
+for (const post of blogPosts) metadata[`/blog/${post.slug}/`] = [post.title, post.summary];
 for (const product of products)
   metadata[`/products/${product.id}/`] = [product.name, product.intro];
 for (const site of journalSites) {

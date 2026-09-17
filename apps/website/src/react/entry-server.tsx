@@ -2,6 +2,7 @@ import { createRequestHandler, RouterServer } from "@tanstack/react-router/ssr/s
 import { renderToString } from "react-dom/server";
 import { createRouter } from "./router";
 
+export { blogPosts } from "./lib/blog";
 export { legacyRoutes, pageMeta, publicPaths } from "./lib/page-meta";
 export async function render(path: string) {
   const handler = createRequestHandler({
