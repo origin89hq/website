@@ -29,17 +29,14 @@ export function ArrowIcon() {
 }
 
 export function MarkIcon({ kind }: { kind: "yes" | "no" | "part" }) {
-  const color = kind === "yes" ? "#e7eaee" : kind === "part" ? "#e9a13c" : "#707b87";
+  const color =
+    kind === "yes" ? "var(--o89-fg)" : kind === "part" ? "var(--o89-warning)" : "var(--o89-faint)";
   return (
-    <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-      <circle cx="10" cy="10" r="8.5" fill="none" stroke={color} strokeWidth="1.4" />
-      {kind === "yes" && (
-        <path d="M6.2 10.3l2.5 2.5 5.1-5.4" {...stroke} stroke={color} strokeWidth={1.7} />
-      )}
-      {kind === "part" && <path d="M6.5 10h7" {...stroke} stroke={color} strokeWidth={1.7} />}
-      {kind === "no" && (
-        <path d="M7 7l6 6M13 7l-6 6" {...stroke} stroke={color} strokeWidth={1.6} />
-      )}
+    <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true" style={{ color }}>
+      <circle cx="10" cy="10" r="8.5" {...stroke} strokeWidth={1.4} />
+      {kind === "yes" && <path d="M6.2 10.3l2.5 2.5 5.1-5.4" {...stroke} strokeWidth={1.7} />}
+      {kind === "part" && <path d="M6.5 10h7" {...stroke} strokeWidth={1.7} />}
+      {kind === "no" && <path d="M7 7l6 6M13 7l-6 6" {...stroke} strokeWidth={1.6} />}
     </svg>
   );
 }

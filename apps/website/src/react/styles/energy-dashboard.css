@@ -124,7 +124,7 @@
 
 .energy-app.app-preview .buddy-tip { display: flex; }
 .solar-history .history-readout { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 18px 0 8px; }
-.solar-history-metric > span { display: block; color: var(--solar-production); font-size: 11px; line-height: 1.5; }
+.solar-history-metric > span { display: block; color: var(--solar-production); line-height: 1.5; }
 .solar-history-metric > strong { display: block; font-size: 35px; line-height: 1.15; font-weight: 440; letter-spacing: -.055em; margin-top: 7px; }
 .solar-history-metric > strong small { color: var(--app-muted); font: 10px Concept, sans-serif; letter-spacing: 0; margin-left: 4px; }
 .solar-history-load > span { color: var(--solar-use); }
@@ -152,30 +152,19 @@
 }
 @container (max-width: 340px) {
   .solar-history-metric > strong { font-size: 32px; }
-  .solar-history-metric > span { font-size: 11px; }
-  .solar-chart-caption { font-size: 11px; }
   .solar-chart-footer { font-size: 11px; }
 }
 .solar-peak-tick { fill: none; stroke: var(--solar-production); stroke-width: .7; }
 .solar-peak-label { fill: var(--solar-production); font: 10px Technical, monospace; letter-spacing: .03em; }
-.solar-history-metric > span { font-size: 11px; }
-.solar-chart-caption { font-size: 11px; }
 .solar-bar { opacity: .7; }
 .solar-load-bar { opacity: .48; }
-@container (max-width: 340px) {
-  .solar-history-metric > span, .solar-chart-caption { font-size: 11px; }
-}
 .solar-history-metric > span { display: flex; align-items: center; gap: 3px; }
 .solar-chart-footer > span:last-child { display: flex; align-items: center; gap: 5px; }
 .solar-history-metric > span { font-size: 12px; color: var(--app-muted); }
 .solar-history-metric > span svg { color: var(--solar-production); }
 .solar-history-load > span svg { color: var(--solar-use); }
-.solar-chart-caption { font-size: 11px; }
 .solar-peak-label { fill: var(--app-ink); font-size: 11px; }
 .energy-app [data-panel="energy"] > .app-insight { margin-top: 20px; }
-@container (max-width: 340px) {
-  .solar-chart-caption { font-size: 11px; }
-}
 
 /* Equipment sits on the app's paper, with colour reserved for active power. */
 .equipment-drawing { --equipment-fill: var(--o89-surface-raised); --equipment-line: color-mix(in srgb, var(--o89-fg) 45%, var(--o89-surface)); overflow: visible; }

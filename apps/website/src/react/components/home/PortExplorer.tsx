@@ -103,8 +103,15 @@ export function PortExplorer() {
     return () => removeEventListener("keydown", onKey);
   }, []);
 
+  // A pointer leaving the explorer schedules a hide; any explicit choice cancels it.
   const pin = (id: string) => {
+    window.clearTimeout(leave.current);
     setPinned((current) => (current === id ? null : id));
+    setActive(id);
+  };
+  const choose = (id: string) => {
+    window.clearTimeout(leave.current);
+    setPinned(id);
     setActive(id);
   };
   const close = () => {
@@ -148,12 +155,14 @@ export function PortExplorer() {
                     if (!pinned) setActive(p.id);
                   }}
                   onClick={() => pin(p.id)}
-                  onFocus={() => setActive(p.id)}
+                  onFocus={() => {
+                    window.clearTimeout(leave.current);
+                    setActive(p.id);
+                  }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
-                      setPinned(p.id);
-                      setActive(p.id);
+                      choose(p.id);
                     }
                   }}
                 >
@@ -198,10 +207,7 @@ export function PortExplorer() {
             key={p.id}
             type="button"
             aria-pressed={active === p.id}
-            onClick={() => {
-              setPinned(p.id);
-              setActive(p.id);
-            }}
+            onClick={() => choose(p.id)}
           >
             {p.code}
           </button>

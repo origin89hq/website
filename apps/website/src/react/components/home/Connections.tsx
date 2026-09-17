@@ -8,6 +8,7 @@ import { BENCH } from "./data";
 
 const ago = (seconds: number) =>
   seconds < 60 ? `${Math.round(seconds)} s ago` : `${Math.floor(seconds / 60)} min ago`;
+const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const celsius = (value: number) => `${value.toFixed(1).replace("-", "−")} °C`;
 
 function PowerInstrument() {
@@ -66,11 +67,11 @@ function WatchdogInstrument() {
   const [kick, setKick] = useState(false);
   const last = useRef(0);
   const kickingRef = useRef(true);
+  const still = useRef(false);
   useEffect(() => {
-    kickingRef.current = kicking;
-    if (kicking) last.current = performance.now();
-  }, [kicking]);
-  useEffect(() => {
+    // With reduced motion the meter doesn't count down; stopping the kicks opens the contact.
+    still.current = reducedMotion();
+    if (still.current) return;
     last.current = performance.now();
     const beat = window.setInterval(() => {
       if (!kickingRef.current) return;
@@ -86,6 +87,10 @@ function WatchdogInstrument() {
       window.clearInterval(tick);
     };
   }, []);
+  useEffect(() => {
+    kickingRef.current = kicking;
+    if (kicking) last.current = performance.now();
+  }, [kicking]);
   const open = remain === 0;
   return (
     <div className="inst">
@@ -113,7 +118,10 @@ function WatchdogInstrument() {
         <button
           type="button"
           className="o89-plate o89-plate-ghost"
-          onClick={() => setKicking((k) => !k)}
+          onClick={() => {
+            setKicking(!kicking);
+            if (still.current) setRemain(kicking ? 0 : WINDOW);
+          }}
         >
           {kicking ? "Stop the kicks" : "Resume the kicks"}
         </button>
@@ -136,6 +144,7 @@ const FRAMES = [
 function ModbusInstrument() {
   const [count, setCount] = useState(3);
   useEffect(() => {
+    if (reducedMotion()) return;
     const timer = window.setInterval(() => setCount((c) => c + 1), 2200);
     return () => window.clearInterval(timer);
   }, []);
@@ -173,6 +182,7 @@ const PROBES = [
 function ProbesInstrument() {
   const [probes, setProbes] = useState(PROBES);
   useEffect(() => {
+    if (reducedMotion()) return;
     const timer = window.setInterval(() => {
       setProbes((list) => list.map((p) => ({ ...p, age: p.age >= 60 ? 1 : p.age + 1 })));
     }, 1000);

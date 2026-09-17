@@ -71,8 +71,20 @@ export function Viewer3D() {
       renderer.domElement.addEventListener("pointerdown", () => {
         controls.autoRotate = false;
       });
+      const release = () => {
+        controls.dispose();
+        pmrem.dispose();
+        renderer.dispose();
+        renderer.domElement.remove();
+      };
       const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
-      const gltf = await loader.loadAsync(modelUrl);
+      let gltf: Awaited<ReturnType<typeof loader.loadAsync>>;
+      try {
+        gltf = await loader.loadAsync(modelUrl);
+      } catch (error) {
+        release();
+        throw error;
+      }
       scene.add(gltf.scene);
       const cover = gltf.scene.getObjectByName("cover");
       const rest = cover ? cover.position.y : 0;
@@ -106,10 +118,7 @@ export function Viewer3D() {
         onScreen.disconnect();
         renderer.setAnimationLoop(null);
         resizer.disconnect();
-        controls.dispose();
-        pmrem.dispose();
-        renderer.dispose();
-        renderer.domElement.remove();
+        release();
       };
     }
     return () => {
