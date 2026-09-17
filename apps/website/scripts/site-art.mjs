@@ -52,21 +52,29 @@ async function assetNames(dir) {
     .sort();
 }
 
-// Every file in the directory must be recorded with its current sha256, and nothing else.
+// The directory and the record must both hold exactly the views in VIEWS, each with its
+// current sha256. Checking their overlap instead would accept a view dropped from both,
+// and would wave through a stray file whose entry simply omits `render`.
 export async function checkRecord(dir = ART) {
   const record = JSON.parse(await readFile(join(dir, RECORD), "utf8"));
+  const expected = Object.keys(VIEWS).sort();
   const names = await assetNames(dir);
   const problems = [];
-  for (const name of names) {
+  for (const name of expected) {
     const entry = record.files[name];
+    const present = names.includes(name);
+    if (!present) problems.push(`${name}: missing from the directory`);
     if (!entry) problems.push(`${name}: not recorded`);
     else if (entry.render !== VIEWS[name])
       problems.push(`${name}: recorded against ${entry.render}, not ${VIEWS[name]}`);
-    else if (entry.sha256 !== (await sha256(join(dir, name))))
+    else if (present && entry.sha256 !== (await sha256(join(dir, name))))
       problems.push(`${name}: sha256 differs`);
   }
+  for (const name of names) {
+    if (!expected.includes(name)) problems.push(`${name}: not a site view`);
+  }
   for (const name of Object.keys(record.files)) {
-    if (!names.includes(name)) problems.push(`${name}: recorded but missing`);
+    if (!expected.includes(name)) problems.push(`${name}: recorded but not a site view`);
   }
   assert.equal(problems.length, 0, `${RECORD} is out of date:\n${problems.join("\n")}`);
   return names;

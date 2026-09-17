@@ -63,11 +63,11 @@ test("a changed, unrecorded or missing image fails the check", async (t) => {
 
   await copyFile(join(ART, "cottage.webp"), join(dir, "cottage.webp"));
   await copyFile(join(ART, "telecom.webp"), join(dir, "extra.webp"));
-  await assert.rejects(checkRecord(dir), /extra\.webp: not recorded/);
+  await assert.rejects(checkRecord(dir), /extra\.webp: not a site view/);
 
   await rm(join(dir, "extra.webp"));
   await rm(join(dir, "mining.webp"));
-  await assert.rejects(checkRecord(dir), /mining\.webp: recorded but missing/);
+  await assert.rejects(checkRecord(dir), /mining\.webp: missing from the directory/);
 
   await copyFile(join(ART, "mining.webp"), join(dir, "mining.webp"));
   await write({ ...record, files: {} });
@@ -118,4 +118,25 @@ test("the recorded scripts must hash the same at the recorded commit", async (t)
 
   await write({ ...record, brand: { repository: "someone/else", commit, scripts } });
   await assert.rejects(checkBrand(brand, dir), /origin89hq\/brand/);
+});
+
+test("a view dropped from both the directory and the record still fails", async (t) => {
+  const { dir, record, write } = await copy(t);
+  const files = { ...record.files };
+  delete files["mining.webp"];
+  await write({ ...record, files });
+  await rm(join(dir, "mining.webp"));
+  await assert.rejects(checkRecord(dir), /mining\.webp: missing from the directory/);
+  await assert.rejects(checkRecord(dir), /mining\.webp: not recorded/);
+});
+
+test("a stray file is not excused by a record entry without a render", async (t) => {
+  const { dir, record, write } = await copy(t);
+  await copyFile(join(ART, "telecom.webp"), join(dir, "extra.webp"));
+  await write({
+    ...record,
+    files: { ...record.files, "extra.webp": { sha256: record.files["telecom.webp"].sha256 } },
+  });
+  await assert.rejects(checkRecord(dir), /extra\.webp: not a site view/);
+  await assert.rejects(checkRecord(dir), /extra\.webp: recorded but not a site view/);
 });
