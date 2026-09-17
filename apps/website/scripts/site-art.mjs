@@ -2,12 +2,14 @@
 //
 //   node scripts/site-art.mjs --brand /path/to/brand --renders /tmp/site-views
 //   node scripts/site-art.mjs --check
+//   node scripts/site-art.mjs --check --brand /path/to/brand
 //
 // --renders holds the output of origin89hq/brand situations/source/build_site_views.py,
 // which models each site from primitives and renders it opaque at 1536 x 1024. --brand is
 // the checkout the renders came from; its commit and the two scripts' hashes go into the
 // record. --check verifies that site-art.json covers every file in src/assets/art/ with
-// the current sha256, and runs as a test.
+// the current sha256, and runs as a test; adding --brand also verifies the recorded
+// scripts against the recorded commit in that checkout.
 //
 // Requires cwebp on PATH.
 import assert from "node:assert/strict";
@@ -22,6 +24,8 @@ import sharp from "sharp";
 const run = promisify(execFile);
 export const ART = fileURLToPath(new URL("../src/assets/art/", import.meta.url));
 const RECORD = "site-art.json";
+// Written beside the renders by build_site_views.py.
+const STAMP = "render-source.json";
 const UNRECORDED = new Set(["README.md", RECORD]);
 // The brand scripts behind every render: one models the sites, the other renders them.
 const SOURCES = ["situations/source/site_scenes.py", "situations/source/build_site_views.py"];
@@ -56,6 +60,8 @@ export async function checkRecord(dir = ART) {
   for (const name of names) {
     const entry = record.files[name];
     if (!entry) problems.push(`${name}: not recorded`);
+    else if (entry.render !== VIEWS[name])
+      problems.push(`${name}: recorded against ${entry.render}, not ${VIEWS[name]}`);
     else if (entry.sha256 !== (await sha256(join(dir, name))))
       problems.push(`${name}: sha256 differs`);
   }
@@ -64,6 +70,40 @@ export async function checkRecord(dir = ART) {
   }
   assert.equal(problems.length, 0, `${RECORD} is out of date:\n${problems.join("\n")}`);
   return names;
+}
+
+// The recorded scripts must still hash the same at the recorded commit. Needs a brand
+// checkout that has the commit; `--check` alone cannot reach it and skips this.
+export async function checkBrand(checkout, dir = ART) {
+  const record = JSON.parse(await readFile(join(dir, RECORD), "utf8"));
+  assert.equal(record.brand.repository, "origin89hq/brand");
+  for (const [path, entry] of Object.entries(record.brand.scripts)) {
+    const blob = await run("git", ["-C", checkout, "show", `${record.brand.commit}:${path}`], {
+      encoding: "buffer",
+      maxBuffer: 1 << 24,
+    });
+    const digest = createHash("sha256").update(blob.stdout).digest("hex");
+    assert.equal(
+      digest,
+      entry.sha256,
+      `${path} at ${record.brand.commit} is not what ${RECORD} records`,
+    );
+  }
+  return record.brand.commit;
+}
+
+// The renders carry the hashes of the scripts that made them; the checkout being
+// recorded must hold those same scripts, or the record would attribute them wrongly.
+async function bindRenders(renders, checkout) {
+  const stamp = JSON.parse(await readFile(join(renders, STAMP), "utf8"));
+  for (const path of SOURCES) {
+    const name = path.slice(path.lastIndexOf("/") + 1);
+    assert.equal(
+      stamp.scripts?.[name],
+      await sha256(join(checkout, path)),
+      `${name} in ${checkout} is not the script that produced these renders`,
+    );
+  }
 }
 
 async function brandRecord(checkout) {
@@ -97,17 +137,24 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     },
   });
   if (values.check) {
-    console.log(`${RECORD} matches ${(await checkRecord()).length} files`);
+    const files = await checkRecord();
+    let where = "";
+    if (values.brand) where = ` at ${(await checkBrand(resolve(values.brand))).slice(0, 10)}`;
+    console.log(`${RECORD} matches ${files.length} files${where}`);
   } else {
     assert.ok(values.brand && values.renders, "Pass --brand and --renders, or --check");
-    const brand = await brandRecord(resolve(values.brand));
-    await packageViews(resolve(values.renders));
+    const checkout = resolve(values.brand);
+    const renders = resolve(values.renders);
+    await bindRenders(renders, checkout);
+    const brand = await brandRecord(checkout);
+    await packageViews(renders);
     const files = {};
     for (const [file, render] of Object.entries(VIEWS)) {
       files[file] = { sha256: await sha256(join(ART, file)), render };
     }
     await writeFile(join(ART, RECORD), `${JSON.stringify({ brand, files }, null, 2)}\n`);
     await checkRecord();
+    await checkBrand(checkout);
     console.log(`packaged ${Object.keys(VIEWS).join(", ")} from ${brand.commit.slice(0, 10)}`);
   }
 }

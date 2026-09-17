@@ -15,6 +15,13 @@ from, and the brand commit with the sha256 of both scripts. Do not hand-edit
 these files; regenerate and package them. `test/site-art.test.mjs` fails if the
 record and the files drift apart.
 
+The render script writes `render-source.json` beside its output with the hashes
+of the scripts that ran, and the packager refuses a brand checkout whose scripts
+differ from it. A record therefore cannot attribute renders to a checkout that
+did not produce them. Cycles output is not reproducible run to run, so the
+scripts are the only thing a later run can compare; re-rendering always changes
+the image bytes.
+
 ## Assets
 
 | File | What it is |
@@ -42,8 +49,17 @@ node scripts/site-art.mjs --brand "$BRAND" --renders /tmp/site-views
 node scripts/site-art.mjs --check
 ```
 
-Packaging requires `cwebp` and installed website dependencies. New Cycles renders
-are not expected to match the old hashes; the record identifies what was published.
+`--check` runs without a checkout and covers the images. Adding `--brand` also
+reads both recorded scripts at the recorded commit and checks their hashes, which
+needs a checkout holding that commit:
+
+```sh
+node scripts/site-art.mjs --check --brand "$BRAND"
+```
+
+Packaging requires `cwebp` and installed website dependencies. The record
+identifies what was published; it is not a promise that a later render reproduces
+those bytes.
 
 ## Presentation rules
 
