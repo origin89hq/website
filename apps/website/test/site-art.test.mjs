@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { promisify } from "node:util";
-import { ART, checkBrand, checkRecord } from "../scripts/site-art.mjs";
+import { ART, checkBrand, checkRecord, repoint } from "../scripts/site-art.mjs";
 
 const run = promisify(execFile);
 const SCRIPTS = ["situations/source/site_scenes.py", "situations/source/build_site_views.py"];
@@ -139,4 +139,31 @@ test("a stray file is not excused by a record entry without a render", async (t)
   });
   await assert.rejects(checkRecord(dir), /extra\.webp: not a site view/);
   await assert.rejects(checkRecord(dir), /extra\.webp: recorded but not a site view/);
+});
+
+test("repointing follows the scripts to another commit, and refuses one without them", async (t) => {
+  const bodies = Object.fromEntries(SCRIPTS.map((path, i) => [path, `# script ${i}\n`]));
+  const { dir: brand, commit } = await brandCheckout(t, bodies);
+  const git = (...args) => run("git", ["-C", brand, ...args]);
+  // A squash-style commit carrying the same scripts, and one that changes them.
+  await git("commit", "--quiet", "--allow-empty", "-m", "squashed");
+  const squashed = (await git("rev-parse", "HEAD")).stdout.trim();
+  await writeFile(join(brand, SCRIPTS[0]), "# rewritten\n");
+  await git("add", ".");
+  await git("commit", "--quiet", "-m", "rewrite");
+  const rewritten = (await git("rev-parse", "HEAD")).stdout.trim();
+
+  const { createHash } = await import("node:crypto");
+  const digest = (body) => createHash("sha256").update(body).digest("hex");
+  const scripts = Object.fromEntries(
+    SCRIPTS.map((path) => [path, { sha256: digest(bodies[path]) }]),
+  );
+  const { dir, record, write } = await copy(t);
+  await write({ ...record, brand: { repository: "origin89hq/brand", commit, scripts } });
+
+  assert.equal(await repoint(brand, squashed, dir), squashed);
+  assert.equal(await checkBrand(brand, dir), squashed);
+
+  await assert.rejects(repoint(brand, rewritten, dir), new RegExp(`at ${rewritten}`));
+  assert.equal(await checkBrand(brand, dir), squashed, "a refused repoint leaves the record alone");
 });
