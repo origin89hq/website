@@ -90,11 +90,16 @@ export function PortExplorer() {
   const [active, setActive] = useState<string | null>(null);
   const [pinned, setPinned] = useState<string | null>(null);
   const leave = useRef(0);
+  // Closing lets the Controller grow back under a cursor that hasn't moved, and the browser
+  // then reports a hover on whichever terminal lands there. Hover waits for real movement.
+  const pointer = useRef<[number, number]>([-1, -1]);
+  const heldAt = useRef<[number, number] | null>(null);
   const port = PORTS.find((p) => p.id === active) ?? null;
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        heldAt.current = pointer.current;
         setPinned(null);
         setActive(null);
       }
@@ -115,6 +120,7 @@ export function PortExplorer() {
     setActive(id);
   };
   const close = () => {
+    heldAt.current = pointer.current;
     setPinned(null);
     setActive(null);
   };
@@ -123,6 +129,9 @@ export function PortExplorer() {
     <div
       className="explorer"
       data-active={active ?? undefined}
+      onPointerMove={(event) => {
+        pointer.current = [event.clientX, event.clientY];
+      }}
       onPointerLeave={() => {
         if (!pinned) leave.current = window.setTimeout(() => setActive(null), 450);
       }}
@@ -151,6 +160,11 @@ export function PortExplorer() {
                   aria-label={`${p.code}: ${p.title}`}
                   onPointerEnter={(event) => {
                     if (event.pointerType === "touch") return;
+                    const held = heldAt.current;
+                    if (held && Math.hypot(event.clientX - held[0], event.clientY - held[1]) < 4) {
+                      return;
+                    }
+                    heldAt.current = null;
                     window.clearTimeout(leave.current);
                     if (!pinned) setActive(p.id);
                   }}
