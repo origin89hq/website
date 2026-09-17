@@ -1855,7 +1855,7 @@ body {
   border-top: 1px solid var(--o89-line);
   color: var(--o89-muted);
 }
-/* Posts read in a centred text column; photos, tables and code widen to a centred band. */
+/* Posts read in a centred text column; photos, tables and code share a wider centred band. */
 .blog-post {
   display: grid;
   grid-template-columns:
@@ -1876,9 +1876,6 @@ body {
 .blog-post-body > :is(.post-table, pre, p:has(> img:only-child)) {
   grid-column: wide;
   justify-self: center;
-  width: min(100%, 1040px);
-}
-.blog-post-body > p:has(> img:only-child) {
   width: min(100%, 880px);
 }
 .blog-post > header {
