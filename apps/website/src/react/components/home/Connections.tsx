@@ -61,7 +61,7 @@ function PowerInstrument() {
 }
 
 function WatchdogInstrument() {
-  const WINDOW = 4.5;
+  const WINDOW = 4.3;
   const [kicking, setKicking] = useState(true);
   const [remain, setRemain] = useState(WINDOW);
   const [kick, setKick] = useState(false);
@@ -128,8 +128,7 @@ function WatchdogInstrument() {
       </div>
       <p className="inst-note">
         The contact needs RUN and a steady KICK. If the kicks stop, the Controller resets or the
-        cable is cut, board B opens the contact on its own. About 4.5 s by design; bench timing
-        pending.
+        cable is cut, board B opens the contact on its own, 4.3 s after the last kick on the bench.
       </p>
     </div>
   );

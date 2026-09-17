@@ -91,7 +91,7 @@ try {
   await page.keyboard.press("Enter");
   assert.match(
     await page.locator("#portPanel").innerText(),
-    /Watchdog timing[\s\S]*Pending bench measurement/,
+    /Watchdog timing[\s\S]*4.34 to 4.46\s?s measured/,
   );
   await page.getByRole("button", { name: "Close details", exact: true }).click();
   assert.equal(await explorer.getAttribute("data-active"), null);

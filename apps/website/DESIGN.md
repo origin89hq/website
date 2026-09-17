@@ -160,7 +160,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 - **Link Blue** (link): links inside running text on the page ground.
 
 ### Tertiary
-- **Nominal Green** (nominal): a live, healthy reading. At most once per screen: the relay-closed state light, the app preview's sync dot, the one completed bench item.
+- **Nominal Green** (nominal): a live, healthy reading. At most once per screen: the relay-closed state light, the app preview's sync dot, completed bench items.
 - **Pending Amber** (warning): pending and planned work, always beside its status word: `Planned`/`Pending bench` chips (dashed border), development status dots in hero and footer, `.o89-pending` table cells, outdated source tags in Buddy's replies.
 - **Alarm** and **Info** ship with the token set for app mockups; the homepage does not use them.
 
