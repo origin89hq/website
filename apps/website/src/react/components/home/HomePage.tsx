@@ -1,8 +1,11 @@
 import plateWhite from "@origin89/brand/logos/plate-89-white.svg?url";
 import { type FormEvent, lazy, type ReactNode, Suspense, useEffect, useRef, useState } from "react";
 import cottage from "../../../assets/home/audience-3d-cottage.webp?url";
+import cottageSignals from "../../../assets/home/audience-3d-cottage-signals.json";
 import mine from "../../../assets/home/audience-3d-mine.webp?url";
+import mineSignals from "../../../assets/home/audience-3d-mine-signals.json";
 import telecom from "../../../assets/home/audience-3d-telecom.webp?url";
+import telecomSignals from "../../../assets/home/audience-3d-telecom-signals.json";
 import gerberBoard from "../../../assets/home/gerber-board-dim.webp?url";
 import gerberU7 from "../../../assets/home/gerber-u7.webp?url";
 import traceBoard from "../../../assets/home/trace-mask-board.webp?url";
@@ -99,6 +102,7 @@ function Statement() {
 const AUDIENCES = [
   {
     img: cottage,
+    signals: cottageSignals,
     alt: "Studio miniature of a cottage site: a cabin with lit windows, a ground-mounted solar rack, a woodshed with the generator and a propane tank, signal paths running to the cabin",
     title: "Cottages and camps",
     text: "A power wall built over the years, a generator in the shed and a fridge full of food. See it all from town.",
@@ -110,6 +114,7 @@ const AUDIENCES = [
   },
   {
     img: telecom,
+    signals: telecomSignals,
     alt: "Studio miniature of a remote telecom site: an equipment shelter, a lattice tower with antennas and a beacon, a genset and a fuel tank inside a fence",
     title: "Remote telecom shelters",
     text: "Batteries, a genset and a tower hours from the nearest road. Know the site’s state before the truck leaves.",
@@ -121,6 +126,7 @@ const AUDIENCES = [
   },
   {
     img: mine,
+    signals: mineSignals,
     alt: "Studio miniature of a mine utility site: an arched steel building, a generator container, a battery skid, a tank and a pipe rack",
     title: "Mining utilities",
     text: "Gensets, pumps and battery banks spread across a site. Planned: several Controllers per location, in one account.",
@@ -131,6 +137,36 @@ const AUDIENCES = [
     ],
   },
 ];
+
+type Signals = { width: number; height: number; paths: { name: string; points: number[][] }[] };
+
+// The render and its signal paths share one coordinate space, so the pulses stay on the
+// rendered lines at any size. Paths run toward the building, the way data flows.
+function Miniature({ img, alt, signals }: { img: string; alt: string; signals: Signals }) {
+  const { width, height, paths } = signals;
+  return (
+    <svg
+      className="mini"
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="xMidYMax meet"
+      role="img"
+      aria-label={alt}
+      style={{ aspectRatio: `${width} / ${height}` }}
+    >
+      <image href={img} width={width} height={height} />
+      {paths.map((path, i) => {
+        const points = path.points.map((point) => point.join(",")).join(" ");
+        const delay = { animationDelay: `${-i * 0.9}s` };
+        return (
+          <g key={path.name}>
+            <polyline className="pulse glow" points={points} pathLength={100} style={delay} />
+            <polyline className="pulse" points={points} pathLength={100} style={delay} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
 
 function Audiences() {
   return (
@@ -148,7 +184,7 @@ function Audiences() {
           {AUDIENCES.map((a) => (
             <article className="audience reveal" key={a.title}>
               <figure>
-                <img src={a.img} alt={a.alt} loading="lazy" />
+                <Miniature {...a} />
               </figure>
               <h3>{a.title}</h3>
               <p>{a.text}</p>

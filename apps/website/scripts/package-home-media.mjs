@@ -9,7 +9,7 @@
 //   film/        frame-NNNN.png + anchors.json    hardware render_film.py
 //   chips/       u7.png, u8.png                   hardware render_chips.py
 //   studio/      connect-*.png, integrate-controller.png   hardware render_studio.py
-//   dioramas/    audience-*.png                   brand build_site_miniatures.py
+//   dioramas/    audience-*.png, audience-*-signals.json   brand build_site_miniatures.py
 //   gerber-art/  *.webp                           hardware gerber_art.mjs
 //   controller.glb                               hardware export_glb.py + gltf-transform webp, meshopt
 //
@@ -85,7 +85,10 @@ const GROUPS = {
   dioramas: {
     script: `${BRAND_SCRIPTS}/build_site_miniatures.py`,
     inputs: [],
-    files: DIORAMAS.map((name) => `audience-3d-${name}.webp`),
+    files: DIORAMAS.flatMap((name) => [
+      `audience-3d-${name}.webp`,
+      `audience-3d-${name}-signals.json`,
+    ]),
     build: packageDioramas,
   },
   gerber: {
@@ -287,6 +290,26 @@ async function packageDioramas(renders, work) {
     const cropped = join(work, `audience-${name}.png`);
     await sharp(source).extract(region).png().toFile(cropped);
     await cwebp("-q", "88", "-alpha_q", "95", cropped, "-o", join(out, `audience-3d-${name}.webp`));
+    // Signal paths in the cropped image's pixels; the homepage animates pulses along them.
+    const signals = JSON.parse(
+      await readFile(join(renders, "dioramas", `audience-${name}-signals.json`), "utf8"),
+    );
+    assert.equal(signals.width, b.width, `${name} signal paths and render differ in size`);
+    const shifted = {
+      width: region.width,
+      height: region.height,
+      paths: signals.paths.map(({ name: path, points }) => ({
+        name: path,
+        points: points.map(([x, y]) => [
+          Math.round((x - left) * 10) / 10,
+          Math.round((y - top) * 10) / 10,
+        ]),
+      })),
+    };
+    await writeFile(
+      join(out, `audience-3d-${name}-signals.json`),
+      `${JSON.stringify(shifted, null, 1)}\n`,
+    );
   }
 }
 

@@ -22,18 +22,33 @@
     }
   },
   "files": {
+    "audience-3d-cottage-signals.json": {
+      "sha256": "0c9fec1508d01c0bb6965ce9cab4641f7c2a2b90a5b1d70b1041d723440ed2ee",
+      "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
+      "inputs": []
+    },
     "audience-3d-cottage.webp": {
-      "sha256": "560649eb5427e42ee0184fad4a79b58b25e341141e3b5b6195d1b46c84374a97",
+      "sha256": "2c399e2bb105cd13e4d98ee5759e704effd52c9267029068c302eca17ed39d76",
+      "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
+      "inputs": []
+    },
+    "audience-3d-mine-signals.json": {
+      "sha256": "e9860940b5d33a0acc1e14ffbbd27dd186a63c013d92ade5be7c22ca7b08463c",
       "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
       "inputs": []
     },
     "audience-3d-mine.webp": {
-      "sha256": "8d1f0f46ca5d5dcb37953e8fa5e898c457aaa508b87ae23428e4132176bdab61",
+      "sha256": "0a3570b0b59956f8ae5988b280026d45b3dcca448ed8e5e6a9c76ae6da716a19",
+      "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
+      "inputs": []
+    },
+    "audience-3d-telecom-signals.json": {
+      "sha256": "75de0d2a33fce596a7c0b261074b7ac450fd72fcab3324021a6f88edf2fedcdf",
       "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
       "inputs": []
     },
     "audience-3d-telecom.webp": {
-      "sha256": "0edbfe017be3cd55896d214321640fc388b1f4ad2f254edb4652d31a678fa9ea",
+      "sha256": "366f1b5f7235e213e3b9335354ed6fccf5962e9d3fcf28fead43b2e3cb7a3e7b",
       "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
       "inputs": []
     },
