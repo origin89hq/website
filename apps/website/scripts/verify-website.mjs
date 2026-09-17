@@ -125,6 +125,49 @@ try {
     await page.locator("#waitlistEmail").evaluate((input) => input.checkValidity()),
     false,
   );
+  // Turnstile loads on first use of the form. Stub it and the API so the check
+  // stays offline and covers a sign-up, a refused retry and the fresh token each needs.
+  const turnstileScript = "https://challenges.cloudflare.com/turnstile/v0/api.js*";
+  await page.route(turnstileScript, (route) =>
+    route.fulfill({
+      contentType: "text/javascript",
+      body: `let issued = 0, options;
+        const issue = () => setTimeout(() => options.callback("stub-token-" + ++issued), 50);
+        window.turnstile = {
+          render(element, value) { options = value; issue(); return "stub"; },
+          reset() { issue(); },
+          remove() {},
+        };`,
+    }),
+  );
+  const signups = [];
+  let waitlistReply = { status: 200, json: { status: "ok" } };
+  await page.route("**/api/waitlist", (route) => {
+    signups.push(route.request().postDataJSON());
+    return route.fulfill(waitlistReply);
+  });
+  const waitlist = page.locator("#waitlist");
+  const join = waitlist.getByRole("button", { name: "Join the waitlist", exact: true });
+  await page.locator("#waitlistEmail").fill("sam@example.com");
+  await join.click();
+  await waitlist.locator('.waitlist-note[data-state="done"]').waitFor();
+  const refusedAt = errors.length;
+  waitlistReply = { status: 503, json: { error: "unavailable" } };
+  await join.click();
+  await waitlist.locator('.waitlist-note[data-state="error"]').waitFor();
+  assert.match(await waitlist.locator(".waitlist-note").innerText(), /hello@origin89\.com/);
+  assert.deepEqual(signups, [
+    { email: "sam@example.com", token: "stub-token-1" },
+    { email: "sam@example.com", token: "stub-token-2" },
+  ]);
+  // Chromium logs the stubbed 503 itself; any other error still fails the check.
+  errors.splice(
+    refusedAt,
+    Infinity,
+    ...errors.slice(refusedAt).filter((text) => !/status of 503/.test(text)),
+  );
+  await page.unroute(turnstileScript);
+  await page.unroute("**/api/waitlist");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await open("/", 390);
@@ -136,7 +179,7 @@ try {
   await page.keyboard.press("Escape");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   checks.push(
-    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; film pause and reduced motion",
+    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; waitlist sign-up and refusal; film pause and reduced motion",
   );
 
   await open("/developers/design-guide/");

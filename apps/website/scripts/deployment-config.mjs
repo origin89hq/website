@@ -15,7 +15,7 @@ function reader(env) {
   };
 }
 
-/** The website: the hostname, the assets, and one binding to Buddy. */
+/** The website: the hostname, the assets, one binding to Buddy and the waitlist vars. */
 export function websiteConfig(base, env) {
   const requireValue = reader(env);
   const account = requireValue("CLOUDFLARE_ACCOUNT_ID", /^[a-f0-9]{32}$/);
@@ -27,17 +27,17 @@ export function websiteConfig(base, env) {
   const buddy = requireValue("BUDDY_WORKER_NAME", namePattern);
   const config = structuredClone(base);
   delete config.env;
+  const hostnames = [...new Set([hostname, alias].filter(Boolean))];
   return {
     ...config,
     name,
     account_id: account,
     workers_dev: false,
     preview_urls: false,
-    routes: [...new Set([hostname, alias].filter(Boolean))].map((pattern) => ({
-      pattern,
-      custom_domain: true,
-    })),
+    routes: hostnames.map((pattern) => ({ pattern, custom_domain: true })),
     services: [{ binding: "BUDDY", service: buddy }],
+    // Production accepts Turnstile tokens only from its own hostnames.
+    vars: { ...config.vars, TURNSTILE_HOSTNAMES: hostnames.join(",") },
   };
 }
 

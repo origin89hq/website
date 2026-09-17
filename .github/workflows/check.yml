@@ -62,9 +62,20 @@ jobs:
       - uses: ./.github/actions/setup-node
       - run: pnpm --filter origin89-website deploy:config
       - run: pnpm build
-      - name: Deploy website
+      # The secrets go up with the version rather than in a step of their own. The Worker's
+      # config lists them as required, so a deploy without them is refused.
+      - name: Deploy website with its secrets
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
         run: |
           test -n "$CLOUDFLARE_API_TOKEN" || { echo 'Configure the organization CLOUDFLARE_API_TOKEN secret.'; exit 1; }
-          pnpm --filter origin89-website deploy:cf
+          if [ -z "$MAILCHIMP_API_KEY" ] || [ -z "$TURNSTILE_SECRET_KEY" ]; then
+            echo "MAILCHIMP_API_KEY or TURNSTILE_SECRET_KEY is not set; the waitlist would refuse every sign-up" >&2
+            exit 1
+          fi
+          umask 077
+          printf 'MAILCHIMP_API_KEY=%s\nTURNSTILE_SECRET_KEY=%s\n' "$MAILCHIMP_API_KEY" "$TURNSTILE_SECRET_KEY" > "$RUNNER_TEMP/secrets.env"
+          trap 'rm -f "$RUNNER_TEMP/secrets.env"' EXIT
+          pnpm --filter origin89-website deploy:cf --secrets-file "$RUNNER_TEMP/secrets.env"

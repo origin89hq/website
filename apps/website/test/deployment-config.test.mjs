@@ -47,3 +47,32 @@ test("the website's remote config takes the hostname and binds the Buddy it name
   assert.notDeepEqual(config.services, base.services);
   assert.equal(config.workers_dev, false);
 });
+
+test("the deployed waitlist accepts Turnstile tokens only from the website's hostnames", () => {
+  const base = parse(readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
+  const env = {
+    CLOUDFLARE_ACCOUNT_ID: "a".repeat(32),
+    WEBSITE_WORKER_NAME: "website-test",
+    BUDDY_WORKER_NAME: "buddy-test",
+    BUDDY_HOSTNAME: "origin89.com",
+  };
+  assert.match(base.vars.TURNSTILE_HOSTNAMES, /localhost/);
+  // Wrangler refuses a deploy that would leave these unset.
+  assert.deepEqual(websiteConfig(base, env).secrets, {
+    required: ["MAILCHIMP_API_KEY", "TURNSTILE_SECRET_KEY"],
+  });
+  assert.equal(base.env.fixture.vars.MAILCHIMP_AUDIENCE_ID, base.vars.MAILCHIMP_AUDIENCE_ID);
+  assert.deepEqual(websiteConfig(base, env).vars, {
+    MAILCHIMP_AUDIENCE_ID: base.vars.MAILCHIMP_AUDIENCE_ID,
+    TURNSTILE_HOSTNAMES: "origin89.com",
+  });
+  assert.equal(
+    websiteConfig(base, { ...env, BUDDY_ALIAS_HOSTNAME: "www.origin89.com" }).vars
+      .TURNSTILE_HOSTNAMES,
+    "origin89.com,www.origin89.com",
+  );
+  assert.equal(
+    websiteConfig(base, { ...env, BUDDY_ALIAS_HOSTNAME: "origin89.com" }).vars.TURNSTILE_HOSTNAMES,
+    "origin89.com",
+  );
+});
