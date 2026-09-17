@@ -21,7 +21,7 @@ and `bom.csv`. Do not hand-edit these files; regenerate and package them.
 
 | File | What it is | Script |
 |---|---|---|
-| `hero-av1.mp4`, `hero.mp4`, `hero-720.mp4` | Hero film loop, one continuous 48 s shot at 30 fps with motion blur, on `#07090c`: 1920 × 1080 in AV1 (SVT-AV1 CRF 36, 10-bit) and H.264 (x264 CRF 23), and 1280 × 720 in H.264 (CRF 23), each encoded from the frames | hardware `render_film.py` |
+| `hero-av1.mp4`, `hero.mp4`, `hero-720.mp4` | Hero film loop, one continuous 48 s shot at 30 fps with motion blur, on `#07090c`: 1920 × 1080 in AV1 (SVT-AV1 CRF 40, 10-bit) and H.264 (x264 CRF 26), and 1280 × 720 in H.264 (CRF 26), each encoded from the frames | hardware `render_film.py` |
 | `hero-poster.webp` | First film frame on `#07090c` | hardware `render_film.py` |
 | `hero-anchors.json` | Callout windows and per-frame callout positions, 0–1 of the frame | hardware `render_film.py` |
 | `chip-u7.webp`, `chip-u8.webp` | Orthographic top views of U7 (STM32G0B1) and U8 (ESP32-C6 module), 720 px | hardware `render_chips.py` |

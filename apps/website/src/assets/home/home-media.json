@@ -1,7 +1,7 @@
 {
   "hardware": {
     "repository": "origin89hq/hardware",
-    "commit": "00b1f2a21995d66f8d066d595c3c0997211d04d3",
+    "commit": "47a0f35826a252e877078ee0be8fab7eda52008d",
     "inputs": {
       "scene": {
         "path": "enclosure/blender/origin89.blend",
@@ -132,7 +132,7 @@
       ]
     },
     "hero-720.mp4": {
-      "sha256": "f209f10f570dd5d2f31c9d072e3838fed185d2896bf4981fb6b52df46fcf1609",
+      "sha256": "c02149cc8a756483f890bb7d8cad0dd51ae4d0c211711def45cf8bc041748616",
       "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
@@ -142,7 +142,7 @@
       ]
     },
     "hero-anchors.json": {
-      "sha256": "a12107434b8b0caf1ad79fcaae56d1915be8ff2cf0a7c861d6ee00ffb6907f79",
+      "sha256": "0428de7338959d436086daac18b7f699513facf9c88be08781e18ad279bbc6b9",
       "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
@@ -152,7 +152,7 @@
       ]
     },
     "hero-av1.mp4": {
-      "sha256": "6069ae78aabda7c7f72e335867304340bdb8e30eb6e259d495d10ed5203b5a3b",
+      "sha256": "27751543b72faae9009a9738feeadb12f4ab033faf2df9b68a7967f7d6dbd02e",
       "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
@@ -162,7 +162,7 @@
       ]
     },
     "hero-poster.webp": {
-      "sha256": "b387ea1b649d90643e68822422a2895e12a11fbe3d341585ab938cb7081ad1ff",
+      "sha256": "90b5f80b1ec59fca9363aeaa88fe8d699de576b45cecbf9bdad7dffae7eac8bd",
       "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
@@ -172,7 +172,7 @@
       ]
     },
     "hero.mp4": {
-      "sha256": "c0fd26251a75d6c124a195708c08976fe2e4af820c362b7bb30cc3156bea0baa",
+      "sha256": "d95def8f18818d1f0ad19271aa81a632d1d52bc2637dfdd1cc9a261d526167a4",
       "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
