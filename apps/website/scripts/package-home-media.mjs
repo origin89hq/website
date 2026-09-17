@@ -67,7 +67,7 @@ const GROUPS = {
   film: {
     script: `${HARDWARE_SCRIPTS}/render_film.py`,
     inputs: DETAILED,
-    files: ["hero-av1.mp4", "hero.mp4", "hero-720.mp4", "hero-poster.webp", "hero-anchors.json"],
+    files: ["hero-av1.mp4", "hero.mp4", "hero-720.mp4", "hero-poster.webp"],
     build: packageFilm,
   },
   chips: {
@@ -196,7 +196,7 @@ async function packageFilm(renders) {
     await stat(join(dir, `frame-${String(frame).padStart(4, "0")}.png`));
   }
   const first = join(dir, "frame-0001.png");
-  // HeroFilm.tsx maps the anchors onto a 1920 x 1080 frame.
+  // The encodes below assume 1920 x 1080 frames; anchors.json gives the frame rate and count.
   assert.deepEqual(await size(first), { width: 1920, height: 1080, hasAlpha: true });
   // Each encode starts from the frames. HeroFilm.tsx picks AV1 where the browser plays it,
   // H.264 otherwise, and the 720p H.264 on narrow screens.
@@ -225,7 +225,6 @@ async function packageFilm(renders) {
     .flatten({ background: BACKGROUND })
     .webp({ quality: 86 })
     .toFile(join(out, "hero-poster.webp"));
-  await copyFile(anchors, join(out, "hero-anchors.json"));
 }
 
 async function packageChips(renders, work) {

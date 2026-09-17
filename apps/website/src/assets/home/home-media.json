@@ -141,16 +141,6 @@
         "bom"
       ]
     },
-    "hero-anchors.json": {
-      "sha256": "0428de7338959d436086daac18b7f699513facf9c88be08781e18ad279bbc6b9",
-      "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
-      "inputs": [
-        "scene",
-        "gerber",
-        "pick_and_place",
-        "bom"
-      ]
-    },
     "hero-av1.mp4": {
       "sha256": "27751543b72faae9009a9738feeadb12f4ab033faf2df9b68a7967f7d6dbd02e",
       "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
