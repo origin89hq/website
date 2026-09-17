@@ -161,7 +161,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 
 ### Tertiary
 - **Nominal Green** (nominal): a live, healthy reading. At most once per screen: the relay-closed state light, the app preview's sync dot, the one completed bench item.
-- **Pending Amber** (warning): pending and planned work, always beside its status word: `Planned`/`Pending bench` chips (dashed border), prototype status dots in hero and footer, `.o89-pending` table cells, outdated source tags in Buddy's replies.
+- **Pending Amber** (warning): pending and planned work, always beside its status word: `Planned`/`Pending bench` chips (dashed border), development status dots in hero and footer, `.o89-pending` table cells, outdated source tags in Buddy's replies.
 - **Alarm** and **Info** ship with the token set for app mockups; the homepage does not use them.
 
 ### Neutral
@@ -185,7 +185,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 **Character:** A tight, heavy grotesk that states the point in sentence case, paired with a plain mono that only ever holds measured or machine data.
 
 ### Hierarchy
-- **Display** (700, `clamp(44px, 6.4vw, 104px)`, 0.98): hero title (capped at 11ch, `clamp(44px, 5.6vw, 92px)`) and the closing waitlist heading. The Statement section runs larger (`clamp(46px, 8.2vw, 138px)`) with staggered lines, the last two in faint.
+- **Display** (700, `clamp(44px, 6.4vw, 104px)`, 0.98): hero title (capped at 12ch, `clamp(44px, 5.4vw, 96px)`, `clamp(38px, 11.6vw, 56px)` below 600px, balanced, its second phrase in a softer `#aab4be`) and the closing waitlist heading. The Statement section runs larger (`clamp(46px, 8.2vw, 138px)`) with staggered lines, the last two in faint.
 - **Headline** (700, `clamp(38px, 4.9vw, 78px)`, 0.98): section headings. Inner pages use `clamp(44px, 5.6vw, 84px)` in the page intro.
 - **Title** (600–700, 20–38px, 1.05–1.2, −0.02 to −0.03em): audience titles, port panel heading (28px), viewer bar, spec group heads (20px), MCU role.
 - **Figure** (600, `clamp(64px, 7.4vw, 116px)`, 0.9, −0.05em, tabular): instrument readouts, with the unit as a 0.32em muted suffix. Smaller figures (22–40px, 600) in bus line, budget, temps and decode.
@@ -203,8 +203,8 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 - **Container:** `min(100% − 2 × gutter, 1320px)`, centred (`.o89-wrap`). Gutter `clamp(16px, 4vw, 56px)`. Inner pages pad with `max(gutter, (100% − 1320px) / 2)`.
 - **Section rhythm:** homepage sections `clamp(96px, 13vw, 190px)` vertical, consecutive sections drop the top padding; inner pages use `clamp(72px, 9vw, 136px)` top-only spacing. Within frames the steps are 4, 8, 12, 16, 24 px.
 - **Grids in use:** two-column heads (1fr 1fr, heading left, lede right, aligned to end); 12-column open-hardware grid with a sticky copy column (top 120px); asymmetric 1.05fr / 0.95fr for MCU and rule composer; three-column audiences; CSS columns (`3 340px`) for the spec grid; hub layout 0.9fr / 1.2fr / 0.9fr.
-- **Full bleed:** the hero film runs full bleed (height `max(640px, min(56.25vw, max(100svh, 42vw)))`) with copy in the content column, over bottom and left gradients to the ground. Render stages (explorer, 3D viewer) are wide frames inside the container.
-- **Breakpoints actually used:** 980px (most grids collapse to one column; hub core moves first), 900px (nav collapses to a Menu disclosure, port panel becomes a bottom sheet, port labels hide and a mono port list appears), 800px (footer to two columns), 720px (hero stacks film above copy, callouts hide, caption line appears), 600px (composer sentence to 22px). Inner pages add 1100, 760 and 650px. Review at 320, 390 and 1440px.
+- **Full bleed:** the hero is one screen tall (`max(620px, 100svh)`) with the film full bleed at 86% opacity and the copy at the bottom of the content column: title and summary on the left, actions and development status on the right above 1100px, stacked below. A bottom gradient and a side scrim that follows the content column put the copy on dark ground; the film toggle sits at the top right. Render stages (explorer, 3D viewer) are wide frames inside the container.
+- **Breakpoints actually used:** 980px (most grids collapse to one column; hub core moves first), 900px (nav collapses to a Menu disclosure, port panel becomes a bottom sheet, port labels hide and a mono port list appears), 800px (footer to two columns), 600px (composer sentence to 22px, hero title scales with width). The hero also uses 1100px (actions and status move under the summary) and 900px (the film fills the screen behind the copy, callouts hide and a caption line appears). Inner pages add 1100, 760 and 650px. Review at 320, 390 and 1440px.
 
 **The One Lead Visual Rule.** Each section has one lead render or instrument; copy sits beside or over it, never competing with a second hero image.
 
@@ -253,10 +253,10 @@ Sturdy, cut from the sign.
 ### Navigation
 - **Style:** sticky (fixed on home) floating bar 12px from the top, 14px bevel, 80% ground with 14px backdrop blur and a 7% white edge; white logo 22px; links 14px 500 muted, fg on hover and `aria-current`; GitHub icon button; small primary plate.
 - **Mobile (≤900px):** links, GitHub and CTA hide; a native `details` Menu disclosure with an 8px bevelled summary opens a raised bevelled sheet of 48px rows.
-- **Footer:** hairline top, 1.3fr + three link columns, 14px muted; a small amber dot with the prototype status line.
+- **Footer:** hairline top, 1.3fr + three link columns, 14px muted; a small amber dot with the development status line ("In active development. Not for sale yet.").
 
 ### Render callouts (signature)
-Hero film labels placed per frame from `hero-anchors.json`, the render camera's projection of board A anchor points. A white 1.5px leader with dot and ring leads to a 300px glass label: signal mono designator, 28px 700 white part name, 15px description. Labels fade in over 0.45s. Below 720px callouts hide and a single caption line (signal mono + muted text) replaces them.
+Hero film labels placed per frame from `hero-anchors.json`, the render camera's projection of board A anchor points. A white 1.5px leader with dot and ring leads to a 300px glass label: signal mono designator, 28px 700 white part name, 15px description. Labels fade in over 0.45s and keep clear of the film toggle. Below 900px callouts hide and a single caption line (signal mono + light text with a dark shadow) replaces them.
 
 ### Port explorer and instruments (signature)
 The port explorer draws terminal labels and polylines over the closed Controller render; hover, focus or selection turns line and node signal blue with a pulsing ring, dims other ports to 32%, and slides a detail panel in (bottom sheet on mobile). Instruments (idle draw, watchdog relay, RS-485 frames, 1-Wire temps, VE.Direct decode) pair a large tabular figure with signal tracks and faint notes that name conditions and label example data.
@@ -265,7 +265,7 @@ The port explorer draws terminal labels and polylines over the closed Controller
 App readings show value, source and age in mono. Stale readings take a dashed line-strong border on a transparent ground with a muted value; missing readings show an em-dash placeholder in faint, never a zero.
 
 ### Motion
-One ease, `--o89-ease` `cubic-bezier(0.16, 1, 0.3, 1)`: 0.2–0.35s for colour and opacity, 0.45–0.7s for panels and transforms, 0.9s for section reveal (fade plus 28px rise, from a visible default, triggered once by IntersectionObserver). Continuous motion is limited to the hero film, the signal trace sweep over Gerber artwork (7s/11s alternating), the active port pulse and dash pulses along integration lines.
+One ease, `--o89-ease` `cubic-bezier(0.16, 1, 0.3, 1)`: 0.2–0.35s for colour and opacity, 0.45–0.7s for panels and transforms, 0.9s for section reveal (fade plus 28px rise, from a visible default, triggered once by IntersectionObserver) and for the hero copy, which rises 18px from 35% opacity once on load, summary and actions 0.1s and 0.2s behind the title. Continuous motion is limited to the hero film, the signal trace sweep over Gerber artwork (7s/11s alternating), the active port pulse and dash pulses along integration lines.
 
 **The Still Under Reduced Motion Rule.** With `prefers-reduced-motion: reduce`, the hero film stays paused (its toggle can start it), reveals render immediately, the 3D lid lift snaps instead of easing, trace sweep, port pulse and render swap animations stop, panel moves become 0.2s linear fades, the 3D viewer stops auto-rotating, and in-page scrolling is instant.
 

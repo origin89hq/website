@@ -60,7 +60,7 @@ export function SiteFooter() {
           <p>Open control for the off-grid equipment you already own. Built at km 43, Québec.</p>
           <p className="o89-footer-status">
             <i aria-hidden="true" />
-            Prototype hardware. Board revision A is on the bench.
+            In active development. Not for sale yet.
           </p>
         </div>
         <nav aria-label="Product links">
