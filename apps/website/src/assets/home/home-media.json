@@ -132,48 +132,54 @@
       ]
     },
     "hero-720.mp4": {
-      "sha256": "9379501fa4b5600601519c471e14ae14de1889810ac597a7af1911e6c178cd21",
-      "script": null,
+      "sha256": "f209f10f570dd5d2f31c9d072e3838fed185d2896bf4981fb6b52df46fcf1609",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
         "gerber",
         "pick_and_place",
         "bom"
-      ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
+      ]
     },
     "hero-anchors.json": {
-      "sha256": "df5fc1b1ce12ed165e085938050364ed3e0aa2bed41f069690bffb2e159651d0",
-      "script": null,
+      "sha256": "a12107434b8b0caf1ad79fcaae56d1915be8ff2cf0a7c861d6ee00ffb6907f79",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
         "gerber",
         "pick_and_place",
         "bom"
-      ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
+      ]
+    },
+    "hero-av1.mp4": {
+      "sha256": "6069ae78aabda7c7f72e335867304340bdb8e30eb6e259d495d10ed5203b5a3b",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
+      "inputs": [
+        "scene",
+        "gerber",
+        "pick_and_place",
+        "bom"
+      ]
     },
     "hero-poster.webp": {
-      "sha256": "59fa5fda38fb7f03f0111e55ec42b91bcfcaf24f994e9a425a2c2ae0c7786d1a",
-      "script": null,
+      "sha256": "b387ea1b649d90643e68822422a2895e12a11fbe3d341585ab938cb7081ad1ff",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
         "gerber",
         "pick_and_place",
         "bom"
-      ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
+      ]
     },
     "hero.mp4": {
-      "sha256": "cadaf990c39f6dbb789b0f3901a9c68b5ab4c03079fcb357262d9d0d0b625cd2",
-      "script": null,
+      "sha256": "c0fd26251a75d6c124a195708c08976fe2e4af820c362b7bb30cc3156bea0baa",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_film.py",
       "inputs": [
         "scene",
         "gerber",
         "pick_and_place",
         "bom"
-      ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
+      ]
     },
     "integrate-controller.webp": {
       "sha256": "cd61ad55793dcb1475e25a4636a67c4bb3c2a8f5bd4c4684875cd3c203dd124a",

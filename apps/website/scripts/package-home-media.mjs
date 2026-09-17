@@ -13,7 +13,7 @@
 //   gerber-art/  *.webp                           hardware gerber_art.mjs
 //   controller.glb                               hardware export_glb.py + gltf-transform webp, meshopt
 //
-// Requires ffmpeg (libx264) and cwebp on PATH. --hardware is the origin89hq/hardware
+// Requires ffmpeg (libx264, libsvtav1) and cwebp on PATH. --hardware is the origin89hq/hardware
 // checkout the renders came from; its commit and input hashes go into the record.
 // Files outside --only keep their existing record, which must still match. --check
 // verifies that home-media.json covers every asset with the current sha256.
@@ -67,7 +67,7 @@ const GROUPS = {
   film: {
     script: `${HARDWARE_SCRIPTS}/render_film.py`,
     inputs: DETAILED,
-    files: ["hero.mp4", "hero-720.mp4", "hero-poster.webp", "hero-anchors.json"],
+    files: ["hero-av1.mp4", "hero.mp4", "hero-720.mp4", "hero-poster.webp", "hero-anchors.json"],
     build: packageFilm,
   },
   chips: {
@@ -198,16 +198,27 @@ async function packageFilm(renders) {
   const first = join(dir, "frame-0001.png");
   // HeroFilm.tsx maps the anchors onto a 1920 x 1080 frame.
   assert.deepEqual(await size(first), { width: 1920, height: 1080, hasAlpha: true });
-  const hero = join(out, "hero.mp4");
-  await ffmpeg(
+  // Each encode starts from the frames. HeroFilm.tsx picks AV1 where the browser plays it,
+  // H.264 otherwise, and the 720p H.264 on narrow screens.
+  const frames = (scale, pixels) => [
     ...["-framerate", String(track.fps), "-i", join(dir, "frame-%04d.png")],
     ...["-f", "lavfi", "-i", `color=c=0x${BACKGROUND.slice(1)}:s=1920x1080:r=${track.fps}`],
-    ...["-filter_complex", "[1:v][0:v]overlay=shortest=1,format=yuv420p"],
-    ...["-frames:v", String(track.frames), "-c:v", "libx264", "-preset", "slow", "-crf", "19"],
-    ...["-movflags", "+faststart", hero],
+    ...["-filter_complex", `[1:v][0:v]overlay=shortest=1${scale},format=${pixels}`],
+    ...["-frames:v", String(track.frames)],
+  ];
+  await ffmpeg(
+    ...frames("", "yuv420p10le"),
+    ...["-c:v", "libsvtav1", "-preset", "6", "-crf", "36", "-g", "240"],
+    ...["-movflags", "+faststart", join(out, "hero-av1.mp4")],
   );
   await ffmpeg(
-    ...["-i", hero, "-vf", "scale=1280:-2", "-c:v", "libx264", "-preset", "slow", "-crf", "23"],
+    ...frames("", "yuv420p"),
+    ...["-c:v", "libx264", "-preset", "slow", "-crf", "23"],
+    ...["-movflags", "+faststart", join(out, "hero.mp4")],
+  );
+  await ffmpeg(
+    ...frames(",scale=1280:720", "yuv420p"),
+    ...["-c:v", "libx264", "-preset", "slow", "-crf", "23"],
     ...["-movflags", "+faststart", join(out, "hero-720.mp4")],
   );
   await sharp(first)

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import filmUrl from "../../../assets/home/hero.mp4?url";
 import filmSmallUrl from "../../../assets/home/hero-720.mp4?url";
 import anchorsUrl from "../../../assets/home/hero-anchors.json?url";
+import filmAv1Url from "../../../assets/home/hero-av1.mp4?url";
 import posterUrl from "../../../assets/home/hero-poster.webp?url";
 import { CALLOUTS } from "./data";
 import { ArrowIcon } from "./icons";
@@ -17,6 +18,14 @@ const LABEL_WIDTH = 300;
 const LEADER_GAP = 110;
 
 type SaveDataNavigator = Navigator & { connection?: { saveData?: boolean } };
+
+// 720p H.264 on narrow screens; AV1 where the browser can play it, which is under half the size.
+const pickFilm = (video: HTMLVideoElement) => {
+  if (matchMedia("(max-width: 900px)").matches) return filmSmallUrl;
+  return video.canPlayType('video/mp4; codecs="av01.0.08M.10"') === "probably"
+    ? filmAv1Url
+    : filmUrl;
+};
 
 export function HeroFilm() {
   const hero = useRef<HTMLElement>(null);
@@ -53,11 +62,10 @@ export function HeroFilm() {
       })
       .catch(() => {});
 
-    const place = () => {
-      frame = requestAnimationFrame(place);
+    const place = (time: number) => {
       const host = layer.current;
       if (!track || !host || !video.duration) return;
-      const f = Math.floor(video.currentTime * track.fps) % track.frames;
+      const f = Math.floor(time * track.fps) % track.frames;
       const shot = track.shots.find((s) => f + 1 >= s.start && f + 1 <= s.end);
       const W = video.clientWidth;
       const H = video.clientHeight;
@@ -100,25 +108,44 @@ export function HeroFilm() {
       }
     };
 
+    // Callouts follow the frame the browser presents, so they stay on their parts while the
+    // camera moves; without requestVideoFrameCallback they follow currentTime on each paint.
+    const synced = "requestVideoFrameCallback" in video;
+    const onFrame = (_now: number, presented: VideoFrameCallbackMetadata) => {
+      frame = video.requestVideoFrameCallback(onFrame);
+      place(presented.mediaTime);
+    };
+    const onPaint = () => {
+      frame = requestAnimationFrame(onPaint);
+      place(video.currentTime);
+    };
+    const follow = () => {
+      if (frame) return;
+      frame = synced ? video.requestVideoFrameCallback(onFrame) : requestAnimationFrame(onPaint);
+    };
+    const unfollow = () => {
+      if (synced) video.cancelVideoFrameCallback(frame);
+      else cancelAnimationFrame(frame);
+      frame = 0;
+    };
+    const onResize = () => place(video.currentTime);
+
     // The film is attached only while it should play and detached when the page is left:
     // a half-downloaded film kept in the back-forward cache blocks the next visit's copy.
     const run = () => {
       if (!wanted.current || !inView) return;
-      if (!video.getAttribute("src")) {
-        video.src = matchMedia("(max-width: 900px)").matches ? filmSmallUrl : filmUrl;
-      }
+      if (!video.getAttribute("src")) video.src = pickFilm(video);
       video.play().catch((error: DOMException) => {
         // Scrolling away or leaving the page interrupts play(); only a refusal stops the film.
         if (error.name === "AbortError") return;
         wanted.current = false;
         setPlaying(false);
       });
-      if (!frame) frame = requestAnimationFrame(place);
+      follow();
     };
     const hold = () => {
       video.pause();
-      cancelAnimationFrame(frame);
-      frame = 0;
+      unfollow();
     };
     const release = () => {
       hold();
@@ -137,11 +164,13 @@ export function HeroFilm() {
     });
     observer.observe(section);
     window.addEventListener("pagehide", release);
+    window.addEventListener("resize", onResize);
     window.addEventListener("pageshow", onShow);
     return () => {
       controller.abort();
       observer.disconnect();
       window.removeEventListener("pagehide", release);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener("pageshow", onShow);
       controls.current = null;
       release();

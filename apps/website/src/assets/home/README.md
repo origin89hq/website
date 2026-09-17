@@ -21,7 +21,7 @@ and `bom.csv`. Do not hand-edit these files; regenerate and package them.
 
 | File | What it is | Script |
 |---|---|---|
-| `hero.mp4`, `hero-720.mp4` | Hero film loop, 24 fps, on `#07090c`: 1920 × 1080 (x264 CRF 19) and 1280 × 720 (CRF 23) | hardware `render_film.py` |
+| `hero-av1.mp4`, `hero.mp4`, `hero-720.mp4` | Hero film loop, 49 s at 24 fps, on `#07090c`: 1920 × 1080 in AV1 (SVT-AV1 CRF 36, 10-bit) and H.264 (x264 CRF 23), and 1280 × 720 in H.264 (CRF 23), each encoded from the frames | hardware `render_film.py` |
 | `hero-poster.webp` | First film frame on `#07090c` | hardware `render_film.py` |
 | `hero-anchors.json` | Shot ranges and per-frame callout positions, 0–1 of the frame | hardware `render_film.py` |
 | `chip-u7.webp`, `chip-u8.webp` | Orthographic top views of U7 (STM32G0B1) and U8 (ESP32-C6 module), 720 px | hardware `render_chips.py` |
@@ -63,7 +63,7 @@ node scripts/package-home-media.mjs --hardware "$HW" --renders "$M"
 node scripts/package-home-media.mjs --check
 ```
 
-Packaging requires `ffmpeg` with libx264, `cwebp` and installed website
+Packaging requires `ffmpeg` with libx264 and libsvtav1, `cwebp` and installed website
 dependencies. To repackage part of the set, pass `--only` with any of
 `film,chips,studio,dioramas,gerber,model`. Files outside those groups keep their
 records, which must still match; the packager refuses if the hardware inputs
@@ -71,9 +71,11 @@ changed for a group it is not repackaging. The record names the hardware commit
 but not the brand commit behind the miniatures.
 
 From the renders behind the current files, packaging reproduced every file
-byte for byte except `hero-poster.webp`, with sharp 0.35.3, cwebp 1.6.0, ffmpeg
-7.1 (x264 core 164) and gltf-transform 4.5.0. New Cycles renders are not expected
-to match the old hashes; the record identifies what was published.
+byte for byte except `hero-poster.webp` and `hero-av1.mp4`, with sharp 0.35.3,
+cwebp 1.6.0, ffmpeg 7.1 (x264 core 164) and gltf-transform 4.5.0. SVT-AV1 2.3.0
+writes a slightly different file on each run from the same frames. New Cycles
+renders are not expected to match the old hashes; the record identifies what was
+published.
 
 ## Presentation rules
 
