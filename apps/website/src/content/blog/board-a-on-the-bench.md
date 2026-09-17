@@ -23,7 +23,7 @@ On the second night it ran for 16 h 48 min from a bench supply at 14.4 V and pol
 | RS-485 | All three channels exchanged frames in all six directions with none missed | Channels wired together on the bench, 115200 8N1 and 9600 8N2 |
 | Modbus RTU | A DC meter answered 119 of 120 polls; the I/O module gave a valid reply to all but one of 58 169 | Short bench leads, 9600 baud |
 | 12 V input | Reads 1.1 % below the bench supply and an in-line meter | At 13.09 V and 14.39 V, with 1 % divider resistors |
-| Temperature | Three DS18B20 probes found and read on the 1-Wire bus | Readings of 23 to 26 °C on the bench |
+| Temperature | Three DS18B20 probes found and read on the 1‑Wire bus | Readings of 23 to 26 °C on the bench |
 | Clock | The two crystals agree to within 13 to 16 ppm; the calendar kept time through a 10 s power loss on its coin cell | Drift over 12 h 50 min; one 10 s power loss |
 | Watchdog | A deliberately starved watchdog reset the processor, and the next boot recorded why | Self-test image |
 | Wi-Fi | Joined a WPA2 network, got replies to 10 of 10 pings to 1.1.1.1 and downloaded 1 MB at 2.2 Mbit/s | 2.4 GHz at −36 dBm; untuned network buffers probably limit the speed |

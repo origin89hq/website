@@ -1855,28 +1855,14 @@ body {
   border-top: 1px solid var(--o89-line);
   color: var(--o89-muted);
 }
-/* Posts read in a centred text column; photos, tables and code share a wider centred band. */
+/* Posts read in one centred column; headings, text, photos and tables share its edges. */
 .blog-post {
-  display: grid;
-  grid-template-columns:
-    [wide-start] minmax(0, 1fr)
-    [text-start] minmax(0, 720px)
-    [text-end] minmax(0, 1fr)
-    [wide-end];
-  padding: clamp(56px, 7vw, 104px) var(--site-gutter) 0;
-}
-.blog-post > *,
-.blog-post-body > * {
-  grid-column: text;
+  width: min(100% - 2 * var(--o89-gutter), 720px);
+  margin-inline: auto;
+  padding: clamp(56px, 7vw, 104px) 0 0;
 }
 .blog-post-body {
-  display: contents;
   line-height: 1.7;
-}
-.blog-post-body > :is(.post-table, pre, p:has(> img:only-child)) {
-  grid-column: wide;
-  justify-self: center;
-  width: min(100%, 880px);
 }
 .blog-post > header {
   padding-bottom: clamp(32px, 4vw, 48px);
@@ -1991,8 +1977,8 @@ body {
   width: 100%;
   min-width: 560px;
   border-collapse: collapse;
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
 }
 .post-table :is(th, td) {
