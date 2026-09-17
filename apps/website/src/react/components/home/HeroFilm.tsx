@@ -246,8 +246,8 @@ export function HeroFilm() {
               <span>One controller</span> <span>for the gear you already own.</span>
             </h1>
             <p className="lede">
-              Origin89 reads the charge controller, inverter, batteries, probes and generator on
-              your wall, runs your rules at the site and keeps every reading with its age.
+              Origin89 reads the charge controller, inverter, batteries, probes and generator at
+              your site, runs your rules there and keeps every reading with its age.
             </p>
           </div>
           <div className="hero-side">

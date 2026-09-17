@@ -80,7 +80,7 @@ export function AppPreview() {
           </div>
         </div>
         <div className="rule">
-          <b>Generator rule</b>Starts below 11.9 V, runs at least 45 min, never between 22:00 and
+          <b>Generator rule</b> Starts below 11.9 V, runs at least 45 min, never between 22:00 and
           07:00.
         </div>
         <div className="app-tabbar">
