@@ -161,7 +161,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 
 ### Tertiary
 - **Nominal Green** (nominal): a live, healthy reading. At most once per screen: the relay-closed state light, the app preview's sync dot, the one completed bench item.
-- **Pending Amber** (warning): pending and planned work, always beside its status word: `Planned`/`Pending bench` chips (dashed border), prototype status dots in hero and footer, `.o89-pending` table cells, outdated source tags in Buddy's replies.
+- **Pending Amber** (warning): pending and planned work, always beside its status word: `Planned`/`Pending bench` chips (dashed border), development status dots in hero and footer, `.o89-pending` table cells, outdated source tags in Buddy's replies.
 - **Alarm** and **Info** ship with the token set for app mockups; the homepage does not use them.
 
 ### Neutral
@@ -203,7 +203,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 - **Container:** `min(100% − 2 × gutter, 1320px)`, centred (`.o89-wrap`). Gutter `clamp(16px, 4vw, 56px)`. Inner pages pad with `max(gutter, (100% − 1320px) / 2)`.
 - **Section rhythm:** homepage sections `clamp(96px, 13vw, 190px)` vertical, consecutive sections drop the top padding; inner pages use `clamp(72px, 9vw, 136px)` top-only spacing. Within frames the steps are 4, 8, 12, 16, 24 px.
 - **Grids in use:** two-column heads (1fr 1fr, heading left, lede right, aligned to end); 12-column open-hardware grid with a sticky copy column (top 120px); asymmetric 1.05fr / 0.95fr for MCU and rule composer; three-column audiences; CSS columns (`3 340px`) for the spec grid; hub layout 0.9fr / 1.2fr / 0.9fr.
-- **Full bleed:** the hero is one screen tall (`max(620px, 100svh)`) with the film full bleed at 86% opacity and the copy at the bottom of the content column: title and summary on the left, actions and prototype status on the right above 1100px, stacked below. A bottom gradient and a side scrim that follows the content column put the copy on dark ground; the film toggle sits at the top right. Render stages (explorer, 3D viewer) are wide frames inside the container.
+- **Full bleed:** the hero is one screen tall (`max(620px, 100svh)`) with the film full bleed at 86% opacity and the copy at the bottom of the content column: title and summary on the left, actions and development status on the right above 1100px, stacked below. A bottom gradient and a side scrim that follows the content column put the copy on dark ground; the film toggle sits at the top right. Render stages (explorer, 3D viewer) are wide frames inside the container.
 - **Breakpoints actually used:** 980px (most grids collapse to one column; hub core moves first), 900px (nav collapses to a Menu disclosure, port panel becomes a bottom sheet, port labels hide and a mono port list appears), 800px (footer to two columns), 600px (composer sentence to 22px, hero title scales with width). The hero also uses 1100px (actions and status move under the summary) and 900px (the film fills the screen behind the copy, callouts hide and a caption line appears). Inner pages add 1100, 760 and 650px. Review at 320, 390 and 1440px.
 
 **The One Lead Visual Rule.** Each section has one lead render or instrument; copy sits beside or over it, never competing with a second hero image.
@@ -253,7 +253,7 @@ Sturdy, cut from the sign.
 ### Navigation
 - **Style:** sticky (fixed on home) floating bar 12px from the top, 14px bevel, 80% ground with 14px backdrop blur and a 7% white edge; white logo 22px; links 14px 500 muted, fg on hover and `aria-current`; GitHub icon button; small primary plate.
 - **Mobile (≤900px):** links, GitHub and CTA hide; a native `details` Menu disclosure with an 8px bevelled summary opens a raised bevelled sheet of 48px rows.
-- **Footer:** hairline top, 1.3fr + three link columns, 14px muted; a small amber dot with the prototype status line.
+- **Footer:** hairline top, 1.3fr + three link columns, 14px muted; a small amber dot with the development status line ("In active development. Not for sale yet.").
 
 ### Render callouts (signature)
 Hero film labels placed per frame from `hero-anchors.json`, the render camera's projection of board A anchor points. A white 1.5px leader with dot and ring leads to a 300px glass label: signal mono designator, 28px 700 white part name, 15px description. Labels fade in over 0.45s and keep clear of the film toggle. Below 900px callouts hide and a single caption line (signal mono + light text with a dark shadow) replaces them.

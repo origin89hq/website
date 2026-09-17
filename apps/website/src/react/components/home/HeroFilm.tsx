@@ -262,7 +262,7 @@ export function HeroFilm() {
             </div>
             <p className="status">
               <i aria-hidden="true" />
-              <b>Prototype.</b> Board revision A is on the bench now.
+              <b>In active development.</b> Not for sale yet.
             </p>
           </div>
         </div>

@@ -15,7 +15,7 @@ import { siteConfig } from "../lib/site-config";
 const productActions: Record<ProductId, { label: string; status: string }> = {
   controller: {
     label: "Plan a connection",
-    status: "Prototype hardware. Board revision A is on the bench.",
+    status: "In active development. Not for sale yet.",
   },
   offgrid: {
     label: "Try the app scene",

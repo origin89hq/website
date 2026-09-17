@@ -21,7 +21,7 @@ const metadata: Record<string, [string, string]> = {
   ],
   "/": [
     "One controller for the gear you already own",
-    "The Origin89 Controller reads the charge controller, inverter, batteries, probes and generator on your wall and runs your rules at the site. Prototype hardware.",
+    "The Origin89 Controller reads the charge controller, inverter, batteries, probes and generator on your wall and runs your rules at the site. In active development.",
   ],
   "/products/": [
     "One connected product family",

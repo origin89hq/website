@@ -41,7 +41,7 @@ Origin89 is an off-grid controller system: the Controller on the wall, the Offgr
 ## Brand Commitments
 
 - Name: Origin89. Identity from the `@origin89/brand` package: logos, Michroma wordmark, Inter Tight, IBM Plex Mono, colour tokens, and Buddy the moose.
-- Voice: plain and specific, no AI filler, honest about prototype status. Pending measurements are labelled; defect lists stay in the repositories.
+- Voice: plain and specific, no AI filler, honest about prototype status. Status lines say "In active development. Not for sale yet." rather than bench or revision details; pending measurements are labelled where they appear; defect lists stay in the repositories.
 - Reference the owner made binding: flipper.net's product-page clarity, where a visitor sees exactly how the device works and what every port does.
 - Third-party equipment in imagery stays unbranded.
 

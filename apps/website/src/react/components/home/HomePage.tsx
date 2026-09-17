@@ -366,7 +366,7 @@ const COMPARE: { feature: string; cells: [Cell, Cell, Cell, Cell] }[] = [
   {
     feature: "Availability",
     cells: [
-      { text: "Prototype, not for sale", pending: true },
+      { text: "In active development, not for sale yet", pending: true },
       { text: "Shipping" },
       { text: "Shipping" },
       { text: "Shipping" },
