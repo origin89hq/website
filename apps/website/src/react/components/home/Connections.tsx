@@ -323,7 +323,7 @@ export function Connections() {
         aria-labelledby={`ctab-${current.id}`}
       >
         <div className="connect-grid">
-          <div className="connect-copy" aria-live="polite">
+          <div className="connect-copy">
             <h3>{current.title}</h3>
             <p>{current.text}</p>
             <Instrument key={current.id} />

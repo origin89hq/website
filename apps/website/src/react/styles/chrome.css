@@ -121,24 +121,31 @@
   grid-template-columns: 1.3fr repeat(3, 1fr);
   gap: 40px 24px;
 }
+.o89-footer-brand {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
 .o89-footer-brand img {
   display: block;
   width: auto;
   height: 28px;
 }
 .o89-footer-brand p {
-  margin-top: 16px;
-  max-width: 34ch;
+  margin: 0;
+  max-width: 36ch;
 }
 .o89-footer-status {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-size: 13px;
 }
 .o89-footer-status i {
   width: 7px;
   height: 7px;
+  margin-top: 0.55lh;
+  translate: 0 -50%;
   border-radius: 50%;
   background: var(--o89-warning);
   flex: none;
