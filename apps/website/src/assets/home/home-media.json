@@ -24,22 +24,22 @@
   "files": {
     "audience-3d-cottage.webp": {
       "sha256": "560649eb5427e42ee0184fad4a79b58b25e341141e3b5b6195d1b46c84374a97",
-      "script": "scripts/render/render-dioramas.py",
+      "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
       "inputs": []
     },
     "audience-3d-mine.webp": {
       "sha256": "8d1f0f46ca5d5dcb37953e8fa5e898c457aaa508b87ae23428e4132176bdab61",
-      "script": "scripts/render/render-dioramas.py",
+      "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
       "inputs": []
     },
     "audience-3d-telecom.webp": {
       "sha256": "0edbfe017be3cd55896d214321640fc388b1f4ad2f254edb4652d31a678fa9ea",
-      "script": "scripts/render/render-dioramas.py",
+      "script": "origin89hq/brand:situations/source/build_site_miniatures.py",
       "inputs": []
     },
     "chip-u7.webp": {
       "sha256": "8322113cf4aefba84cc2db15463f9c263281d272cbcb4421a98533ecf105a7e1",
-      "script": "scripts/render/render-chips.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_chips.py",
       "inputs": [
         "scene",
         "gerber",
@@ -49,7 +49,7 @@
     },
     "chip-u8.webp": {
       "sha256": "291024b16e3eb33d7b0c854080a4187370a54e4324bc3d0eeae440b8559cb681",
-      "script": "scripts/render/render-chips.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_chips.py",
       "inputs": [
         "scene",
         "gerber",
@@ -59,7 +59,7 @@
     },
     "connect-bottom.webp": {
       "sha256": "32c344796181186f76934f28848180f7bbd59c09b55766bbb92e9028ac639dfd",
-      "script": "scripts/render/render-studio.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_studio.py",
       "inputs": [
         "scene",
         "gerber",
@@ -69,7 +69,7 @@
     },
     "connect-cable.webp": {
       "sha256": "a20f45f2bd569ffd16be392c0eee8073244d4d9e35ffa3805aeca8b415455b01",
-      "script": "scripts/render/render-studio.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_studio.py",
       "inputs": [
         "scene",
         "gerber",
@@ -79,7 +79,7 @@
     },
     "connect-harness.webp": {
       "sha256": "291f2f87f9919f7e38ead5ae6f4301bb45d1fc0b09602be7a03bb23f311ea75c",
-      "script": "scripts/render/render-studio.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_studio.py",
       "inputs": [
         "scene",
         "gerber",
@@ -89,7 +89,7 @@
     },
     "connect-left.webp": {
       "sha256": "91aa5a7defa3d9c756dc93b00641d2e0d95b46f9e3b530b6c62d93c5397ace41",
-      "script": "scripts/render/render-studio.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_studio.py",
       "inputs": [
         "scene",
         "gerber",
@@ -99,7 +99,7 @@
     },
     "connect-right.webp": {
       "sha256": "92480c722eb2d1a9793ad864fe2cfd57447e9b4e5390a3c77a9d3e02826c5a56",
-      "script": "scripts/render/render-studio.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_studio.py",
       "inputs": [
         "scene",
         "gerber",
@@ -109,7 +109,7 @@
     },
     "controller.glb": {
       "sha256": "1467a9711fb361910276764603b4c5074be0425fdced9528988689edb9cb8c57",
-      "script": "scripts/render/export-glb.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/export_glb.py",
       "inputs": [
         "scene",
         "gerber",
@@ -119,14 +119,14 @@
     },
     "gerber-board-dim.webp": {
       "sha256": "4479b05f07a4b9d6ce4d83879d7a0662a8eea7672c5737438c6da9e25ae70055",
-      "script": "scripts/render/gerber-art.mjs",
+      "script": "origin89hq/hardware:enclosure/blender/web/gerber_art.mjs",
       "inputs": [
         "gerber"
       ]
     },
     "gerber-u7.webp": {
       "sha256": "c30998d2a3128bb1e61d7f947ec44e3539dc9d500911a155f750ee3346131272",
-      "script": "scripts/render/gerber-art.mjs",
+      "script": "origin89hq/hardware:enclosure/blender/web/gerber_art.mjs",
       "inputs": [
         "gerber"
       ]
@@ -140,7 +140,7 @@
         "pick_and_place",
         "bom"
       ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging render-film.py frames."
+      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
     },
     "hero-anchors.json": {
       "sha256": "df5fc1b1ce12ed165e085938050364ed3e0aa2bed41f069690bffb2e159651d0",
@@ -151,7 +151,7 @@
         "pick_and_place",
         "bom"
       ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging render-film.py frames."
+      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
     },
     "hero-poster.webp": {
       "sha256": "59fa5fda38fb7f03f0111e55ec42b91bcfcaf24f994e9a425a2c2ae0c7786d1a",
@@ -162,7 +162,7 @@
         "pick_and_place",
         "bom"
       ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging render-film.py frames."
+      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
     },
     "hero.mp4": {
       "sha256": "cadaf990c39f6dbb789b0f3901a9c68b5ab4c03079fcb357262d9d0d0b625cd2",
@@ -173,11 +173,11 @@
         "pick_and_place",
         "bom"
       ],
-      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging render-film.py frames."
+      "note": "First 384-frame cut, rendered by an earlier film script that is not kept. Replace by packaging frames from origin89hq/hardware:enclosure/blender/web/render_film.py."
     },
     "integrate-controller.webp": {
       "sha256": "cd61ad55793dcb1475e25a4636a67c4bb3c2a8f5bd4c4684875cd3c203dd124a",
-      "script": "scripts/render/render-studio.py",
+      "script": "origin89hq/hardware:enclosure/blender/web/render_studio.py",
       "inputs": [
         "scene",
         "gerber",
@@ -187,14 +187,14 @@
     },
     "trace-mask-board.webp": {
       "sha256": "a9799f86fb40ddeabbeb6bcf92ead444b00348439a3454720424b3e480ae0968",
-      "script": "scripts/render/gerber-art.mjs",
+      "script": "origin89hq/hardware:enclosure/blender/web/gerber_art.mjs",
       "inputs": [
         "gerber"
       ]
     },
     "trace-mask-u7.webp": {
       "sha256": "a0c83597b94d50259b1f5eb7b421372fe1fef519de20cd729ee44c1b414de439",
-      "script": "scripts/render/gerber-art.mjs",
+      "script": "origin89hq/hardware:enclosure/blender/web/gerber_art.mjs",
       "inputs": [
         "gerber"
       ]

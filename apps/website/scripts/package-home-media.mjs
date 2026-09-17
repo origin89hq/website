@@ -1,16 +1,17 @@
 // Package the homepage renders into src/assets/home/ and record their provenance in home-media.json.
 //
-//   node scripts/render/package-home-media.mjs --hardware /path/to/hardware --renders /tmp/home-media
-//   node scripts/render/package-home-media.mjs --hardware ... --renders ... --only chips,studio
-//   node scripts/render/package-home-media.mjs --check
+//   node scripts/package-home-media.mjs --hardware /path/to/hardware --renders /tmp/home-media
+//   node scripts/package-home-media.mjs --hardware ... --renders ... --only chips,studio
+//   node scripts/package-home-media.mjs --check
 //
-// --renders holds the outputs of the render scripts:
-//   film/        frame-NNNN.png + anchors.json    render-film.py
-//   chips/       u7.png, u8.png                   render-chips.py
-//   studio/      connect-*.png, integrate-controller.png   render-studio.py
-//   dioramas/    audience-*.png                   render-dioramas.py
-//   gerber-art/  *.webp                           gerber-art.mjs
-//   controller.glb                               export-glb.py + gltf-transform webp, meshopt
+// --renders holds the outputs of the render scripts, which live with their inputs
+// (origin89hq/hardware enclosure/blender/web/, origin89hq/brand situations/source/):
+//   film/        frame-NNNN.png + anchors.json    hardware render_film.py
+//   chips/       u7.png, u8.png                   hardware render_chips.py
+//   studio/      connect-*.png, integrate-controller.png   hardware render_studio.py
+//   dioramas/    audience-*.png                   brand build_site_miniatures.py
+//   gerber-art/  *.webp                           hardware gerber_art.mjs
+//   controller.glb                               hardware export_glb.py + gltf-transform webp, meshopt
 //
 // Requires ffmpeg (libx264) and cwebp on PATH. --hardware is the origin89hq/hardware
 // checkout the renders came from; its commit and input hashes go into the record.
@@ -36,7 +37,7 @@ const { values } = parseArgs({
     check: { type: "boolean", default: false },
   },
 });
-const out = values.out ?? fileURLToPath(new URL("../../src/assets/home/", import.meta.url));
+const out = values.out ?? fileURLToPath(new URL("../src/assets/home/", import.meta.url));
 const recordPath = join(out, "home-media.json");
 const UNRECORDED = new Set(["README.md", "home-media.json"]);
 const BACKGROUND = "#07090c";
@@ -57,35 +58,38 @@ const STUDIO = [
   "connect-right",
 ];
 const DIORAMAS = ["cottage", "mine", "telecom"];
+// Recorded as repository:path; the scripts are not in this repository.
+const HARDWARE_SCRIPTS = "origin89hq/hardware:enclosure/blender/web";
+const BRAND_SCRIPTS = "origin89hq/brand:situations/source";
 const GERBER_ART = ["gerber-board-dim", "gerber-u7", "trace-mask-board", "trace-mask-u7"];
 
 const GROUPS = {
   film: {
-    script: "scripts/render/render-film.py",
+    script: `${HARDWARE_SCRIPTS}/render_film.py`,
     inputs: DETAILED,
     files: ["hero.mp4", "hero-720.mp4", "hero-poster.webp", "hero-anchors.json"],
     build: packageFilm,
   },
   chips: {
-    script: "scripts/render/render-chips.py",
+    script: `${HARDWARE_SCRIPTS}/render_chips.py`,
     inputs: DETAILED,
     files: ["chip-u7.webp", "chip-u8.webp"],
     build: packageChips,
   },
   studio: {
-    script: "scripts/render/render-studio.py",
+    script: `${HARDWARE_SCRIPTS}/render_studio.py`,
     inputs: DETAILED,
     files: [...STUDIO.map((name) => `${name}.webp`), "integrate-controller.webp"],
     build: packageStudio,
   },
   dioramas: {
-    script: "scripts/render/render-dioramas.py",
+    script: `${BRAND_SCRIPTS}/build_site_miniatures.py`,
     inputs: [],
     files: DIORAMAS.map((name) => `audience-3d-${name}.webp`),
     build: packageDioramas,
   },
   gerber: {
-    script: "scripts/render/gerber-art.mjs",
+    script: `${HARDWARE_SCRIPTS}/gerber_art.mjs`,
     inputs: ["gerber"],
     files: GERBER_ART.map((name) => `${name}.webp`),
     build: (renders) =>
@@ -96,7 +100,7 @@ const GROUPS = {
       ),
   },
   model: {
-    script: "scripts/render/export-glb.py",
+    script: `${HARDWARE_SCRIPTS}/export_glb.py`,
     inputs: DETAILED,
     files: ["controller.glb"],
     build: (renders) => copyFile(join(renders, "controller.glb"), join(out, "controller.glb")),
