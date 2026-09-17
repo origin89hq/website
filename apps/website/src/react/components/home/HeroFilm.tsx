@@ -16,25 +16,34 @@ type Track = {
 const LABEL_WIDTH = 300;
 const LEADER_GAP = 110;
 
+type SaveDataNavigator = Navigator & { connection?: { saveData?: boolean } };
+
 export function HeroFilm() {
+  const hero = useRef<HTMLElement>(null);
   const film = useRef<HTMLVideoElement>(null);
   const layer = useRef<HTMLDivElement>(null);
   const callouts = useRef<Record<string, HTMLDivElement | null>>({});
+  const wanted = useRef(true);
+  const controls = useRef<{ run: () => void; hold: () => void } | null>(null);
   const [playing, setPlaying] = useState(true);
   const [caption, setCaption] = useState<string | null>(null);
 
   useEffect(() => {
     const video = film.current;
-    if (!video) return;
+    const section = hero.current;
+    if (!video || !section) return;
     video.muted = true;
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      video.pause();
+    if (
+      matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      (navigator as SaveDataNavigator).connection?.saveData
+    ) {
+      wanted.current = false;
       setPlaying(false);
-    } else void video.play().catch(() => setPlaying(false));
+    }
 
     let track: Track | null = null;
     let frame = 0;
+    let inView = false;
     let current: string | null = null;
     const controller = new AbortController();
     fetch(anchorsUrl, { signal: controller.signal })
@@ -90,41 +99,75 @@ export function HeroFilm() {
         setCaption(visible);
       }
     };
-    frame = requestAnimationFrame(place);
+
+    // The film is attached only while it should play and detached when the page is left:
+    // a half-downloaded film kept in the back-forward cache blocks the next visit's copy.
+    const run = () => {
+      if (!wanted.current || !inView) return;
+      if (!video.getAttribute("src")) {
+        video.src = matchMedia("(max-width: 900px)").matches ? filmSmallUrl : filmUrl;
+      }
+      video.play().catch((error: DOMException) => {
+        // Scrolling away or leaving the page interrupts play(); only a refusal stops the film.
+        if (error.name === "AbortError") return;
+        wanted.current = false;
+        setPlaying(false);
+      });
+      if (!frame) frame = requestAnimationFrame(place);
+    };
+    const hold = () => {
+      video.pause();
+      cancelAnimationFrame(frame);
+      frame = 0;
+    };
+    const release = () => {
+      hold();
+      if (!video.getAttribute("src")) return;
+      video.removeAttribute("src");
+      video.load();
+    };
+    const onShow = (event: PageTransitionEvent) => {
+      if (event.persisted) run();
+    };
+    controls.current = { run, hold };
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = !!entry?.isIntersecting;
+      if (inView) run();
+      else hold();
+    });
+    observer.observe(section);
+    window.addEventListener("pagehide", release);
+    window.addEventListener("pageshow", onShow);
     return () => {
       controller.abort();
-      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("pagehide", release);
+      window.removeEventListener("pageshow", onShow);
+      controls.current = null;
+      release();
     };
   }, []);
 
   const toggle = () => {
-    const video = film.current;
-    if (!video) return;
-    if (video.paused) {
-      setPlaying(true);
-      video.play().catch(() => setPlaying(false));
-    } else {
-      video.pause();
-      setPlaying(false);
-    }
+    wanted.current = !wanted.current;
+    setPlaying(wanted.current);
+    if (wanted.current) controls.current?.run();
+    else controls.current?.hold();
   };
   const shown = caption ? CALLOUTS[caption] : null;
 
   return (
-    <section className="hero" aria-labelledby="hero-title">
+    <section className="hero" ref={hero} aria-labelledby="hero-title">
       <video
         ref={film}
         id="film"
         muted
         playsInline
         loop
-        preload="metadata"
+        preload="none"
         poster={posterUrl}
         aria-label="Film of the Origin89 Controller: the cover lifts, light runs along the board's traces, close views of the STM32G0B1, the ESP32-C6 antenna and the RS-485 transceivers, then an exploded view."
-      >
-        <source src={filmSmallUrl} type="video/mp4" media="(max-width: 900px)" />
-        <source src={filmUrl} type="video/mp4" />
-      </video>
+      />
       <div className="callouts" ref={layer} aria-hidden="true">
         {Object.entries(CALLOUTS).map(([key, callout]) => (
           <div
