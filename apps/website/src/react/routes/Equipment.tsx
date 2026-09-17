@@ -59,7 +59,7 @@ export function EquipmentPage({
       <section className="catalogue-summary" aria-labelledby="catalogue-summary-title">
         <strong>{counts.entries.toLocaleString("en")}</strong>
         <div>
-          <h2 id="catalogue-summary-title">catalogue entries to explore</h2>
+          <h2 id="catalogue-summary-title">catalogue entries</h2>
           <p>
             {counts.connected} communication / I/O entries · {counts.passive} passive-equipment
             entries
@@ -175,8 +175,8 @@ export function EquipmentPage({
           </button>
         )}
         <p className="catalogue-note">
-          A model in the catalogue is a starting point. Its interface, available readings, intended
-          actions and hardware testing determine compatibility.
+          A catalogue entry is a starting point. Compatibility depends on the model’s interface,
+          available readings, intended actions and hardware testing.
         </p>
       </section>
     </SiteShell>

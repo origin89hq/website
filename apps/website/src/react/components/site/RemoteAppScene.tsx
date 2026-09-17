@@ -80,7 +80,7 @@ export function RemoteAppScene({
             <span>
               <small>Buddy’s next check</small>
               <strong>Start with the sump reading.</strong>
-              <span>See the evidence behind the alarm.</span>
+              <span>See the readings behind the alarm.</span>
             </span>
             <b aria-hidden="true">
               <ArrowRight size={16} />
@@ -145,7 +145,7 @@ export function RemoteAppScene({
             from the site.
           </h2>
           <p className="buddy-explanation">
-            The last update was 12 minutes ago. These readings describe that moment; the current
+            The last update was 12 minutes ago. These readings are from that moment. The current
             condition is unknown.
           </p>
           <div className="remote-alert remote-stale">
@@ -161,7 +161,7 @@ export function RemoteAppScene({
           <div className="battery-summary last-known">
             <div className="metric-heading">
               <span>Battery</span>
-              <span>Last known · 12 min ago</span>
+              <span>Last known · 12 min ago</span>
             </div>
             <div className="battery-number">
               78<span>%</span>
@@ -190,7 +190,7 @@ export function RemoteAppScene({
             <span>
               <small>Buddy’s next check</small>
               <strong>Check the update path.</strong>
-              <span>See what we know—and what we don’t.</span>
+              <span>See what we know and what’s missing.</span>
             </span>
             <b aria-hidden="true">
               <ArrowRight size={16} />
@@ -201,9 +201,9 @@ export function RemoteAppScene({
       {site === "telecom" && panel === "energy" && (
         <>
           <h2>
-            Check the link.
+            Check the link
             <br />
-            Then the numbers.
+            before the numbers.
           </h2>
           <p className="buddy-explanation">
             A missing update alone doesn’t tell us whether the issue is at the gateway, backhaul or
@@ -220,7 +220,7 @@ export function RemoteAppScene({
             </div>
             <div>
               <dt>
-                Battery<small>Last known · 12 min ago</small>
+                Battery<small>Last known · 12 min ago</small>
               </dt>
               <dd>
                 78 <small>%</small>
@@ -228,7 +228,7 @@ export function RemoteAppScene({
             </div>
             <div>
               <dt>
-                Shelter temperature<small>Last known · 12 min ago</small>
+                Shelter temperature<small>Last known · 12 min ago</small>
               </dt>
               <dd>
                 +14 <small>°C</small>
@@ -236,7 +236,7 @@ export function RemoteAppScene({
             </div>
             <div>
               <dt>
-                Generator<small>Last known · 12 min ago</small>
+                Generator<small>Last known · 12 min ago</small>
               </dt>
               <dd>Standby</dd>
             </div>

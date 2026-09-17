@@ -132,7 +132,7 @@ try {
   assert.equal(await page.locator(".film-toggle").getAttribute("aria-label"), "Play the film");
   assert.equal(await page.locator(".reveal.pre").count(), 0);
   await page.locator(".port-list").getByRole("button", { name: "TNK", exact: true }).click();
-  assert.match(await page.locator("#portPanel").innerText(), /4–20 mA/);
+  assert.match(await page.locator("#portPanel").innerText(), /4–20\smA/);
   await page.keyboard.press("Escape");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   checks.push(
@@ -271,10 +271,10 @@ try {
   await equipmentDetails.getByRole("button", { name: "Close equipment details" }).click();
   await solarPreview.getByRole("button", { name: "Inspect battery charging" }).click();
   assert.match(await solarPreview.locator(".flow-detail").innerText(), /before conversion losses/);
-  assert.match(await equipmentDetails.innerText(), /10.0 kWh/);
+  assert.match(await equipmentDetails.innerText(), /10.0\skWh/);
   await equipmentDetails.getByRole("button", { name: "Close equipment details" }).click();
   await solarPreview.getByRole("button", { name: "Inspect cottage consumption" }).click();
-  assert.match(await equipmentDetails.innerText(), /Total demand[\s\S]*850 W/);
+  assert.match(await equipmentDetails.innerText(), /Total demand[\s\S]*850\sW/);
   assert.match(await equipmentDetails.innerText(), /branch-circuit measurements/);
   await page.keyboard.press("Escape");
   assert.equal(await equipmentDetails.isVisible(), false);

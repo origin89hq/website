@@ -138,7 +138,7 @@ function BuddySession({
         image.src = file.url;
         await image.decode();
       } catch {
-        setFileError("Couldn’t read that image. Please choose another photo.");
+        setFileError("Couldn’t read that image. Choose another photo.");
         return;
       }
     }
@@ -204,7 +204,7 @@ function BuddySession({
         <div>
           <BuddyAvatar src={buddyUrl} alt="" size={46} />
           <div>
-            <h2>Your setup. Let’s figure it out.</h2>
+            <h2>Let’s map your setup.</h2>
             <span>Buddy · Interactive prototype · No image analysis</span>
           </div>
         </div>

@@ -22,7 +22,7 @@ export function EnergyOutlook() {
         <h3>On battery alone.</h3>
         <CloudSun size={19} strokeWidth={1.4} aria-hidden="true" />
       </div>
-      <p className="outlook-intro">Buddy’s estimate: how long could your battery carry the load?</p>
+      <p className="outlook-intro">Buddy estimates how long the battery could carry the load.</p>
       <div className="outlook-estimate" aria-live="polite" aria-atomic="true">
         <strong>
           ≈{hours}
@@ -54,7 +54,7 @@ export function EnergyOutlook() {
       </fieldset>
       <details className="outlook-evidence">
         <summary>
-          See the inputs & assumptions <Plus size={14} aria-hidden="true" />
+          Inputs and assumptions <Plus size={14} aria-hidden="true" />
         </summary>
         <dl>
           <div>
@@ -63,7 +63,7 @@ export function EnergyOutlook() {
           </div>
           <div>
             <dt>Usable capacity · sample configuration</dt>
-            <dd>10.0 kWh</dd>
+            <dd>10.0 kWh</dd>
           </div>
           <div>
             <dt>Reserve · sample setting</dt>
@@ -79,7 +79,7 @@ export function EnergyOutlook() {
           </div>
         </dl>
         <p>
-          5.6 kWh above reserve × 92% ÷ {loadKw.toFixed(2)} kW. Assumes no incoming generation and a
+          5.6 kWh above reserve × 92% ÷ {loadKw.toFixed(2)} kW. Assumes no incoming generation and a
           constant load. Temperature, battery condition and changing demand can shorten the
           estimate.
         </p>

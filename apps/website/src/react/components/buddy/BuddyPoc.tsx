@@ -56,7 +56,7 @@ const welcome: SessionSnapshot = {
       parts: [
         {
           type: "text",
-          text: "Got a photo of your setup? A wide shot is a great place to start.",
+          text: "Got a photo of your setup? Start with a wide shot.",
         },
       ],
     },
@@ -213,7 +213,7 @@ export function BuddyPocPage() {
 async function preparePhoto(file: File): Promise<Blob> {
   if (!["image/jpeg", "image/png", "image/webp"].includes(file.type))
     throw new Error("Use JPG, PNG or WebP photos.");
-  if (file.size > 20 * 1024 * 1024) throw new Error("Choose a photo smaller than 20 MB.");
+  if (file.size > 20 * 1024 * 1024) throw new Error("Choose a photo smaller than 20 MB.");
   const url = URL.createObjectURL(file);
   try {
     const image = new Image();
@@ -224,13 +224,16 @@ async function preparePhoto(file: File): Promise<Blob> {
     canvas.width = Math.round(image.width * scale);
     canvas.height = Math.round(image.height * scale);
     const context = canvas.getContext("2d");
-    if (!context) throw new Error("Couldn’t prepare this photo.");
+    if (!context) throw new Error("Couldn’t prepare this photo. Try a different one.");
     context.fillStyle = "white";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     const blob = await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob(
-        (blob) => (blob ? resolve(blob) : reject(new Error("Couldn’t prepare this photo."))),
+        (blob) =>
+          blob
+            ? resolve(blob)
+            : reject(new Error("Couldn’t prepare this photo. Try a different one.")),
         "image/jpeg",
         0.9,
       ),
@@ -457,7 +460,9 @@ function BuddyPocWorkspace({
         );
       }
     } catch (error) {
-      setLocalError(error instanceof Error ? error.message : "Couldn’t reconnect.");
+      setLocalError(
+        error instanceof Error ? error.message : "Couldn’t reconnect. Try again in a moment.",
+      );
     } finally {
       setWorking(false);
     }
@@ -814,7 +819,7 @@ function BuddyPocWorkspace({
         </section>
         <aside className="poc-inventory" aria-label="Equipment list">
           <div className="poc-section-title">
-            <h2>A clearer picture.</h2>
+            <h2>What we have so far.</h2>
             <p>
               {record.equipment.length
                 ? `${record.equipment.length} equipment entries · ${record.equipment.filter((item) => item.confirmed).length} reviewed by you`
@@ -887,9 +892,9 @@ function BuddyPocWorkspace({
                 <Camera size={30} />
                 <p>Start with what’s in front of you.</p>
                 <span>
-                  Labels, equipment, a wider view.
+                  Take a photo of a label, a device or the whole wall.
                   <br />
-                  You don’t need to know the technical names.
+                  You don’t need to know what anything is called.
                 </span>
               </div>
             )}
@@ -909,7 +914,7 @@ function BuddyPocWorkspace({
           {record.equipment.length > 0 && (
             <section className="poc-open">
               <h3>
-                Still to explore <span>{unresolved.length}</span>
+                Open questions <span>{unresolved.length}</span>
               </h3>
               {unresolved.slice(0, 4).map((question) => (
                 <p key={question.id}>
@@ -926,7 +931,7 @@ function BuddyPocWorkspace({
         </aside>
         <section className="poc-map" aria-label="Installation map">
           <div className="poc-section-title">
-            <h2>Your setup, taking shape.</h2>
+            <h2>Your setup map.</h2>
             <p>Equipment inventory · Wiring not yet established</p>
           </div>
           <div className="poc-map-canvas">
@@ -971,8 +976,8 @@ function BuddyPocWorkspace({
             <p>
               <strong>Where Origin89 could fit comes next.</strong>
               <span>
-                First, we identify your equipment and available interfaces. Connections stay open
-                until we have evidence.
+                First, we identify your equipment and available interfaces. Connections stay
+                unconfirmed until we have evidence.
               </span>
             </p>
           </div>
@@ -1041,7 +1046,9 @@ function ResetDialog({
             try {
               await onReset();
             } catch (error) {
-              setError(error instanceof Error ? error.message : "Couldn’t reset your setup.");
+              setError(
+                error instanceof Error ? error.message : "Couldn’t reset your setup. Try again.",
+              );
               setBusy(false);
             }
           }}
@@ -1092,7 +1099,7 @@ function EquipmentEditor({
               quantity: data.get("quantity") ? Number(data.get("quantity")) : null,
             });
           } catch (error) {
-            setError(error instanceof Error ? error.message : "Couldn’t save.");
+            setError(error instanceof Error ? error.message : "Couldn’t save. Try again.");
             setBusy(false);
           }
         }}

@@ -45,12 +45,7 @@ const tokens = [
   ["Action lit", "--o89-action-lit", "#3f61b3", "The plate fill on hover."],
   ["Link", "--o89-link", "#6279ad", "Links inside running text on the page ground."],
   ["Signal", "--o89-signal", "#7f9ce0", "Data paths, leader lines, selection and designators."],
-  [
-    "Nominal",
-    "--o89-nominal",
-    "#2f9d64",
-    "A live reading that is healthy. At most once per screen.",
-  ],
+  ["Nominal", "--o89-nominal", "#2f9d64", "A live, healthy reading, at most once per screen."],
   ["Warning", "--o89-warning", "#e9a13c", "Pending and planned work."],
 ] as const;
 const statusWords = [
@@ -86,11 +81,11 @@ export function DesignGuidePage() {
     });
   return (
     <SiteShell>
-      <PageIntro title="Build something that belongs.">
+      <PageIntro title="Design in the Origin89 style.">
         <p>
-          The Origin89 web language: a dark ground, hairline frames with the Plate 89 corner, and
-          colour kept for state. Use these tokens and rules for anything that sits beside the
-          website or the Offgrid app.
+          Origin89 pages use a dark ground, hairline frames with the Plate 89 corner, and colour
+          only for state. Use these tokens and rules for anything that sits beside the website or
+          the Offgrid app.
         </p>
         <a
           className="o89-text-link"
@@ -121,32 +116,31 @@ export function DesignGuidePage() {
             <p>
               On the dark ground, use the white horizontal logo. Keep the clipped corners, counters
               and wordmark intact, and leave clear space of at least one quarter of the plate’s
-              height around the lockup. The blue logo is for light documents.
+              height around the logo. The blue logo is for light documents.
             </p>
             <div className="guide-two-columns">
               <div>
                 <h3>At small sizes</h3>
                 <p>
-                  Start at 24 px for the symbol or 170 px for the horizontal signature. Use the
-                  symbol alone when the full name becomes cramped.
+                  The minimum size is 24 px for the symbol and 170 px for the horizontal logo. Use
+                  the symbol alone when the horizontal logo would be cramped.
                 </p>
               </div>
               <div>
                 <h3>Product names</h3>
                 <p>
-                  Origin89 Controller. Origin89 Offgrid. Buddy. KM43 names the protocol; it is not
-                  the app or firmware brand.
+                  Write the names as Origin89 Controller, Origin89 Offgrid and Buddy. KM43 is the
+                  protocol name only; do not use it for the app or firmware.
                 </p>
               </div>
             </div>
           </section>
 
           <section id="color" aria-labelledby="color-title">
-            <h2 id="color-title">A dark ground. Colour means state.</h2>
+            <h2 id="color-title">A dark ground, with colour kept for state.</h2>
             <p>
-              The site has one theme. Reference the tokens from <code>theme.css</code> rather than
-              copying hex values, and let every colour travel with a label, a symbol or a line
-              treatment.
+              The site has one theme. Reference the tokens in <code>theme.css</code> instead of
+              copying hex values, and pair every colour with a label, a symbol or a line style.
             </p>
             <div className="guide-swatches">
               {tokens.map(([label, token, hex, role]) => (
@@ -162,7 +156,7 @@ export function DesignGuidePage() {
               ))}
             </div>
             <p className="guide-note">
-              Measured on the page ground: foreground 16.5:1, muted 8.0:1, faint 4.6:1, link 4.6:1.
+              Contrast on the page ground: foreground 16.5:1, muted 8.0:1, faint 4.6:1, link 4.6:1.
               On a raised surface faint drops to 4.2:1, so secondary text there uses muted. The
               action fill is 2.4:1 against the ground, which is why the plate carries a white rim.
             </p>
@@ -203,7 +197,7 @@ export function DesignGuidePage() {
           </section>
 
           <section id="type" aria-labelledby="type-title">
-            <h2 id="type-title">Inter Tight for words. Plex Mono for data.</h2>
+            <h2 id="type-title">Inter Tight for words, Plex Mono for data.</h2>
             <div className="guide-type-sample">
               <strong>Every terminal, named.</strong>
               <p>
@@ -218,11 +212,11 @@ export function DesignGuidePage() {
               </div>
               <div>
                 <dt>Supply</dt>
-                <dd>12 V</dd>
+                <dd>12 V</dd>
               </div>
               <div>
                 <dt>Solar in</dt>
-                <dd>2.10 kW · 8 s ago</dd>
+                <dd>2.10 kW · 8 s ago</dd>
               </div>
               <div>
                 <dt>Board</dt>
@@ -232,7 +226,7 @@ export function DesignGuidePage() {
             <p>
               IBM Plex Mono is for data only: designators, units, readings, file names and code.
               Labels and prose stay in Inter Tight. Do not put all-caps labels above headings; the
-              heading carries the section. Use the supplied logo instead of typing the wordmark.
+              heading names the section. Use the supplied logo instead of typing the wordmark.
             </p>
           </section>
 
@@ -270,8 +264,8 @@ export function DesignGuidePage() {
                 <strong>Frame</strong>
                 <p>
                   Cards, panels, inputs and table containers use a 1 px line and{" "}
-                  <code>corner-shape: bevel</code>. Never a plain rounded rectangle, a glow or a
-                  coloured side border.
+                  <code>corner-shape: bevel</code>. Do not use plain rounded rectangles, glows or
+                  coloured side borders.
                 </p>
               </div>
               <ul className="equipment-chips" aria-label="Chip examples">
@@ -301,22 +295,22 @@ export function DesignGuidePage() {
           </section>
 
           <section id="readings" aria-labelledby="readings-title">
-            <h2 id="readings-title">Missing is a state, not zero.</h2>
+            <h2 id="readings-title">A missing reading never shows as zero.</h2>
             <div className="reading-examples">
               <div className="reading-measured">
                 <span>Measured</span>
                 <strong>76%</strong>
-                <small>Battery · updated 8 s ago</small>
+                <small>Battery · updated 8 s ago</small>
               </div>
               <div className="reading-estimated">
                 <span>Estimated</span>
-                <strong>≈4 h</strong>
+                <strong>≈4 h</strong>
                 <small>Illustrative estimate · assumptions shown</small>
               </div>
               <div className="reading-stale">
                 <span>Last known</span>
                 <strong>78%</strong>
-                <small>Battery · 12 min ago · current state unknown</small>
+                <small>Battery · 12 min ago · current state unknown</small>
               </div>
               <div className="reading-missing">
                 <span>Unavailable</span>
@@ -325,8 +319,8 @@ export function DesignGuidePage() {
               </div>
             </div>
             <p>
-              Keep the observation, source and timestamp together. An old reading cannot become a
-              fresh all-clear. Equipment research cannot become a claim of tested support.
+              Keep each reading’s value, source and timestamp together. Never present an old reading
+              as a current all-clear, or equipment research as tested support.
             </p>
             <h3>Status words</h3>
             <dl className="guide-status">
@@ -344,7 +338,7 @@ export function DesignGuidePage() {
           </section>
 
           <section id="renders" aria-labelledby="renders-title">
-            <h2 id="renders-title">Renders come from the real files.</h2>
+            <h2 id="renders-title">Renders come from the hardware repository.</h2>
             <div className="guide-renders">
               <figure className="render-stage">
                 <img
@@ -369,7 +363,9 @@ export function DesignGuidePage() {
             </div>
             <ul>
               <li>Render products from CAD and fabrication data. Do not paint or generate them.</li>
-              <li>Light them in a dark studio. No gradient backdrops, glows or glass panels.</li>
+              <li>
+                Light them in a dark studio, without gradient backdrops, glows or glass panels.
+              </li>
               <li>
                 Place renders frameless on the page ground, or over a faint dot grid that fades at
                 the edges.
@@ -380,7 +376,7 @@ export function DesignGuidePage() {
           </section>
 
           <section id="buddy" aria-labelledby="buddy-title">
-            <h2 id="buddy-title">Be useful. Leave room for the person.</h2>
+            <h2 id="buddy-title">Buddy advises and the person decides.</h2>
             <div className="guide-buddy">
               <BuddyAvatar
                 src={journalAssets.buddy}
@@ -395,7 +391,7 @@ export function DesignGuidePage() {
               <li>Ask one question at a time. Explain the useful part first.</li>
               <li>Identify the exact equipment before giving model-specific advice.</li>
               <li>Separate proposed checks, measurements and confirmed actions.</li>
-              <li>Use still poses beside readings. Motion should explain a change.</li>
+              <li>Use still poses beside readings, and use motion only to explain a change.</li>
               <li>
                 Use one ease-out curve, <code>--o89-ease</code>, and honour reduced motion.
               </li>
@@ -403,7 +399,7 @@ export function DesignGuidePage() {
           </section>
 
           <section id="downloads" aria-labelledby="downloads-title">
-            <h2 id="downloads-title">Start with the real artwork.</h2>
+            <h2 id="downloads-title">Download the guide, artwork and tokens.</h2>
             <div className="guide-downloads">
               {downloads.map(([label, file]) => (
                 <a
@@ -417,8 +413,8 @@ export function DesignGuidePage() {
               ))}
             </div>
             <p className="guide-note">
-              These assets come from the Origin89 brand source. The identity guide is version 1.0,
-              September 8, 2026; this page covers the dark theme used on origin89.com.
+              These files come from the Origin89 brand repository. The identity guide is version
+              1.0, dated September 8, 2026; this page covers the dark theme used on origin89.com.
             </p>
             <p className="guide-note">
               Buddy’s poses, avatars and icons are rebuilt from the shared Blender model in the{" "}

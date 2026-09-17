@@ -41,9 +41,9 @@ export const sourceProjects = [
     category: "Electronics and CAD",
     repository: siteConfig.repositories.hardware,
     summary:
-      "The controller board, separate generator board and enclosure, down to the editable files.",
+      "Editable files for the controller board, the separate generator board and the enclosure.",
     contents:
-      "EasyEDA projects, Gerbers, bills of materials and FreeCAD enclosure source. Prototype boards; validation is ongoing.",
+      "EasyEDA projects, Gerbers, bills of materials and FreeCAD enclosure source. The boards are prototypes still in validation.",
     format: "EasyEDA / FreeCAD",
     license: "Designs: CERN-OHL-W-2.0",
     links: [

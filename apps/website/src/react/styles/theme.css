@@ -64,6 +64,17 @@ h4 {
   line-height: 1;
   text-wrap: balance;
 }
+/* Keep a single word from ending a paragraph on its own line. */
+p,
+li,
+figcaption,
+blockquote {
+  text-wrap: pretty;
+}
+dd,
+.buddy-hero-question {
+  text-wrap: balance;
+}
 .skip-link {
   background: var(--o89-surface-raised);
   color: var(--o89-fg);

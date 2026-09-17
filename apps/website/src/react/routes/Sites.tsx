@@ -13,16 +13,16 @@ const exploreLabels: Record<JournalSite, string> = {
 const detailTitles: Record<JournalSite, string> = {
   cottage: "A setup built over years.",
   mining: "Keep the utilities in view.",
-  telecom: "A clearer view from far away.",
+  telecom: "Check the shelter between visits.",
 };
 
 export function SitesPage() {
   return (
     <SiteShell>
-      <PageIntro title="Different places. Familiar questions.">
+      <PageIntro title="Different sites, the same questions.">
         <p>
-          What’s running? What needs a closer look? Start with the place you look after, and build a
-          view around its equipment.
+          What’s running, and what needs a closer look? Start with the place you look after and
+          build a view around its equipment.
         </p>
       </PageIntro>
       <section className="site-stories-list" aria-label="Site examples">
@@ -58,10 +58,10 @@ export function SitesPage() {
       </section>
       <MultiSiteNote />
       <section className="content-section other-site" aria-labelledby="other-site-title">
-        <h2 id="other-site-title">A maple operation? Another remote site?</h2>
+        <h2 id="other-site-title">Maple operations and other remote sites</h2>
         <p>
-          Pumps, tanks, temperature sensors and local power belong in the same equipment
-          conversation. Start with the reading or task that matters to your operation.
+          Pumps, tanks, temperature sensors and local power show up at these sites too. Start with
+          the reading or task that matters to your operation.
         </p>
         <a className="o89-text-link" href="/contact/">
           Tell us about your installation <ArrowRight size={16} aria-hidden="true" />
@@ -93,14 +93,14 @@ export function SitePage({ site: siteId }: { site: JournalSite }) {
         </figure>
       </section>
       <section className="site-equipment" aria-labelledby="site-equipment-title">
-        <h2 id="site-equipment-title">The equipment that matters</h2>
+        <h2 id="site-equipment-title">Equipment at this site</h2>
         <ul className="equipment-chips">
           {site.equipment.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
         <a className="o89-text-link" href="/equipment/">
-          Explore the catalogue <ArrowRight size={16} aria-hidden="true" />
+          Search the equipment catalogue <ArrowRight size={16} aria-hidden="true" />
         </a>
       </section>
       <section className="site-app-section" aria-labelledby="site-app-title">
