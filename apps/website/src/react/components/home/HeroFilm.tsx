@@ -195,7 +195,7 @@ export function HeroFilm() {
         loop
         preload="none"
         poster={posterUrl}
-        aria-label="Film of the Origin89 Controller: the cover lifts, light runs along the board's traces, close views of the STM32G0B1, the ESP32-C6 antenna and the RS-485 transceivers, then an exploded view."
+        aria-label="One continuous shot of the Origin89 Controller: the cover lifts, the camera moves in to the ESP32-C6 antenna, light runs along the board's traces, close views of the STM32G0B1 and the RS-485 transceivers, then the parts separate and turn, come back together and the closed Controller flips."
       />
       <div className="callouts" ref={layer} aria-hidden="true">
         {Object.entries(CALLOUTS).map(([key, callout]) => (
