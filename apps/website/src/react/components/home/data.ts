@@ -356,42 +356,6 @@ export const PORTS: Port[] = [
   },
 ];
 
-export const CALLOUTS: Record<
-  string,
-  { anchor: string; code: string; name: string; text: string }
-> = {
-  lift: {
-    anchor: "cn",
-    code: "CN1–CN8",
-    name: "Every field terminal",
-    text: "Power, three RS-485 buses, CAN and 1-Wire along one edge.",
-  },
-  sweep: {
-    anchor: "board",
-    code: "Board A",
-    name: "Four layers",
-    text: "Signals on the top layer, a solid ground plane beneath every pair.",
-  },
-  u7: {
-    anchor: "u7",
-    code: "U7",
-    name: "STM32G0B1",
-    text: "Makes every decision. Runs on if the radio is unplugged.",
-  },
-  u8: {
-    anchor: "antenna",
-    code: "U8",
-    name: "ESP32-C6",
-    text: "Wi-Fi 6 and Bluetooth LE, with no copper under its antenna.",
-  },
-  rs485: {
-    anchor: "rs485",
-    code: "U3–U5",
-    name: "3 × RS-485",
-    text: "One transceiver, surge clamp and termination jumper per bus.",
-  },
-};
-
 export const BENCH = {
   idleRadioOn: { mA: 38, volts: 13.1 },
   idleRadioOff: { mA: 11, volts: 13.1 },
