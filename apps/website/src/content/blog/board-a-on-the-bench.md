@@ -1,32 +1,38 @@
 ---
-title: Board A is on the bench
+title: Board A on the bench: the first four days
 date: 2026-09-17
-summary: The first Controller boards are built and we have started measuring them. Results will be posted here as we get them.
+summary: Two unattended nights, one bad reply in 58 169 Modbus polls, and a working Wi-Fi link. What we measured on the first Controller board and what is still untested.
 ---
 
-The first revision of the Controller's main board, board A, is fabricated and on our bench. Board B, the generator board, is assembled and waiting for its own bench session.
+The first revision of the Controller's main board, board A, has been on our bench since 14 September. One board from the first order runs a self-test image that exercises each circuit on a schedule and keeps the results in the board's own memory. Everything below comes from that single board on a bench, not from a site.
 
-Until now, the numbers on this website came from CAD models and design files. Measured values replace them only after we have taken them on real boards, and this blog is where those measurements appear first.
+The session logs have the wiring, firmware builds and raw readings: [14 September](https://github.com/origin89hq/hardware/blob/main/boards/controller-a/bench/2026-09-14.md), [15 to 16 September](https://github.com/origin89hq/hardware/blob/main/boards/controller-a/bench/2026-09-16.md) and [16 to 17 September](https://github.com/origin89hq/hardware/blob/main/boards/controller-a/bench/2026-09-17.md).
 
-## What is on board A
+## Two nights without a laptop
 
-| Part | Board A |
-| --- | --- |
-| Control | STM32G0B1 |
-| Radio | ESP32-C6 module |
-| Equipment ports | 3 × RS-485, CAN, 2 × VE.Direct |
-| Sensor inputs | 1-Wire temperature probes, SEL, SNS and TNK |
-| Generator | Five-wire link to board B, which holds the start contact |
-| Supply | 12 V battery bank |
+On the first night the board ran for 12 h 50 min from a 12 V battery with the debug probe unplugged. The next morning its own record showed zero failures on every test: 46 260 CAN loopback checks, 22 902 RS-485 exchanges between its own channels and 4 290 rounds of three temperature probes.
 
-## What we are measuring
+On the second night it ran for 16 h 48 min from a bench supply at 14.4 V and polled an 8-channel Modbus RTU I/O module once a second. Of 58 169 polls, one failed at 02:48 with a reply that did not parse; we don't know why yet. The board also switched a 12 V lamp through the module's output about 1 950 times and read the output back each time. The lamp followed every switch, and the board did not reset during the night.
 
-- Power draw from a 12 V bank
-- How many temperature probes one 1-Wire input reads
-- How long the equipment and probe cables can run
-- Watchdog timing
-- Radio range
+## What works so far
 
-Each result will say how we measured it: the setup and the conditions. Problems we find in the boards are tracked in the [hardware repository](https://github.com/origin89hq/hardware/issues), next to the design files.
+| Circuit | Result | Conditions |
+| --- | --- | --- |
+| RS-485 | All three channels exchanged frames in all six directions with none missed | Channels wired together on the bench, 115200 8N1 and 9600 8N2 |
+| Modbus RTU | A DC meter answered 119 of 120 polls; the I/O module gave a valid reply to all but one of 58 169 | Short bench leads, 9600 baud |
+| 12 V input | Reads 1.1 % below the bench supply and an in-line meter | At 13.09 V and 14.39 V, with 1 % divider resistors |
+| Temperature | Three DS18B20 probes found and read on the 1-Wire bus | Readings of 23 to 26 °C on the bench |
+| Clock | The two crystals agree to within 13 to 16 ppm; the calendar kept time through a 10 s power loss on its coin cell | Drift over 12 h 50 min; one 10 s power loss |
+| Watchdog | A deliberately starved watchdog reset the processor, and the next boot recorded why | Self-test image |
+| Wi-Fi | Joined a WPA2 network, got replies to 10 of 10 pings to 1.1.1.1 and downloaded 1 MB at 2.2 Mbit/s | 2.4 GHz at −36 dBm; untuned network buffers probably limit the speed |
+| Bluetooth | A 15 s scan found 30 to 43 devices | Receive only |
+| CAN | 3 019 frames in loopback with none missed | Loopback does not exercise the transceiver's receiver |
 
-Follow along with the [Atom feed](/blog/feed.xml).
+## Not tested yet
+
+- Board B's generator interlock. The [board B log](https://github.com/origin89hq/hardware/blob/main/boards/generator-b/bench/2026-09-14.md) explains why it is waiting.
+- RS-485 on a long cable, and radio range.
+- The selector switch, and VE.Direct with a real device.
+- Brown-out behaviour, and how far down a battery the board keeps running.
+
+Problems found on the bench are tracked in the [hardware repository's issues](https://github.com/origin89hq/hardware/issues). Follow along with the [Atom feed](/blog/feed.xml).
