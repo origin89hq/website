@@ -82,10 +82,7 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
       aria-label="Interactive integration map"
     >
       <div className="map-heading">
-        <div>
-          <span className="micro">YOUR SITE / TAKING SHAPE</span>
-          <h3>It fits right here.</h3>
-        </div>
+        <h3>It fits right here.</h3>
         <span className="map-status">
           {state.stage === "done"
             ? "First draft · Needs review"
@@ -101,12 +98,6 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <defs>
-            <linearGradient id="signal-line">
-              <stop stopColor="#a5bfce" />
-              <stop offset="1" stopColor="#4267b3" />
-            </linearGradient>
-          </defs>
           <path
             style={{ display: state.kind !== "solar" ? "none" : undefined }}
             className="map-line panel-link"
@@ -282,9 +273,7 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
           <b>?</b> Needs checking
         </span>
       </div>
-      <p className="map-instruction">
-        Tap a device for details <span>↗</span>
-      </p>
+      <p className="map-instruction">Tap a device for details</p>
       {detail && (
         <section className="map-detail" aria-label="Equipment details">
           <button
@@ -295,9 +284,6 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
           >
             ×
           </button>
-          <span className="micro" data-detail-label>
-            {detail[0]}
-          </span>
           <h4 data-detail-title>{detail[1]}</h4>
           <p data-detail-body>{detail[2]}</p>
           {selected === "primary" && model && (

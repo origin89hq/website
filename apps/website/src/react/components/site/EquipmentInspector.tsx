@@ -98,7 +98,6 @@ export function EquipmentInspector({
       >
         <X size={20} />
       </button>
-      <span className="dashboard-eyebrow">EQUIPMENT / DESIGN PREVIEW</span>
       <EquipmentIllustration kind={kind} />
       <h2 id={`${id}-title`}>{item.title}</h2>
       <p className="equipment-inspector-source">{item.subtitle}</p>

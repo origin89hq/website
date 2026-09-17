@@ -20,8 +20,8 @@ const metadata: Record<string, [string, string]> = {
     "A photo-led installation inventory preview. Add equipment, confirm details and build your setup record.",
   ],
   "/": [
-    "A clearer picture of your site",
-    "Connect the equipment you already own. Explore Origin89 Controller, Offgrid and Buddy for cottages, mining utilities and remote telecom.",
+    "One controller for the gear you already own",
+    "The Origin89 Controller reads the charge controller, inverter, batteries, probes and generator on your wall and runs your rules at the site. Prototype hardware.",
   ],
   "/products/": [
     "One connected product family",
@@ -45,7 +45,7 @@ const metadata: Record<string, [string, string]> = {
   ],
   "/developers/design-guide/": [
     "Developer design guide",
-    "Origin89 identity, site palettes, typography, UI components, data states and downloadable brand assets.",
+    "Origin89 colour tokens, typography, plate buttons, reading states, render rules and downloadable brand assets.",
   ],
   "/contact/": [
     "Plan your Origin89 setup",

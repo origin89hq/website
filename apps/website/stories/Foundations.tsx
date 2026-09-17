@@ -6,7 +6,6 @@ export function Foundations({
   if (section === "principles")
     return (
       <article className="sb-doc">
-        <span className="micro">ORIGIN89 / DESIGN SYSTEM · 01</span>
         <h1>
           One system.
           <br />
@@ -19,10 +18,10 @@ export function Foundations({
             <p>One question at a time. Visual equipment maps. Details when you ask.</p>
           </div>
           <div>
-            <h3>Fit the place.</h3>
+            <h3>Colour means state.</h3>
             <p>
-              Warm cottages. Working mines. Cold telecom shelters. The same components, with the
-              right character.
+              One dark theme. Blue fills the plate, signal blue marks data paths, amber marks
+              pending work.
             </p>
           </div>
           <div>
@@ -35,8 +34,7 @@ export function Foundations({
         </div>
         <h2>Start with Buddy.</h2>
         <p>
-          Open Setup conversation in the sidebar. Try the photo flow, switch the site theme, then
-          check the phone stories.
+          Open Setup conversation in the sidebar. Try the photo flow, then check the phone stories.
         </p>
         <p className="sb-note">
           React · shadcn/ui · Tailwind CSS · AI Elements · AI SDK UI. Cloudflare is the planned AI
@@ -46,10 +44,9 @@ export function Foundations({
     );
   return (
     <article className="sb-doc">
-      <span className="micro">FOUNDATIONS / SITE JOURNAL</span>
       <h1>
         {section === "palette"
-          ? "A palette that fits the place."
+          ? "A dark ground. Colour means state."
           : section === "type"
             ? "Clear words. Quiet details."
             : "Give the useful parts room."}
@@ -57,17 +54,24 @@ export function Foundations({
       {section === "palette" ? (
         <>
           <p>
-            Bridge blue stays consistent. The paper, ink and supporting surfaces adapt to the site.
+            The website and Storybook use the tokens in theme.css. The design guide lists each role
+            and its contrast.
           </p>
-          <h2>Semantic colors</h2>
+          <h2>Tokens</h2>
           <div className="sb-swatch-grid">
             {[
-              ["Paper", "--journal-paper"],
-              ["Ink", "--journal-ink"],
-              ["Secondary text", "--journal-muted"],
-              ["Dividers", "--journal-line"],
-              ["Visual field", "--journal-field"],
-              ["Origin89 blue", "--primary"],
+              ["Page", "--o89-page"],
+              ["Surface", "--o89-surface"],
+              ["Raised surface", "--o89-surface-raised"],
+              ["Line", "--o89-line"],
+              ["Strong line", "--o89-line-strong"],
+              ["Foreground", "--o89-fg"],
+              ["Muted", "--o89-muted"],
+              ["Action", "--o89-action"],
+              ["Signal", "--o89-signal"],
+              ["Nominal", "--o89-nominal"],
+              ["Warning", "--o89-warning"],
+              ["Alarm", "--o89-alarm"],
             ].map(([label, token]) => (
               <div className="sb-swatch" key={token}>
                 <i style={{ background: `var(${token})` }} />
@@ -80,20 +84,20 @@ export function Foundations({
       ) : section === "type" ? (
         <>
           <div className="sb-type-row">
-            <small>INTER TIGHT / TITLE</small>
+            <small>Inter Tight · heading</small>
             <h2 style={{ margin: 0, fontSize: 48 }}>A clearer picture of your site.</h2>
           </div>
           <div className="sb-type-row">
-            <small>INTER TIGHT / CONVERSATION</small>
+            <small>Inter Tight · conversation</small>
             <p style={{ fontSize: 20 }}>What batteries do you have?</p>
           </div>
           <div className="sb-type-row">
-            <small>IBM PLEX MONO / LABELS & MEASUREMENTS</small>
-            <p style={{ fontFamily: "Technical", fontSize: 12 }}>SOLAR IN · 2.10 kW · 8 SEC AGO</p>
+            <small>IBM Plex Mono · data</small>
+            <p style={{ fontFamily: "Technical", fontSize: 14 }}>2.10 kW · RS-485 A/B · 8 s ago</p>
           </div>
           <p className="sb-note">
-            Headlines say one useful thing. Chat asks one question. Model numbers and timestamps
-            stay precise.
+            Headlines say one useful thing. Chat asks one question. Mono is for model numbers, units
+            and timestamps only.
           </p>
         </>
       ) : (

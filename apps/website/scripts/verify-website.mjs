@@ -81,99 +81,86 @@ try {
   );
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await open("/");
-  const interior = page.getByRole("button", { name: "Show controller interior", exact: true });
-  await page.waitForFunction(
-    () => !document.querySelector(".controller-study-controls button").disabled,
+  const explorer = page.locator(".explorer");
+  await page.locator('g.port[data-port="rs485-1"] text').click();
+  assert.equal(await explorer.getAttribute("data-active"), "rs485-1");
+  assert.equal(await page.locator("#portPanel h3").innerText(), "Talks to Modbus equipment.");
+  await page.keyboard.press("Escape");
+  assert.equal(await explorer.getAttribute("data-active"), null);
+  await page.getByRole("button", { name: /^LNK:/ }).focus();
+  await page.keyboard.press("Enter");
+  assert.match(
+    await page.locator("#portPanel").innerText(),
+    /Watchdog timing[\s\S]*Pending bench measurement/,
   );
-  await page.mouse.wheel(0, 650);
-  await page.waitForFunction(
-    () => getComputedStyle(document.querySelector(".controller-cover")).opacity === "0",
+  await page.getByRole("button", { name: "Close details", exact: true }).click();
+  assert.equal(await explorer.getAttribute("data-active"), null);
+  await page.getByRole("tab", { name: "STM32G0B1", exact: true }).focus();
+  await page.keyboard.press("ArrowRight");
+  assert.equal(
+    await page.getByRole("tab", { name: "ESP32-C6", exact: true }).getAttribute("aria-selected"),
+    "true",
   );
-  assert.equal(await interior.getAttribute("aria-pressed"), "true");
-  await page.mouse.wheel(0, -650);
-  await page.waitForFunction(
-    () => getComputedStyle(document.querySelector(".controller-cover")).opacity === "1",
+  assert.equal(await page.locator("#mcu-esp32").isVisible(), true);
+  assert.equal(await page.locator("#mcu-stm32").isVisible(), false);
+  const connection = page.locator("#connectView");
+  await page.getByRole("tab", { name: "12 V in", exact: true }).click();
+  await connection.getByRole("button", { name: "Radio off", exact: true }).click();
+  assert.match(await connection.locator(".big").innerText(), /^11/);
+  await page.getByRole("tab", { name: "Generator", exact: true }).click();
+  await connection.getByRole("button", { name: "Stop the kicks", exact: true }).click();
+  await connection.locator(".state.open").waitFor({ timeout: 8000 });
+  await connection.getByRole("button", { name: "Resume the kicks", exact: true }).click();
+  await connection.locator(".state:not(.open)").waitFor();
+  await page.locator("#ruleDo").selectOption("ha");
+  assert.match(
+    await page.locator(".rule-facts").innerText(),
+    /Home Assistant[\s\S]*Needs your network[\s\S]*Planned/,
   );
-  assert.equal(await interior.getAttribute("aria-pressed"), "false");
-
-  await open("/", 320);
-  await page.waitForFunction(
-    () => !document.querySelector(".controller-study-controls button").disabled,
+  const filmToggle = page.locator(".film-toggle");
+  const filmLabel = await filmToggle.getAttribute("aria-label");
+  await filmToggle.click();
+  assert.notEqual(await filmToggle.getAttribute("aria-label"), filmLabel);
+  assert.equal(
+    await page.locator("#waitlistEmail").evaluate((input) => input.checkValidity()),
+    false,
   );
-  const detailHeights = [];
-  for (const name of ["Inverter", "Battery", "Sensors"]) {
-    await page.getByRole("button", { name, exact: true }).click();
-    detailHeights.push(
-      await page
-        .locator(".controller-connection-detail")
-        .evaluate((element) => element.getBoundingClientRect().height),
-    );
-  }
-  assert.ok(
-    Math.max(...detailHeights) - Math.min(...detailHeights) < 1,
-    "Connection changes must not shift the narrow-screen layout",
-  );
-  const targets = await page.locator(".controller-hotspot").evaluateAll((elements) =>
-    elements.map((element) => {
-      const { x, y, width, height } = element.getBoundingClientRect();
-      return { x, y, width, height };
-    }),
-  );
-  for (let i = 1; i < targets.length; i++) {
-    const left = targets[i - 1],
-      right = targets[i];
-    assert.ok(
-      left.x + left.width <= right.x || left.y >= right.y + right.height,
-      "Connection hit targets must not overlap at 320px",
-    );
-  }
-  const zoom = page.getByRole("button", { name: "Zoom controller", exact: true });
-  await zoom.click();
-  assert.equal(await page.locator(".controller-study").getAttribute("data-zoomed"), "true");
-  await zoom.click();
-  assert.equal(await page.locator(".controller-study").getAttribute("data-zoomed"), "false");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await open("/", 390);
-  await page.waitForFunction(
-    () => !document.querySelector(".controller-study-controls button").disabled,
-  );
-  await interior.focus();
-  await page.keyboard.press("Space");
-  assert.equal(await interior.getAttribute("aria-pressed"), "true");
-  assert.equal(
-    await page
-      .locator(".controller-cover")
-      .evaluate((element) => getComputedStyle(element).transitionDuration),
-    "0s",
-  );
-  assert.equal(
-    await page
-      .locator(".journal-opening")
-      .evaluate((element) => getComputedStyle(element).position),
-    "static",
-  );
-  await page.getByRole("button", { name: "Explore battery connection", exact: true }).click();
-  await page.getByRole("link", { name: "Find your battery", exact: true }).click();
-  await page.waitForURL("**/equipment/?q=battery");
-  assert.equal(await page.locator("#equipment-query").inputValue(), "battery");
+  await page.waitForFunction(() => document.querySelector("#film")?.paused === true);
+  assert.equal(await page.locator(".film-toggle").getAttribute("aria-label"), "Play the film");
+  assert.equal(await page.locator(".reveal.pre").count(), 0);
+  await page.locator(".port-list").getByRole("button", { name: "TNK", exact: true }).click();
+  assert.match(await page.locator("#portPanel").innerText(), /4–20 mA/);
+  await page.keyboard.press("Escape");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   checks.push(
-    "Controller scroll teardown reverses, reduced-motion keyboard control works, and battery inspection opens filtered equipment results",
+    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; film pause and reduced motion",
   );
 
   await open("/developers/design-guide/");
   await page.locator("#color").scrollIntoViewIfNeeded();
-  const colors = new Set();
-  for (const theme of ["Cottage · warm", "Mining · industrial", "Telecom · cold"]) {
-    await page.getByRole("button", { name: theme, exact: true }).click();
-    colors.add(
-      await page
-        .locator(".website-concept")
-        .evaluate((element) => getComputedStyle(element).backgroundColor),
-    );
+  // Every documented swatch must render the hex value printed beside it, so the guide
+  // cannot drift from theme.css.
+  const swatches = await page.locator(".guide-swatch").evaluateAll((items) =>
+    items.map((item) => ({
+      token: item.querySelector("code")?.textContent,
+      hex: item.querySelector(".guide-hex")?.textContent,
+      rendered: getComputedStyle(item.querySelector("i")).backgroundColor,
+    })),
+  );
+  assert.ok(swatches.length >= 14, `only ${swatches.length} colour tokens on the guide`);
+  for (const { token, hex, rendered } of swatches) {
+    const [r, g, b] = [1, 3, 5].map((index) => Number.parseInt(hex.slice(index, index + 2), 16));
+    assert.equal(rendered, `rgb(${r}, ${g}, ${b})`, `${token} renders ${hex}`);
   }
-  assert.equal(colors.size, 3);
+  assert.deepEqual(await page.locator("#readings .status-word").allTextContents(), [
+    "Published",
+    "Specified",
+    "Planned",
+    "Pending bench",
+  ]);
   await page.evaluate(() => {
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
@@ -185,9 +172,12 @@ try {
     });
   });
   await page.getByRole("button", { name: "Copy CSS", exact: true }).click();
-  assert.match(await page.evaluate(() => window.__copiedCSS), /var\(--journal-paper\)/);
-  await page.getByRole("button", { name: "Copied ✓", exact: true }).waitFor();
-  await shot("guide-telecom-palette");
+  const copiedCSS = await page.evaluate(() => window.__copiedCSS);
+  assert.match(copiedCSS, /var\(--o89-surface\)/);
+  assert.match(copiedCSS, /corner-shape: bevel/);
+  assert.doesNotMatch(copiedCSS, /--journal-/);
+  await page.getByRole("button", { name: "Copied", exact: true }).waitFor();
+  await shot("guide-colour-tokens");
   const downloads = await page
     .locator(".guide-downloads a")
     .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
@@ -202,11 +192,11 @@ try {
     assert.equal(response.status(), 200, download);
     assert.ok((await response.body()).length > 100, download);
   }
-  await page.getByRole("link", { name: "Readings & states", exact: true }).click();
+  await page.getByRole("link", { name: "Readings and states", exact: true }).click();
   assert.equal(new URL(page.url()).hash, "#readings");
   await shot("guide-reading-states");
   checks.push(
-    `Three developer-guide themes, copyable CSS, chapter links and ${downloads.length} working downloads`,
+    `${swatches.length} design-guide colour tokens match theme.css, status words, copyable CSS, chapter links and ${downloads.length} working downloads`,
   );
   await open("/equipment/");
   await page.getByRole("searchbox").fill("SmartSolar MPPT 100/30");
@@ -252,52 +242,28 @@ try {
   await page.evaluate(() => {
     window.__sameDocument = true;
   });
-  await page.getByRole("link", { name: "Developers", exact: true }).first().click();
+  await page
+    .getByRole("navigation", { name: "Website navigation" })
+    .getByRole("link", { name: "Developers", exact: true })
+    .click();
   await page.waitForURL("**/developers/");
   assert.equal(await page.evaluate(() => window.__sameDocument), true);
   assert.match(await page.title(), /Build with Origin89/);
   await page.goBack();
   await page.waitForURL(base + "/");
-  const heroCopy = await page.locator(".journal-story").innerText();
-  const heroBackground = await page
-    .locator(".website-concept")
-    .evaluate((element) => getComputedStyle(element).backgroundColor);
-  for (const [name, id] of [
-    ["Cottages", "cottage"],
-    ["Mining sites", "mining"],
-    ["Remote telecom", "telecom"],
-  ]) {
-    const tab = page.getByRole("tab", { name: new RegExp(name) });
-    await tab.click();
-    assert.equal(await tab.getAttribute("aria-controls"), `site-panel-${id}`);
-    assert.equal(await page.getByRole("tabpanel").count(), 1);
-    const panel = page.locator(`#site-panel-${id}`);
-    assert.equal(await panel.isVisible(), true);
-    assert.equal(await panel.locator(".underlined-action").getAttribute("href"), `/app/${id}/`);
-    assert.equal(await page.locator(".journal-story").innerText(), heroCopy);
-    assert.equal(
-      await page
-        .locator(".website-concept")
-        .evaluate((element) => getComputedStyle(element).backgroundColor),
-      heroBackground,
-    );
-    assert.equal(await page.locator(".journal-context [role=tab]").count(), 0);
-  }
-  await page.getByRole("tab", { name: /Cottages/ }).focus();
-  await page.keyboard.press("ArrowRight");
-  await page.waitForFunction(
-    () =>
-      document.querySelector(".journal-examples")?.getAttribute("data-active-site") === "mining",
-  );
-  assert.match(page.url(), /site=mining/);
-  await page.locator(".site-example-copy:visible .underlined-action").click();
+  assert.equal(await page.locator("#hero-title").isVisible(), true);
+  await open("/sites/mining/");
+  await page.evaluate(() => {
+    window.__sameDocument = true;
+  });
+  await page.getByRole("link", { name: "Try this app scene" }).click();
   await page.waitForURL("**/app/mining/");
   assert.equal(await page.evaluate(() => window.__sameDocument), true);
   await page.reload({ waitUntil: "load" });
   await page.locator("[data-app-site=mining]").waitFor();
-  checks.push("Client navigation, titles, browser back, keyboard site selection and deep links");
-  await open("/", 320);
-  const solarPreview = page.locator(".app-preview:visible");
+  checks.push("Client navigation, titles, browser back and app scene deep links");
+  await open("/app/cottage/", 320);
+  const solarPreview = page.locator(".buddy-app:visible");
   await solarPreview.getByRole("button", { name: "Inspect generator standby" }).click();
   assert.match(await solarPreview.locator(".flow-detail").innerText(), /not supplying power/);
   const equipmentDetails = solarPreview.getByRole("dialog");
@@ -345,10 +311,6 @@ try {
   );
   await forecast.getByRole("button", { name: "Current load" }).click();
   assert.match(await forecast.locator(".outlook-estimate").innerText(), /≈6h 04m/);
-  assert.equal(
-    await solarPreview.evaluate((element) => getComputedStyle(element).borderRadius),
-    "0px",
-  );
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   await page.emulateMedia({ reducedMotion: "reduce" });
   assert.equal(
@@ -359,7 +321,7 @@ try {
   );
   await page.emulateMedia({ reducedMotion: "no-preference" });
   checks.push(
-    "Solar chart keyboard boundaries and period units; forecast inputs, load scenarios, square edges and reduced motion at 320px",
+    "Solar chart keyboard boundaries and period units; forecast inputs, load scenarios and reduced motion at 320px",
   );
   await solarPreview.getByRole("button", { name: "Control", exact: true }).click();
   const porchSwitch = solarPreview.getByRole("switch", { name: "Example porch lights" });
@@ -419,11 +381,8 @@ try {
   checks.push(
     "Camera event rules, offline recovery, camera zoom and focus restoration, sample switches and missing temperature inputs at 320px",
   );
-  await open("/?site=telecom", 390);
-  await page.locator("#site-panel-telecom").waitFor({ state: "visible" });
-  assert.equal(await page.locator("#site-tab-telecom").getAttribute("aria-selected"), "true");
-  assert.equal(await page.locator(".website-concept").getAttribute("data-active-site"), "cottage");
-  const appPreview = page.locator(".app-preview:visible");
+  await open("/app/telecom/", 390);
+  const appPreview = page.locator(".buddy-app:visible");
   assert.equal(await appPreview.getByRole("group", { name: "Chart period" }).count(), 0);
   assert.match(await appPreview.locator(".history-gap").innerText(), /Current condition unknown/);
   assert.equal(await appPreview.locator(".flow-current").count(), 0);
@@ -460,7 +419,7 @@ try {
   await appPreview.getByRole("button", { name: "Close Buddy conversation", exact: true }).click();
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   checks.push(
-    "Site tabs control their adjacent example panel, restore from the URL, and preserve the shared hero",
+    "Telecom app scene: unknown readings, unavailable controls and camera, battery care and Buddy at 390px",
   );
   await open("/", 390);
   await page.locator(".concept-menu summary").click();

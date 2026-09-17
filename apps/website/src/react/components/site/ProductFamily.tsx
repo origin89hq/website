@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { type ProductId, products } from "../../lib/products";
 import { buddyFullBody, controllerImage } from "../../lib/react-assets";
 import { EquipmentIllustration } from "./EquipmentIllustration";
@@ -46,7 +46,6 @@ function FamilyArt({ productId }: { productId: ProductId }) {
             <span className="live-dot" />
             Sample cottage · Readings 8 sec ago
           </div>
-          <span className="mini-app-eyebrow">YOUR ENERGY / NOW</span>
           <strong className="mini-app-title">Running on sunshine.</strong>
           <div className="mini-app-flow">
             {sampleFlow.map(({ kind, reading, unit, label }) => (
@@ -71,29 +70,23 @@ export function ProductFamily({ linkToProducts = true }: { linkToProducts?: bool
   return (
     <section className="product-family" id="products" aria-labelledby="product-family-title">
       <div className="product-family-heading">
-        <div>
-          <span className="micro">THE ORIGIN89 SYSTEM</span>
-          <h2 id="product-family-title">Local control, with an app to check in.</h2>
-        </div>
+        <h2 id="product-family-title">Local control, with an app to check in.</h2>
         {linkToProducts && (
-          <a className="text-action" href="/products/">
-            Explore the products <ArrowUpRight size={16} aria-hidden="true" />
+          <a className="o89-text-link" href="/products/">
+            Explore the products <ArrowRight size={16} aria-hidden="true" />
           </a>
         )}
       </div>
       <div className="product-family-grid">
-        {products.map((product, index) => (
+        {products.map((product) => (
           <article key={product.id} className="family-card">
             <div className={`family-art family-${product.id}`}>
               <FamilyArt productId={product.id} />
             </div>
-            <span className="micro">
-              0{index + 1} / {product.role}
-            </span>
             <h3>{product.name}</h3>
             <p>{product.summary}</p>
             <a className="family-link" href={`/products/${product.id}/`}>
-              {actionLabels[product.id]} <ArrowUpRight size={14} aria-hidden="true" />
+              {actionLabels[product.id]} <ArrowRight size={16} aria-hidden="true" />
             </a>
           </article>
         ))}

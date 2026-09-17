@@ -10,10 +10,11 @@ import {
   useLocation,
   useRouter,
 } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
+import { HomePage } from "./components/home/HomePage";
 import { BuddyApp } from "./components/site/BuddyApp";
 import { SiteShell } from "./components/site/SiteChrome";
-import { SiteJournal } from "./components/site/SiteJournal";
 import { type JournalSite, journalSites } from "./lib/journal-sites";
 import { pageMeta } from "./lib/page-meta";
 import { type ProductId, products } from "./lib/products";
@@ -124,14 +125,18 @@ function NotFound() {
   return (
     <SiteShell>
       <section className="not-found">
-        <span className="micro">404 / PAGE NOT FOUND</span>
         <h1>Let’s get you back to your site.</h1>
         <p>
           That page isn’t here. Explore the products or start with the equipment you already have.
         </p>
-        <a className="concept-action" href="/">
-          Back to Origin89 <span>↗</span>
-        </a>
+        <div className="page-actions">
+          <a className="o89-plate o89-plate-action" href="/products/">
+            Explore the products <ArrowRight size={16} aria-hidden="true" />
+          </a>
+          <a className="o89-text-link" href="/equipment/">
+            Find your equipment <ArrowRight size={16} aria-hidden="true" />
+          </a>
+        </div>
       </section>
     </SiteShell>
   );
@@ -143,28 +148,8 @@ const rootRoute = createRootRoute({
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  search: { middlewares: [stripSearchParams({ site: "cottage" })] },
-  validateSearch: (search: Record<string, unknown>) => ({
-    site: validSite(search.site),
-  }),
-  component: Home,
+  component: HomePage,
 });
-function Home() {
-  const { site } = homeRoute.useSearch(),
-    navigate = homeRoute.useNavigate();
-  return (
-    <SiteJournal
-      site={site}
-      assets={journalAssets}
-      onSiteChange={(site) => {
-        void navigate({ search: { site }, replace: true, resetScroll: false });
-      }}
-      onOpenApp={(site) => {
-        void navigate({ to: "/app/$site/", params: { site } });
-      }}
-    />
-  );
-}
 const productsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/products/",
@@ -267,7 +252,9 @@ const appRoute = createRoute({
         <div className="app-review-note">
           <strong>Origin89 Offgrid + Buddy</strong>
           <span>{setting.label} · Interactive concept · Sample data</span>
-          <a href={`/?site=${site}`}>See this site on the website ↗</a>
+          <a href={`/sites/${site}/`}>
+            See this site on the website <ArrowRight size={14} aria-hidden="true" />
+          </a>
         </div>
       </main>
     );

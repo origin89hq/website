@@ -1,18 +1,20 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 export function MultiSiteNote() {
   return (
     <section
-      className="content-section other-site multi-site-note"
+      className="content-section multi-site-note"
       id="multiple-sites"
       aria-labelledby="multiple-sites-title"
     >
       <div>
-        <span className="micro">PLANNED / MULTI-SITE MANAGEMENT</span>
         <h2 id="multiple-sites-title">
           One account.
           <br />
           Multiple locations.
         </h2>
+        <p className="status-word" data-status="planned">
+          Planned
+        </p>
       </div>
       <div>
         <p>
@@ -21,8 +23,8 @@ export function MultiSiteNote() {
           remote sites.
         </p>
         <p className="multi-site-local">Local control stays at each site.</p>
-        <a className="underlined-action" href="/contact/">
-          Tell us about your locations <ArrowUpRight size={16} aria-hidden="true" />
+        <a className="o89-text-link" href="/contact/">
+          Tell us about your locations <ArrowRight size={16} aria-hidden="true" />
         </a>
       </div>
     </section>

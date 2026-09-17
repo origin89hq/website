@@ -814,7 +814,6 @@ function BuddyPocWorkspace({
         </section>
         <aside className="poc-inventory" aria-label="Equipment list">
           <div className="poc-section-title">
-            <span>YOUR INSTALLATION</span>
             <h2>A clearer picture.</h2>
             <p>
               {record.equipment.length
@@ -927,7 +926,6 @@ function BuddyPocWorkspace({
         </aside>
         <section className="poc-map" aria-label="Installation map">
           <div className="poc-section-title">
-            <span>THE PICTURE SO FAR</span>
             <h2>Your setup, taking shape.</h2>
             <p>Equipment inventory · Wiring not yet established</p>
           </div>

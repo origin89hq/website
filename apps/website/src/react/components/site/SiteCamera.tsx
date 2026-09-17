@@ -41,8 +41,8 @@ export function SiteCamera({
           loading="lazy"
         />
         <span className="camera-frame-top">
-          <span>CAM 02 / {label}</span>
-          <span>{stale ? "13:28 · LAST FRAME" : "13:40 · SAMPLE"}</span>
+          <span>CAM 02 · {label}</span>
+          <span>{stale ? "13:28 · last frame" : "13:40 · sample"}</span>
         </span>
         <span className="camera-frame-bottom">
           <span>{stale ? "No current camera connection" : "Gate 2 · Camera event source"}</span>
@@ -58,10 +58,7 @@ export function SiteCamera({
       <article className="camera-automation" aria-label="Gate 2 camera automation">
         <div className="camera-rule-heading">
           <ScanLine size={19} strokeWidth={1.5} />
-          <div>
-            <span className="dashboard-eyebrow">CAMERA → AUTOMATION</span>
-            <h4>Someone at Gate 2.</h4>
-          </div>
+          <h4>Someone at Gate 2.</h4>
         </div>
         <div className="camera-trigger">
           <small>WHEN</small>
@@ -154,7 +151,7 @@ export function SiteCamera({
             >
               <span className="notification-app">
                 <span>
-                  <Bell size={13} /> ORIGIN89 OFFGRID
+                  <Bell size={13} /> Origin89 Offgrid
                 </span>
                 <small>now · sample</small>
               </span>
@@ -180,10 +177,7 @@ export function SiteCamera({
         )}
       <dialog ref={dialog} className="camera-inspector" aria-labelledby={`${id}-title`}>
         <header>
-          <div>
-            <span className="dashboard-eyebrow">CAM 02 / DESIGN PREVIEW</span>
-            <h2 id={`${id}-title`}>{label}</h2>
-          </div>
+          <h2 id={`${id}-title`}>{label}</h2>
           <button
             type="button"
             aria-label="Close camera view"

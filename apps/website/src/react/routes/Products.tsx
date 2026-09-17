@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { BuddyAvatar } from "../components/buddy/BuddyAvatar";
 import { SetupMap } from "../components/buddy/SetupMap";
@@ -11,13 +11,26 @@ import type { JournalSite } from "../lib/journal-sites";
 import { type ProductId, products } from "../lib/products";
 import { boardImage, controllerImage, journalAssets } from "../lib/react-assets";
 import { siteConfig } from "../lib/site-config";
+
+const productActions: Record<ProductId, { label: string; status: string }> = {
+  controller: {
+    label: "Plan a connection",
+    status: "Prototype hardware. Board revision A is on the bench.",
+  },
+  offgrid: {
+    label: "Try the app scene",
+    status: "In development. The app scene uses sample readings.",
+  },
+  buddy: {
+    label: "Show Buddy your setup",
+    status: "In development. The setup conversation is a preview.",
+  },
+};
+
 export function ProductsPage() {
   return (
     <SiteShell>
-      <PageIntro
-        eyebrow="THE ORIGIN89 SYSTEM / IN DEVELOPMENT"
-        title="Meet the Controller, Offgrid and Buddy."
-      >
+      <PageIntro title="Meet the Controller, Offgrid and Buddy.">
         <p>
           Origin89 helps its different parts work together. Connect at the site, see the readings in
           Offgrid, and ask Buddy when something needs explaining.
@@ -32,10 +45,9 @@ export function ProductsPage() {
       </div>
       <ProductFamily linkToProducts={false} />
       <MultiSiteNote />
-      <section className="content-section">
+      <section className="content-section" aria-labelledby="product-roles-title">
         <div className="section-heading">
-          <span className="micro">COMPARE THE ROLES</span>
-          <h2>Each part has a job.</h2>
+          <h2 id="product-roles-title">Each part has a job.</h2>
         </div>
         {/** biome-ignore lint/a11y/noNoninteractiveTabindex: The named panel or scroll region must be reachable by keyboard. */}
         {/** biome-ignore lint/a11y/useSemanticElements: The focusable scroll region and control group retain their existing layout and accessible names. */}
@@ -75,55 +87,56 @@ export function ProductsPage() {
 export function ProductPage({ productId }: { productId: ProductId }) {
   const product = products.find((product) => product.id === productId)!;
   const [site, setSite] = useState<JournalSite>("cottage");
+  const action = productActions[productId];
   return (
     <SiteShell site={site}>
       <section className="product-intro">
-        <div>
-          <span className="micro">{product.name.toUpperCase()} / IN DEVELOPMENT</span>
+        <div className="product-intro-copy">
           <h1>{product.title}</h1>
           <p>{product.intro}</p>
-          <a
-            className="concept-action"
-            href={
-              productId === "offgrid"
-                ? `/app/${site}/`
-                : productId === "buddy"
-                  ? "/buddy/"
-                  : "/contact/"
-            }
-          >
-            {productId === "offgrid"
-              ? "Try the app scene"
-              : productId === "buddy"
-                ? "Show Buddy your setup"
-                : "Plan a connection"}{" "}
-            <span>↗</span>
-          </a>
+          <div className="page-actions">
+            <a
+              className="o89-plate o89-plate-action"
+              href={
+                productId === "offgrid"
+                  ? `/app/${site}/`
+                  : productId === "buddy"
+                    ? "/buddy/"
+                    : "/contact/"
+              }
+            >
+              {action.label} <ArrowRight size={16} aria-hidden="true" />
+            </a>
+          </div>
+          <p className="product-status">
+            <i aria-hidden="true" />
+            {action.status}
+          </p>
         </div>
         <div className={`product-hero-art product-hero-${productId}`}>
           {productId === "controller" ? (
-            <>
+            <figure className="render-stage">
               <img
                 src={controllerImage}
                 alt="Origin89 Controller, rendered from the editable enclosure CAD"
                 width="800"
                 height="650"
               />
-              <span className="micro">CAD CONCEPT / HARDWARE IN DEVELOPMENT</span>
-            </>
+              <figcaption>
+                Rendered from the enclosure CAD. Final markings are still in development.
+              </figcaption>
+            </figure>
           ) : productId === "buddy" ? (
             <>
-              <BuddyAvatar
-                src={journalAssets.buddy}
-                alt="Buddy, your Origin89 assistant"
-                size={360}
-                fetchPriority="high"
-              />
-              <div className="buddy-hero-question">
-                What would you like
-                <br />
-                to understand?
+              <div className="render-stage">
+                <BuddyAvatar
+                  src={journalAssets.buddy}
+                  alt="Buddy, your Origin89 assistant"
+                  size={360}
+                  fetchPriority="high"
+                />
               </div>
+              <p className="buddy-hero-question">What would you like to understand?</p>
             </>
           ) : (
             <BuddyApp key={site} site={site} buddyUrl={journalAssets.buddy} />
@@ -137,6 +150,7 @@ export function ProductPage({ productId }: { productId: ProductId }) {
             <button
               type="button"
               key={value}
+              className="o89-plate o89-plate-ghost o89-plate-sm"
               aria-pressed={site === value}
               onClick={() => setSite(value)}
             >
@@ -149,32 +163,32 @@ export function ProductPage({ productId }: { productId: ProductId }) {
           ))}
         </div>
       )}
-      <section className="content-section feature-rows">
-        {product.features.map(([title, body], index) => (
+      <section className="content-section feature-rows" aria-label={`${product.name} features`}>
+        {product.features.map(([title, body]) => (
           <article key={title}>
-            <span className="micro">0{index + 1}</span>
             <h2>{title}</h2>
             <p>{body}</p>
           </article>
         ))}
       </section>
       {productId === "controller" && (
-        <section className="hardware-open-section">
-          <img
-            src={boardImage}
-            alt="Controller circuit board rendered from its editable CAD source"
-            width="800"
-            height="640"
-            loading="lazy"
-          />
+        <section className="hardware-open-section" aria-labelledby="hardware-open-title">
+          <figure className="render-stage">
+            <img
+              src={boardImage}
+              alt="Controller circuit board rendered from its editable CAD source"
+              width="800"
+              height="640"
+              loading="lazy"
+            />
+          </figure>
           <div>
-            <span className="micro">OPEN FROM THE BOARD UP</span>
-            <h2>Inspect the boards.</h2>
+            <h2 id="hardware-open-title">Inspect the boards.</h2>
             <p>
               The public hardware repository includes editable board projects, Gerbers, bills of
               materials and enclosure CAD, with the prototype status documented.
             </p>
-            <a className="underlined-action" href={siteConfig.repositories.hardware}>
+            <a className="o89-text-link" href={siteConfig.repositories.hardware}>
               Browse hardware on GitHub <ArrowUpRight size={16} aria-hidden="true" />
             </a>
             <small>

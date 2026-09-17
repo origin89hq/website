@@ -3,11 +3,13 @@ import { RouterClient } from "@tanstack/react-router/ssr/client";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { createRouter } from "./router";
 import "./styles/base.css";
-import "./styles/journal.css";
 import "./styles/buddy-setup.css";
 import "./styles/ui.css";
 import "./styles/typography.css";
 import "./styles/website.css";
+import "./styles/theme.css";
+import "./styles/chrome.css";
+import "./styles/home.css";
 
 const router = createRouter();
 const root = document.getElementById("root")!;
