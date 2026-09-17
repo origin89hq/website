@@ -20,7 +20,6 @@ import { HeroFilm } from "./HeroFilm";
 import { Integrations } from "./Integrations";
 import { ArrowIcon, MarkIcon, SpecIcons } from "./icons";
 import { PortExplorer } from "./PortExplorer";
-import { Viewer3D } from "./Viewer3D";
 import { Waitlist } from "./Waitlist";
 
 const BuddyWorkspace = lazy(() => import("../buddy/BuddyWorkspace"));
@@ -929,7 +928,6 @@ export function HomePage() {
               </p>
             </div>
             <PortExplorer />
-            <Viewer3D />
           </div>
         </section>
         <DualMcu />

@@ -1,6 +1,6 @@
 # Homepage media
 
-The homepage film, stills and 3D model are **rendered from Controller board A's
+The homepage film and stills are **rendered from Controller board A's
 real CAD and fabrication data**: the Blender scene in origin89hq/hardware
 ([`enclosure/blender/origin89.blend`](https://github.com/origin89hq/hardware/tree/main/enclosure/blender),
 enclosure from `shoe.py`, board from its STEP export) and the board's Gerbers,
@@ -30,9 +30,8 @@ and `bom.csv`. Do not hand-edit these files; regenerate and package them.
 | `gerber-u7.webp` | Top copper, pads and silkscreen around U7, x −4…44 mm, y −22…22 mm | hardware `gerber_art.mjs` |
 | `gerber-board-dim.webp` | The whole board's top layers, dimmed, on transparent | hardware `gerber_art.mjs` |
 | `trace-mask-u7.webp`, `trace-mask-board.webp` | Copper and pad coverage as alpha, for the trace highlight mask | hardware `gerber_art.mjs` |
-| `controller.glb` | Detailed scene without cables: `cover`, `board` and `plate` nodes, board top textured from the Gerbers, WebP textures, meshopt | hardware `export_glb.py` |
 
-The film, chips, studio stills and GLB use a detailed copy of the scene: parts
+The film, chips and studio stills use a detailed copy of the scene: parts
 placed from pick-and-place and marked from the BOM, and the board textured from
 the Gerbers. The hardware scripts' README describes it.
 
@@ -50,8 +49,7 @@ M=/tmp/home-media
 BLENDER=/Applications/Blender.app/Contents/MacOS/Blender
 
 # 1. Controller renders: run the commands in $HW/enclosure/blender/web/README.md
-#    from $HW with the same M. They write film/, chips/, studio/, gerber-art/ and
-#    controller.glb.
+#    from $HW with the same M. They write film/, chips/, studio/ and gerber-art/.
 
 # 2. Audience miniatures
 (cd "$BRAND" && "$BLENDER" --background --python-exit-code 1 \
@@ -93,11 +91,8 @@ published.
 
 ## Website consumers
 
-[`HeroFilm.tsx`](../../react/components/home/HeroFilm.tsx) plays the film and
-reads the anchors; [`DualMcu.tsx`](../../react/components/home/DualMcu.tsx) uses
+[`HeroFilm.tsx`](../../react/components/home/HeroFilm.tsx) plays the film; [`DualMcu.tsx`](../../react/components/home/DualMcu.tsx) uses
 the chips; [`Connections.tsx`](../../react/components/home/Connections.tsx) the
 connection stills; [`Integrations.tsx`](../../react/components/home/Integrations.tsx)
-the closed Controller; [`HomePage.tsx`](../../react/components/home/HomePage.tsx)
-the miniatures, Gerber artwork and trace masks; and
-[`Viewer3D.tsx`](../../react/components/home/Viewer3D.tsx) the GLB, lifting the
-`cover` node.
+the closed Controller; and [`HomePage.tsx`](../../react/components/home/HomePage.tsx)
+the miniatures, Gerber artwork and trace masks.

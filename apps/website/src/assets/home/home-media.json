@@ -122,16 +122,6 @@
         "bom"
       ]
     },
-    "controller.glb": {
-      "sha256": "1467a9711fb361910276764603b4c5074be0425fdced9528988689edb9cb8c57",
-      "script": "origin89hq/hardware:enclosure/blender/web/export_glb.py",
-      "inputs": [
-        "scene",
-        "gerber",
-        "pick_and_place",
-        "bom"
-      ]
-    },
     "gerber-board-dim.webp": {
       "sha256": "4479b05f07a4b9d6ce4d83879d7a0662a8eea7672c5737438c6da9e25ae70055",
       "script": "origin89hq/hardware:enclosure/blender/web/gerber_art.mjs",
