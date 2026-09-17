@@ -514,7 +514,7 @@ function Compare() {
             {COMPARE.map(({ group, rows }) => (
               <tbody key={group}>
                 <tr className="group">
-                  <th scope="colgroup" colSpan={5}>
+                  <th scope="rowgroup" colSpan={5}>
                     {group}
                   </th>
                 </tr>
