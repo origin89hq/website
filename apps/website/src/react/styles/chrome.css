@@ -26,15 +26,171 @@
   gap: 22px;
   margin-right: auto;
 }
-.o89-nav > nav a {
+.o89-nav > nav a,
+.o89-nav-menu > button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: var(--o89-muted);
   font-size: 14px;
   font-weight: 500;
   transition: color 0.2s;
 }
 .o89-nav > nav a:hover,
-.o89-nav > nav a[aria-current="page"] {
+.o89-nav > nav a[data-current],
+.o89-nav-menu > button:hover,
+.o89-nav-menu > button[data-current],
+.o89-nav-menu > button[aria-expanded="true"] {
   color: var(--o89-fg);
+}
+/* The open page keeps a mark of its own, so hovering a neighbour cannot stand in for it. */
+.o89-nav > nav a[data-current]::after,
+.o89-nav-menu > button[data-current]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1.5px;
+  background: var(--o89-signal);
+}
+
+/* Desktop product menu, opened by hover or by activating its trigger. */
+.o89-nav-menu {
+  position: relative;
+}
+.o89-nav-menu > button svg {
+  transition: rotate 0.2s var(--o89-ease);
+}
+.o89-nav-menu > button[aria-expanded="true"] svg {
+  rotate: 180deg;
+}
+.o89-nav-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: -14px;
+  z-index: 1;
+  width: 420px;
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  /* Opaque: the bar's own backdrop-filter is a backdrop root, so a translucent panel
+     inside it would show the page through instead of blurring it. */
+  background: var(--o89-surface);
+  border: 1px solid var(--o89-line-strong);
+  border-radius: 14px;
+  corner-shape: bevel;
+  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 0.75);
+  opacity: 0;
+  translate: 0 -6px;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.18s var(--o89-ease),
+    translate 0.18s var(--o89-ease),
+    visibility 0s 0.18s;
+}
+/* Keeps the pointer inside the menu while it crosses the gap under the trigger. */
+.o89-nav-panel::before {
+  content: "";
+  position: absolute;
+  inset: -14px 0 100%;
+}
+.o89-nav-panel[data-open="true"] {
+  opacity: 1;
+  translate: 0;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.18s var(--o89-ease),
+    translate 0.18s var(--o89-ease),
+    visibility 0s;
+}
+.o89-nav-panel > a {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  border-radius: 10px;
+  corner-shape: bevel;
+  transition: background 0.18s var(--o89-ease);
+}
+.o89-nav-panel > a:hover {
+  background: rgb(255 255 255 / 0.05);
+}
+.o89-nav-panel > a strong {
+  display: block;
+  color: var(--o89-fg);
+  font-size: 15px;
+  font-weight: 600;
+}
+.o89-nav-panel > a small {
+  display: block;
+  margin-top: 2px;
+  color: var(--o89-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.o89-nav-panel-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: var(--o89-surface-raised);
+  border: 1px solid var(--o89-line-strong);
+  border-radius: 9px;
+  corner-shape: bevel;
+  color: var(--o89-signal);
+  transition:
+    color 0.18s var(--o89-ease),
+    border-color 0.18s var(--o89-ease);
+}
+.o89-nav-panel > a:hover .o89-nav-panel-mark {
+  border-color: var(--o89-line-strong);
+  color: var(--o89-fg);
+}
+.o89-nav-panel-foot {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--o89-line);
+}
+.o89-nav-panel-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  corner-shape: bevel;
+  color: var(--o89-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.o89-nav-panel-foot a:hover {
+  color: var(--o89-fg);
+  background: rgb(255 255 255 / 0.05);
+}
+.o89-nav-panel-foot svg {
+  transition: translate 0.25s var(--o89-ease);
+}
+.o89-nav-panel-foot a:hover svg {
+  translate: 3px 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .o89-nav-panel,
+  .o89-nav-panel[data-open="true"] {
+    translate: none;
+    transition:
+      opacity 0.01s,
+      visibility 0s;
+  }
+  .o89-nav-menu > button svg,
+  .o89-nav-panel-foot svg {
+    transition: none;
+  }
 }
 .o89-nav-github {
   display: grid;
@@ -105,7 +261,24 @@
     justify-content: space-between;
     min-height: 48px;
     padding: 0 12px;
+    border-radius: 8px;
+    corner-shape: bevel;
     font-size: 16px;
+  }
+  .o89-nav .concept-menu nav a[aria-current="page"] {
+    background: var(--o89-surface);
+  }
+  .o89-nav .concept-menu nav a.o89-nav-sub {
+    min-height: 42px;
+    margin-left: 12px;
+    padding-left: 16px;
+    border-left: 1px solid var(--o89-line-strong);
+    border-radius: 0 8px 8px 0;
+    color: var(--o89-muted);
+    font-size: 14px;
+  }
+  .o89-nav .concept-menu nav a.o89-nav-sub[aria-current="page"] {
+    color: var(--o89-fg);
   }
 }
 

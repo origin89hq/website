@@ -508,17 +508,44 @@ try {
   checks.push(
     "Telecom app scene: unknown readings, unavailable controls and camera, battery care and Buddy at 390px",
   );
+  await open("/");
+  const productsTrigger = page.locator(".o89-nav-menu > button");
+  const productsPanel = page.locator(".o89-nav-panel");
+  await productsPanel.waitFor({ state: "hidden" });
+  await productsTrigger.hover();
+  await productsPanel.waitFor({ state: "visible" });
+  await productsPanel.getByRole("link", { name: "Origin89 Offgrid" }).click();
+  await page.waitForURL("**/products/offgrid/");
+  await productsPanel.waitFor({ state: "hidden" });
+  assert.equal(await productsTrigger.getAttribute("data-current"), "true");
+  assert.equal(
+    await page.locator('.o89-nav > nav > a[href="/equipment/"]').getAttribute("data-current"),
+    null,
+  );
+  await productsTrigger.press("Enter");
+  await productsPanel.waitFor({ state: "visible" });
+  assert.equal(await productsTrigger.getAttribute("aria-expanded"), "true");
+  await productsTrigger.press("Escape");
+  await productsPanel.waitFor({ state: "hidden" });
+  assert.ok(await productsTrigger.evaluate((node) => node === document.activeElement));
+  checks.push("Desktop product menu: hover, navigation, current section and Escape");
   await open("/", 390);
   await page.locator(".concept-menu summary").click();
-  await page
-    .getByRole("navigation", { name: "Mobile website navigation" })
-    .getByRole("link", { name: "Developers", exact: true })
-    .click();
+  const mobileNav = page.getByRole("navigation", { name: "Mobile website navigation" });
+  await mobileNav.getByRole("link", { name: "Buddy", exact: true }).click();
+  await page.waitForURL("**/products/buddy/");
+  assert.equal(await page.locator(".concept-menu").getAttribute("open"), null);
+  await page.locator(".concept-menu summary").click();
+  assert.equal(
+    await mobileNav.getByRole("link", { name: "Buddy", exact: true }).getAttribute("aria-current"),
+    "page",
+  );
+  await mobileNav.getByRole("link", { name: "Developers", exact: true }).click();
   await page.waitForURL("**/developers/");
   assert.equal(await page.locator(".concept-menu").getAttribute("open"), null);
   await open("/developers/design-guide/", 320);
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-  checks.push("Mobile navigation and 320px design-guide layout");
+  checks.push("Mobile navigation, product sub-links and 320px design-guide layout");
   await open("/");
   const posted = [];
   page.on("request", (request) => {

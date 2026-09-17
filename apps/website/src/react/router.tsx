@@ -14,7 +14,7 @@ import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { HomePage } from "./components/home/HomePage";
 import { BuddyApp } from "./components/site/BuddyApp";
-import { SiteShell } from "./components/site/SiteChrome";
+import { SitePathContext, SiteShell } from "./components/site/SiteChrome";
 import { blogPosts, findBlogPost, loadBlogPostBody } from "./lib/blog";
 import { type JournalSite, journalSites } from "./lib/journal-sites";
 import { pageMeta } from "./lib/page-meta";
@@ -115,12 +115,12 @@ function Root() {
     return () => document.removeEventListener("click", onClick);
   }, [router]);
   return (
-    <>
+    <SitePathContext value={location.pathname}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
       <Outlet />
-    </>
+    </SitePathContext>
   );
 }
 function NotFound() {
