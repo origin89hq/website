@@ -7,7 +7,7 @@
 .home .h-l { font-size: clamp(38px, 4.9vw, 78px); }
 .home h1, .home h2, .home h3, .home h4 { line-height: .98; margin: 0; }
 .home p { margin: 0; }
-.home :is(.artifact, .explorer-stage, .viewer, .port-panel, .node, .composer, .sketch, .app, .spec-group, .bench, .mcu-link, .on-wall, .table-scroll, .boundary, .pin, .seg, .seg button, .pick select, .panel-code, .panel-close, .waitlist input) { corner-shape: bevel; }
+.home :is(.artifact, .explorer-stage, .port-panel, .node, .composer, .sketch, .app, .spec-group, .bench, .mcu-link, .on-wall, .table-scroll, .boundary, .pin, .seg, .seg button, .pick select, .panel-code, .panel-close, .waitlist input) { corner-shape: bevel; }
 .home :is(.artifact header, .panel-kind, .port-panel .spec dt, .spec-group .spec dt, .node span, .rule-facts dt, .reading .age, .app-top small, .bench-head span, .sketch-note, .explorer-hint, .on-wall b, .pin .n, .app-tabbar, .budget-fig .mono, .temps .mono) { color: var(--o89-muted); }
 @property --gx { syntax: '<percentage>'; inherits: false; initial-value: 30%; }
 @property --gy { syntax: '<percentage>'; inherits: false; initial-value: 30%; }
@@ -25,7 +25,7 @@
 @media (prefers-reduced-motion: reduce) {
   .home .traces { animation: none; }
 }
-.home .artifact, .home .explorer-stage, .home .viewer, .home .port-panel, .home .node, .home .composer, .home .sketch, .home .app, .home .spec-group, .home .bench, .home .mcu-link, .home .on-wall, .home .table-scroll, .home .boundary, .home .pin, .home .seg, .home .seg button, .home .pick select, .home .panel-code, .home .panel-close, .home .waitlist input { corner-shape: bevel; }
+.home .artifact, .home .explorer-stage, .home .port-panel, .home .node, .home .composer, .home .sketch, .home .app, .home .spec-group, .home .bench, .home .mcu-link, .home .on-wall, .home .table-scroll, .home .boundary, .home .pin, .home .seg, .home .seg button, .home .pick select, .home .panel-code, .home .panel-close, .home .waitlist input { corner-shape: bevel; }
 /* Hero: one screen tall at every width, copy on dark ground at the bottom of the film. */
 .home .hero { position: relative; height: max(620px, 100svh); overflow: hidden; background: var(--o89-page); }
 .home .hero video, .home .hero .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .86; }
@@ -217,21 +217,6 @@
 }
 .home .port-list button { font-family: var(--font-data); font-size: 12.5px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--o89-line-strong); background: var(--o89-surface); color: var(--o89-muted); cursor: pointer; }
 .home .port-list button[aria-pressed="true"] { color: var(--o89-fg); border-color: var(--o89-signal); }
-.home .viewer { position: relative; margin-top: 16px; height: clamp(440px, 60vw, 760px); border-radius: 24px; overflow: hidden; background: radial-gradient(70% 70% at 50% 40%, #151b22 0%, var(--o89-page) 100%); border: 1px solid var(--o89-line); }
-.home .viewer canvas { width: 100%; height: 100%; touch-action: none; cursor: grab; }
-.home .viewer canvas:active { cursor: grabbing; }
-.home .viewer-hud { position: absolute; inset: 20px; pointer-events: none; }
-.home .viewer-hud svg { width: 100%; height: 100%; }
-.home .viewer-bar { position: absolute; left: 24px; right: 24px; bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; pointer-events: none; }
-.home .viewer-bar > * { pointer-events: auto; }
-.home .viewer-bar h3 { font-size: clamp(26px, 2.6vw, 38px); }
-.home .viewer-bar p { color: var(--o89-muted); font-size: 14px; margin-top: 6px; }
-.home .viewer-controls { display: flex; gap: 8px; }
-@media (max-width: 720px) {
-  .home .viewer { height: 520px; }
-  .home .viewer-bar { left: 0; right: 0; bottom: 0; padding: 60px 20px 20px; background: linear-gradient(to top, var(--o89-page) 30%, transparent); }
-}
-.home .viewer-loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--o89-faint); font-size: 14px; }
 .home .mcu { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
 .home .mcu-board { position: sticky; top: 96px; }
 .home .chip-stage { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 40px); padding: clamp(24px, 4vw, 56px) clamp(8px, 2vw, 24px);

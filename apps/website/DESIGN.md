@@ -187,7 +187,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 ### Hierarchy
 - **Display** (700, `clamp(44px, 6.4vw, 104px)`, 0.98): hero title (capped at 12ch, `clamp(44px, 5.4vw, 96px)`, `clamp(38px, 11.6vw, 56px)` below 600px, balanced, its second phrase in a softer `#aab4be`) and the closing waitlist heading. The Statement section runs larger (`clamp(46px, 8.2vw, 138px)`) with staggered lines, the last two in faint.
 - **Headline** (700, `clamp(38px, 4.9vw, 78px)`, 0.98): section headings. Inner pages use `clamp(44px, 5.6vw, 84px)` in the page intro.
-- **Title** (600–700, 20–38px, 1.05–1.2, −0.02 to −0.03em): audience titles, port panel heading (28px), viewer bar, spec group heads (20px), MCU role.
+- **Title** (600–700, 20–38px, 1.05–1.2, −0.02 to −0.03em): audience titles, port panel heading (28px), spec group heads (20px), MCU role.
 - **Figure** (600, `clamp(64px, 7.4vw, 116px)`, 0.9, −0.05em, tabular): instrument readouts, with the unit as a 0.32em muted suffix. Smaller figures (22–40px, 600) in bus line, budget, temps and decode.
 - **Lede** (400, `clamp(17px, 1.35vw, 20px)`, 1.55, muted, 46–60ch).
 - **Body** (400–500, 14–17px, 1.55): 15–16px in panels and cards, 14px in lists and specs.
@@ -203,7 +203,7 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 - **Container:** `min(100% − 2 × gutter, 1320px)`, centred (`.o89-wrap`). Gutter `clamp(16px, 4vw, 56px)`. Inner pages pad with `max(gutter, (100% − 1320px) / 2)`.
 - **Section rhythm:** homepage sections `clamp(96px, 13vw, 190px)` vertical, consecutive sections drop the top padding; inner pages use `clamp(72px, 9vw, 136px)` top-only spacing. Within frames the steps are 4, 8, 12, 16, 24 px.
 - **Grids in use:** two-column heads (1fr 1fr, heading left, lede right, aligned to end); 12-column open-hardware grid with a sticky copy column (top 120px); asymmetric 1.05fr / 0.95fr for MCU and rule composer; three-column audiences; CSS columns (`3 340px`) for the spec grid; hub layout 0.9fr / 1.2fr / 0.9fr.
-- **Full bleed:** the hero is one screen tall (`max(620px, 100svh)`) with the film full bleed at 86% opacity and the copy at the bottom of the content column: title and summary on the left, actions and development status on the right above 1100px, stacked below. A bottom gradient and a side scrim that follows the content column put the copy on dark ground; the film toggle sits at the top right. Render stages (explorer, 3D viewer) are wide frames inside the container.
+- **Full bleed:** the hero is one screen tall (`max(620px, 100svh)`) with the film full bleed at 86% opacity and the copy at the bottom of the content column: title and summary on the left, actions and development status on the right above 1100px, stacked below. A bottom gradient and a side scrim that follows the content column put the copy on dark ground; the film toggle sits at the top right. The port explorer stage is a wide frame inside the container.
 - **Breakpoints actually used:** 980px (most grids collapse to one column; hub core moves first), 900px (nav collapses to a Menu disclosure, port panel becomes a bottom sheet, port labels hide and a mono port list appears), 800px (footer to two columns), 600px (composer sentence to 22px, hero title scales with width). The hero also uses 1100px (actions and status move under the summary) and 900px (the film fills the screen behind the copy). Inner pages add 1100, 760 and 650px. Review at 320, 390 and 1440px.
 
 **The One Lead Visual Rule.** Each section has one lead render or instrument; copy sits beside or over it, never competing with a second hero image.
@@ -233,7 +233,7 @@ Sturdy, cut from the sign.
 - **Shape:** octagonal clip, 10px cut; 48px tall, 22px side padding, 600 weight 15px; small variant 40px, 7px cut, 16px padding, 14px.
 - **Primary** (`o89-plate o89-plate-action`): action fill inset 1px inside a 90% white rim (the rim is the outer element, the fill a clipped `::before`). One per view: "Join the waitlist" in nav and hero.
 - **Hover:** fill moves to action-lit over 0.25s on the brand ease.
-- **Ghost** (`o89-plate-ghost`): page fill inside a line-strong rim; hover rim turns muted; `aria-pressed`/`aria-selected` gives an fg rim over a raised fill. Used for secondary actions, tabs (connection tabs, MCU tabs in mono) and viewer controls.
+- **Ghost** (`o89-plate-ghost`): page fill inside a line-strong rim; hover rim turns muted; `aria-pressed`/`aria-selected` gives an fg rim over a raised fill. Used for secondary actions, tabs (connection tabs, MCU tabs in mono).
 - **Text link** (`o89-text-link`): 15px 600 fg with an arrow icon that shifts 4px right on hover; 44px min target.
 
 ### Chips and status words
@@ -264,7 +264,7 @@ App readings show value, source and age in mono. Stale readings take a dashed li
 ### Motion
 One ease, `--o89-ease` `cubic-bezier(0.16, 1, 0.3, 1)`: 0.2–0.35s for colour and opacity, 0.45–0.7s for panels and transforms, 0.9s for section reveal (fade plus 28px rise, from a visible default, triggered once by IntersectionObserver) and for the hero copy, which rises 18px from 35% opacity once on load, summary and actions 0.1s and 0.2s behind the title. The hero film plays once, rests on the closed Controller it opened on and replays when the hero returns to view after scrolling past it; its toggle pauses, plays or replays. Continuous motion is limited to the signal trace sweep over Gerber artwork (7s/11s alternating), the active port pulse and dash pulses along integration lines.
 
-**The Still Under Reduced Motion Rule.** With `prefers-reduced-motion: reduce`, the hero film stays paused (its toggle can start it), reveals render immediately, the 3D lid lift snaps instead of easing, trace sweep, port pulse and render swap animations stop, panel moves become 0.2s linear fades, the 3D viewer stops auto-rotating, and in-page scrolling is instant.
+**The Still Under Reduced Motion Rule.** With `prefers-reduced-motion: reduce`, the hero film stays paused (its toggle can start it), reveals render immediately, trace sweep, port pulse and render swap animations stop, panel moves become 0.2s linear fades, and in-page scrolling is instant.
 
 ## Do's and Don'ts
 

@@ -11,7 +11,6 @@
 //   studio/      connect-*.png, integrate-controller.png   hardware render_studio.py
 //   dioramas/    audience-*.png, audience-*-signals.json   brand build_site_miniatures.py
 //   gerber-art/  *.webp                           hardware gerber_art.mjs
-//   controller.glb                               hardware export_glb.py + gltf-transform webp, meshopt
 //
 // Requires ffmpeg (libx264, libsvtav1) and cwebp on PATH. --hardware is the origin89hq/hardware
 // checkout the renders came from; its commit and input hashes go into the record.
@@ -101,12 +100,6 @@ const GROUPS = {
           copyFile(join(renders, "gerber-art", `${name}.webp`), join(out, `${name}.webp`)),
         ),
       ),
-  },
-  model: {
-    script: `${HARDWARE_SCRIPTS}/export_glb.py`,
-    inputs: DETAILED,
-    files: ["controller.glb"],
-    build: (renders) => copyFile(join(renders, "controller.glb"), join(out, "controller.glb")),
   },
 };
 
