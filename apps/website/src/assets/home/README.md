@@ -21,9 +21,9 @@ and `bom.csv`. Do not hand-edit these files; regenerate and package them.
 
 | File | What it is | Script |
 |---|---|---|
-| `hero-av1.mp4`, `hero.mp4`, `hero-720.mp4` | Hero film loop, 49 s at 24 fps, on `#07090c`: 1920 × 1080 in AV1 (SVT-AV1 CRF 36, 10-bit) and H.264 (x264 CRF 23), and 1280 × 720 in H.264 (CRF 23), each encoded from the frames | hardware `render_film.py` |
+| `hero-av1.mp4`, `hero.mp4`, `hero-720.mp4` | Hero film loop, one continuous 48 s shot at 30 fps with motion blur, on `#07090c`: 1920 × 1080 in AV1 (SVT-AV1 CRF 36, 10-bit) and H.264 (x264 CRF 23), and 1280 × 720 in H.264 (CRF 23), each encoded from the frames | hardware `render_film.py` |
 | `hero-poster.webp` | First film frame on `#07090c` | hardware `render_film.py` |
-| `hero-anchors.json` | Shot ranges and per-frame callout positions, 0–1 of the frame | hardware `render_film.py` |
+| `hero-anchors.json` | Callout windows and per-frame callout positions, 0–1 of the frame | hardware `render_film.py` |
 | `chip-u7.webp`, `chip-u8.webp` | Orthographic top views of U7 (STM32G0B1) and U8 (ESP32-C6 module), 720 px | hardware `render_chips.py` |
 | `connect-*.webp` | Wired Controller from the scene's inspection cameras, 1600 × 1100 | hardware `render_studio.py` |
 | `integrate-controller.webp` | Closed Controller from the Hero camera, no cables, 900 × 990 | hardware `render_studio.py` |
