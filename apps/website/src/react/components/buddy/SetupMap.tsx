@@ -39,33 +39,33 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
       "YOUR EQUIPMENT",
       isUnknown(state.controller) ? "Model to confirm" : state.controller,
       model
-        ? `The EPEVER ${model} reference lists 100 A rated charging current and RS-485/Modbus. This is a possible data path, not confirmed Origin89 support. ${state.port === "Display / logger" ? "An existing display or logger means the shared bus needs review first." : "The exact interface and existing accessories still need review."}`
+        ? `The EPEVER ${model} reference lists 100 A rated charging current and RS-485/Modbus. That is a possible data path. Origin89 support is not confirmed. ${state.port === "Display / logger" ? "An existing display or logger means the shared bus needs review first." : "The exact interface and existing accessories still need review."}`
         : "Confirm the label and manufacturer documentation before choosing a data interface. No model or compatibility has been inferred from a photo.",
     ],
     battery: [
       "BATTERY BANK",
       isUnknown(state.battery) ? "Let’s identify the bank." : state.battery,
-      "Confirm the model, chemistry and monitoring interface. A photo alone does not establish capacity, state of charge or a safe connection.",
+      "Confirm the model, chemistry and monitoring interface. A photo alone cannot show capacity, state of charge or whether a connection is safe.",
     ],
     panels: [
       "SOLAR ARRAY",
-      isUnknown(state.panel) ? "Panel model still open" : state.panel,
-      `${isUnknown(state.panelCount) ? "Panel count unknown." : state.panelCount + " panels reported."} ${isUnknown(state.arrangement) ? "String arrangement unknown." : state.arrangement + " — user-reported, unverified."} A visible cable does not establish series/parallel wiring.`,
+      isUnknown(state.panel) ? "Panel model to confirm" : state.panel,
+      `${isUnknown(state.panelCount) ? "Panel count unknown." : state.panelCount + " panels reported."} ${isUnknown(state.arrangement) ? "String arrangement unknown." : state.arrangement + " (user-reported, unverified)."} A visible cable does not show whether panels are wired in series or parallel.`,
     ],
     origin: [
       "PROPOSED ORIGIN89 LINK",
       "The local connection point.",
-      "Origin89 would gather supported equipment data at the site. These are proposed data relationships, not electrical wiring or approved installation instructions.",
+      "Origin89 would read supported equipment data at the site. The lines show proposed data links. They are not electrical wiring or approved installation instructions.",
     ],
     app: [
       "YOUR VIEW",
       "Offgrid + Buddy",
-      "Equipment readings and useful explanations in one place. This concept uses a guided conversation, not live image recognition or an equipment connection.",
+      "Equipment readings and Buddy’s explanations in one place. This concept uses a guided conversation. It has no live image recognition or equipment connection.",
     ],
     other: [
       "ROOM TO EXTEND",
-      "Add the next useful device.",
-      "Review pumps, inverters, generators and sensors by exact make, model and the readings you need. The interface is still to be established.",
+      "Add another device.",
+      "Review pumps, inverters, generators and sensors by exact make and model, and note the readings you need. Their interfaces are not confirmed yet.",
     ],
   };
   const detail = selected ? details[selected] : null;
@@ -82,12 +82,12 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
       aria-label="Interactive integration map"
     >
       <div className="map-heading">
-        <h3>It fits right here.</h3>
+        <h3>Where Origin89 could fit.</h3>
         <span className="map-status">
           {state.stage === "done"
             ? "First draft · Needs review"
             : state.controller
-              ? "Building your picture"
+              ? "Mapping your equipment"
               : "Start with your equipment"}
         </span>
       </div>
@@ -244,7 +244,7 @@ export function SetupMap({ state = emptySetup, buddyUrl, plateUrl }: SetupMapPro
             <em></em>
           </span>
           <strong>Offgrid + Buddy</strong>
-          <small>One useful view</small>
+          <small>One view</small>
         </button>
         <button
           type="button"

@@ -9,7 +9,7 @@
 //   film/        frame-NNNN.png + anchors.json    hardware render_film.py
 //   chips/       u7.png, u8.png                   hardware render_chips.py
 //   studio/      connect-*.png, integrate-controller.png   hardware render_studio.py
-//   dioramas/    audience-*.png                   brand build_site_miniatures.py
+//   dioramas/    audience-*.png, audience-*-signals.json   brand build_site_miniatures.py
 //   gerber-art/  *.webp                           hardware gerber_art.mjs
 //   controller.glb                               hardware export_glb.py + gltf-transform webp, meshopt
 //
@@ -67,7 +67,7 @@ const GROUPS = {
   film: {
     script: `${HARDWARE_SCRIPTS}/render_film.py`,
     inputs: DETAILED,
-    files: ["hero-av1.mp4", "hero.mp4", "hero-720.mp4", "hero-poster.webp", "hero-anchors.json"],
+    files: ["hero-av1.mp4", "hero.mp4", "hero-720.mp4", "hero-poster.webp"],
     build: packageFilm,
   },
   chips: {
@@ -85,7 +85,10 @@ const GROUPS = {
   dioramas: {
     script: `${BRAND_SCRIPTS}/build_site_miniatures.py`,
     inputs: [],
-    files: DIORAMAS.map((name) => `audience-3d-${name}.webp`),
+    files: DIORAMAS.flatMap((name) => [
+      `audience-3d-${name}.webp`,
+      `audience-3d-${name}-signals.json`,
+    ]),
     build: packageDioramas,
   },
   gerber: {
@@ -196,7 +199,7 @@ async function packageFilm(renders) {
     await stat(join(dir, `frame-${String(frame).padStart(4, "0")}.png`));
   }
   const first = join(dir, "frame-0001.png");
-  // HeroFilm.tsx maps the anchors onto a 1920 x 1080 frame.
+  // The encodes below assume 1920 x 1080 frames; anchors.json gives the frame rate and count.
   assert.deepEqual(await size(first), { width: 1920, height: 1080, hasAlpha: true });
   // Each encode starts from the frames. HeroFilm.tsx picks AV1 where the browser plays it,
   // H.264 otherwise, and the 720p H.264 on narrow screens.
@@ -208,24 +211,23 @@ async function packageFilm(renders) {
   ];
   await ffmpeg(
     ...frames("", "yuv420p10le"),
-    ...["-c:v", "libsvtav1", "-preset", "6", "-crf", "36", "-g", "240"],
+    ...["-c:v", "libsvtav1", "-preset", "6", "-crf", "40", "-g", "300"],
     ...["-movflags", "+faststart", join(out, "hero-av1.mp4")],
   );
   await ffmpeg(
     ...frames("", "yuv420p"),
-    ...["-c:v", "libx264", "-preset", "slow", "-crf", "23"],
+    ...["-c:v", "libx264", "-preset", "slow", "-crf", "26"],
     ...["-movflags", "+faststart", join(out, "hero.mp4")],
   );
   await ffmpeg(
     ...frames(",scale=1280:720", "yuv420p"),
-    ...["-c:v", "libx264", "-preset", "slow", "-crf", "23"],
+    ...["-c:v", "libx264", "-preset", "slow", "-crf", "26"],
     ...["-movflags", "+faststart", join(out, "hero-720.mp4")],
   );
   await sharp(first)
     .flatten({ background: BACKGROUND })
     .webp({ quality: 86 })
     .toFile(join(out, "hero-poster.webp"));
-  await copyFile(anchors, join(out, "hero-anchors.json"));
 }
 
 async function packageChips(renders, work) {
@@ -288,6 +290,26 @@ async function packageDioramas(renders, work) {
     const cropped = join(work, `audience-${name}.png`);
     await sharp(source).extract(region).png().toFile(cropped);
     await cwebp("-q", "88", "-alpha_q", "95", cropped, "-o", join(out, `audience-3d-${name}.webp`));
+    // Signal paths in the cropped image's pixels; the homepage animates pulses along them.
+    const signals = JSON.parse(
+      await readFile(join(renders, "dioramas", `audience-${name}-signals.json`), "utf8"),
+    );
+    assert.equal(signals.width, b.width, `${name} signal paths and render differ in size`);
+    const shifted = {
+      width: region.width,
+      height: region.height,
+      paths: signals.paths.map(({ name: path, points }) => ({
+        name: path,
+        points: points.map(([x, y]) => [
+          Math.round((x - left) * 10) / 10,
+          Math.round((y - top) * 10) / 10,
+        ]),
+      })),
+    };
+    await writeFile(
+      join(out, `audience-3d-${name}-signals.json`),
+      `${JSON.stringify(shifted, null, 1)}\n`,
+    );
   }
 }
 

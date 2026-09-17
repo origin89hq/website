@@ -204,13 +204,13 @@ A cool near-black neutral ramp with two blues and two state colours, each with a
 - **Section rhythm:** homepage sections `clamp(96px, 13vw, 190px)` vertical, consecutive sections drop the top padding; inner pages use `clamp(72px, 9vw, 136px)` top-only spacing. Within frames the steps are 4, 8, 12, 16, 24 px.
 - **Grids in use:** two-column heads (1fr 1fr, heading left, lede right, aligned to end); 12-column open-hardware grid with a sticky copy column (top 120px); asymmetric 1.05fr / 0.95fr for MCU and rule composer; three-column audiences; CSS columns (`3 340px`) for the spec grid; hub layout 0.9fr / 1.2fr / 0.9fr.
 - **Full bleed:** the hero is one screen tall (`max(620px, 100svh)`) with the film full bleed at 86% opacity and the copy at the bottom of the content column: title and summary on the left, actions and development status on the right above 1100px, stacked below. A bottom gradient and a side scrim that follows the content column put the copy on dark ground; the film toggle sits at the top right. Render stages (explorer, 3D viewer) are wide frames inside the container.
-- **Breakpoints actually used:** 980px (most grids collapse to one column; hub core moves first), 900px (nav collapses to a Menu disclosure, port panel becomes a bottom sheet, port labels hide and a mono port list appears), 800px (footer to two columns), 600px (composer sentence to 22px, hero title scales with width). The hero also uses 1100px (actions and status move under the summary) and 900px (the film fills the screen behind the copy, callouts hide and a caption line appears). Inner pages add 1100, 760 and 650px. Review at 320, 390 and 1440px.
+- **Breakpoints actually used:** 980px (most grids collapse to one column; hub core moves first), 900px (nav collapses to a Menu disclosure, port panel becomes a bottom sheet, port labels hide and a mono port list appears), 800px (footer to two columns), 600px (composer sentence to 22px, hero title scales with width). The hero also uses 1100px (actions and status move under the summary) and 900px (the film fills the screen behind the copy). Inner pages add 1100, 760 and 650px. Review at 320, 390 and 1440px.
 
 **The One Lead Visual Rule.** Each section has one lead render or instrument; copy sits beside or over it, never competing with a second hero image.
 
 ## Elevation & Depth
 
-Depth is tonal and lit, not shadowed. Surfaces step from page to surface to surface-raised, each edged by a 1px hairline. The lift comes from light: renders carry their own dark drop shadows (`drop-shadow(0 24px 30px rgba(0,0,0,.7))` to `0 40px 60px rgba(0,0,0,.8)`) and stand in blurred radial pools of action blue at 35–42% alpha. Signal elements glow faintly as instrument light (`box-shadow: 0 0 12px rgba(127,156,224,.7)`). Glass (blur 10–14px over 72–80% ground) is used only on overlays that sit above moving media or content: the sticky nav and hero callout labels.
+Depth is tonal and lit, not shadowed. Surfaces step from page to surface to surface-raised, each edged by a 1px hairline. The lift comes from light: renders carry their own dark drop shadows (`drop-shadow(0 24px 30px rgba(0,0,0,.7))` to `0 40px 60px rgba(0,0,0,.8)`) and stand in blurred radial pools of action blue at 35–42% alpha. Signal elements glow faintly as instrument light (`box-shadow: 0 0 12px rgba(127,156,224,.7)`). Glass (blur 10–14px over 72–80% ground) is used only on overlays that sit above moving media or content: the sticky nav.
 
 ### Shadow Vocabulary
 - **Render drop** (`filter: drop-shadow(0 24px 30px rgba(0,0,0,.7))`): chip and Controller renders.
@@ -222,7 +222,7 @@ Depth is tonal and lit, not shadowed. Surfaces step from page to surface to surf
 
 ## Shapes
 
-**The Plate 89 Rule.** Frames take the plate's 45° clipped corner through `corner-shape: bevel` on a normal `border-radius`; browsers without `corner-shape` fall back to rounded corners of the same radius. Frames, stages, panels, inputs, selects, segmented controls, table containers and callout labels all opt in. Radii scale with the object: 8–10px controls, 12–14px frames and callouts, 16px panels and spec groups, 20px composer, 24px render stages, 28px app section.
+**The Plate 89 Rule.** Frames take the plate's 45° clipped corner through `corner-shape: bevel` on a normal `border-radius`; browsers without `corner-shape` fall back to rounded corners of the same radius. Frames, stages, panels, inputs, selects, segmented controls, and table containers all opt in. Radii scale with the object: 8–10px controls, 12–14px frames, 16px panels and spec groups, 20px composer, 24px render stages, 28px app section.
 
 Plate buttons are cut, not radiused: an octagonal `clip-path` polygon with a 10px cut (7px small), which renders identically in every browser. Chips and pill tags stay fully round (999px) and are the only round-ended shape. Status dots are circles. Rows are divided by 1px hairlines; dot grids (14px pitch, 1.2px dots in line or line-strong, radially masked) sit behind renders and chips.
 
@@ -255,9 +255,6 @@ Sturdy, cut from the sign.
 - **Mobile (≤900px):** links, GitHub and CTA hide; a native `details` Menu disclosure with an 8px bevelled summary opens a raised bevelled sheet of 48px rows.
 - **Footer:** hairline top, 1.3fr + three link columns, 14px muted; a small amber dot with the development status line ("In active development. Not for sale yet.").
 
-### Render callouts (signature)
-Hero film labels placed per frame from `hero-anchors.json`, the render camera's projection of board A anchor points. A white 1.5px leader with dot and ring leads to a 300px glass label: signal mono designator, 28px 700 white part name, 15px description. Labels fade in over 0.45s and keep clear of the film toggle. Below 900px callouts hide and a single caption line (signal mono + light text with a dark shadow) replaces them.
-
 ### Port explorer and instruments (signature)
 The port explorer draws terminal labels and polylines over the closed Controller render; hover, focus or selection turns line and node signal blue with a pulsing ring, dims other ports to 32%, and slides a detail panel in (bottom sheet on mobile). Instruments (idle draw, watchdog relay, RS-485 frames, 1-Wire temps, VE.Direct decode) pair a large tabular figure with signal tracks and faint notes that name conditions and label example data.
 
@@ -265,7 +262,7 @@ The port explorer draws terminal labels and polylines over the closed Controller
 App readings show value, source and age in mono. Stale readings take a dashed line-strong border on a transparent ground with a muted value; missing readings show an em-dash placeholder in faint, never a zero.
 
 ### Motion
-One ease, `--o89-ease` `cubic-bezier(0.16, 1, 0.3, 1)`: 0.2–0.35s for colour and opacity, 0.45–0.7s for panels and transforms, 0.9s for section reveal (fade plus 28px rise, from a visible default, triggered once by IntersectionObserver) and for the hero copy, which rises 18px from 35% opacity once on load, summary and actions 0.1s and 0.2s behind the title. Continuous motion is limited to the hero film, the signal trace sweep over Gerber artwork (7s/11s alternating), the active port pulse and dash pulses along integration lines.
+One ease, `--o89-ease` `cubic-bezier(0.16, 1, 0.3, 1)`: 0.2–0.35s for colour and opacity, 0.45–0.7s for panels and transforms, 0.9s for section reveal (fade plus 28px rise, from a visible default, triggered once by IntersectionObserver) and for the hero copy, which rises 18px from 35% opacity once on load, summary and actions 0.1s and 0.2s behind the title. The hero film plays once, rests on the closed Controller it opened on and replays when the hero returns to view after scrolling past it; its toggle pauses, plays or replays. Continuous motion is limited to the signal trace sweep over Gerber artwork (7s/11s alternating), the active port pulse and dash pulses along integration lines.
 
 **The Still Under Reduced Motion Rule.** With `prefers-reduced-motion: reduce`, the hero film stays paused (its toggle can start it), reveals render immediately, the 3D lid lift snaps instead of easing, trace sweep, port pulse and render swap animations stop, panel moves become 0.2s linear fades, the 3D viewer stops auto-rotating, and in-page scrolling is instant.
 
@@ -275,7 +272,6 @@ One ease, `--o89-ease` `cubic-bezier(0.16, 1, 0.3, 1)`: 0.2–0.35s for colour a
 - **Do** use the dark theme only, from `var(--o89-*)` tokens; layer page, surface, surface-raised.
 - **Do** give frames, panels, stages and inputs `corner-shape: bevel` on their radius, and buttons the clipped plate polygon.
 - **Do** render products from real CAD and fabrication data on black (`#07090c`, or transparent over the section's light), and keep site miniatures as generic dark dioramas.
-- **Do** place callouts from the render camera's anchors, never by eye.
 - **Do** use the four status words (Published, Specified, Planned, Pending bench) and put amber beside Planned and Pending bench.
 - **Do** name the conditions of every measured value ("11 mA at 13.1 V, radio off") and label example data on the page ("Sample data · app in development", "Addresses are examples.").
 - **Do** set IBM Plex Mono for designators, units, readings, file names and code, with tabular numerals.

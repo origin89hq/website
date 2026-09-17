@@ -24,7 +24,7 @@ function FamilyArt({ productId }: { productId: ProductId }) {
       return (
         <img
           src={controllerImage}
-          alt="Origin89 Controller CAD concept"
+          alt="Origin89 Controller, rendered from CAD"
           width="1200"
           height="1824"
           loading="lazy"

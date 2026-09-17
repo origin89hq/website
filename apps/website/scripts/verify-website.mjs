@@ -125,6 +125,75 @@ try {
     await page.locator("#waitlistEmail").evaluate((input) => input.checkValidity()),
     false,
   );
+  // Turnstile loads on first use of the form. Stub it and the API so the check
+  // stays offline. The stub issues a token only when told to, like a visitor
+  // ticking the box, and counts resets and removals.
+  const turnstileScript = "https://challenges.cloudflare.com/turnstile/v0/api.js*";
+  await page.route(turnstileScript, (route) =>
+    route.fulfill({
+      contentType: "text/javascript",
+      body: `let issued = 0, options;
+        window.turnstileStub = {
+          resets: 0,
+          removals: 0,
+          issue: () => options.callback("stub-token-" + ++issued),
+        };
+        window.turnstile = {
+          render(element, value) { options = value; return "stub"; },
+          reset() { turnstileStub.resets++; setTimeout(turnstileStub.issue, 50); },
+          remove() { turnstileStub.removals++; },
+        };`,
+    }),
+  );
+  const signups = [];
+  let waitlistReply = { status: 200, json: { status: "ok" } };
+  await page.route("**/api/waitlist", (route) => {
+    signups.push(route.request().postDataJSON());
+    return route.fulfill(waitlistReply);
+  });
+  const waitlist = page.locator("#waitlist");
+  const note = waitlist.locator(".waitlist-note");
+  const join = waitlist.getByRole("button", { name: "Join the waitlist", exact: true });
+  const stub = () =>
+    page.evaluate(() => ({ resets: turnstileStub.resets, removals: turnstileStub.removals }));
+  const tick = () => page.evaluate(() => window.turnstileStub.issue());
+  // The form waits for the check instead of giving up or resetting it.
+  await page.locator("#waitlistEmail").fill("sam@example.com");
+  await join.click();
+  await waitlist.getByText("Complete the Cloudflare check below").waitFor();
+  assert.equal(signups.length, 0);
+  await tick();
+  await waitlist.locator('.waitlist-note[data-state="done"]').waitFor();
+  assert.deepEqual(await stub(), { resets: 0, removals: 1 });
+  // A refused sign-up leaves the check alone until the retry needs a new token.
+  const refusedAt = errors.length;
+  waitlistReply = { status: 503, json: { error: "unavailable" } };
+  await join.click();
+  await waitlist.getByText("Complete the Cloudflare check below").waitFor();
+  await tick();
+  await waitlist.locator('.waitlist-note[data-state="error"]').waitFor();
+  assert.match(await note.innerText(), /hello@origin89\.com/);
+  assert.equal((await stub()).resets, 0);
+  waitlistReply = { status: 200, json: { status: "ok" } };
+  await join.click();
+  await waitlist.locator('.waitlist-note[data-state="done"]').waitFor();
+  assert.deepEqual(await stub(), { resets: 1, removals: 2 });
+  assert.deepEqual(
+    signups.map(({ email, token }) => `${email} ${token}`),
+    [
+      "sam@example.com stub-token-1",
+      "sam@example.com stub-token-2",
+      "sam@example.com stub-token-3",
+    ],
+  );
+  // Chromium logs the stubbed 503 itself; any other error still fails the check.
+  errors.splice(
+    refusedAt,
+    Infinity,
+    ...errors.slice(refusedAt).filter((text) => !/status of 503/.test(text)),
+  );
+  await page.unroute(turnstileScript);
+  await page.unroute("**/api/waitlist");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await open("/", 390);
@@ -132,11 +201,11 @@ try {
   assert.equal(await page.locator(".film-toggle").getAttribute("aria-label"), "Play the film");
   assert.equal(await page.locator(".reveal.pre").count(), 0);
   await page.locator(".port-list").getByRole("button", { name: "TNK", exact: true }).click();
-  assert.match(await page.locator("#portPanel").innerText(), /4–20 mA/);
+  assert.match(await page.locator("#portPanel").innerText(), /4–20\smA/);
   await page.keyboard.press("Escape");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   checks.push(
-    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; film pause and reduced motion",
+    "Homepage port explorer by pointer, keyboard and phone list; processor tabs; idle-draw and watchdog instruments; rule composer; waitlist check, sign-up, refusal and retry; film pause and reduced motion",
   );
 
   await open("/developers/design-guide/");
@@ -289,10 +358,10 @@ try {
   await equipmentDetails.getByRole("button", { name: "Close equipment details" }).click();
   await solarPreview.getByRole("button", { name: "Inspect battery charging" }).click();
   assert.match(await solarPreview.locator(".flow-detail").innerText(), /before conversion losses/);
-  assert.match(await equipmentDetails.innerText(), /10.0 kWh/);
+  assert.match(await equipmentDetails.innerText(), /10.0\skWh/);
   await equipmentDetails.getByRole("button", { name: "Close equipment details" }).click();
   await solarPreview.getByRole("button", { name: "Inspect cottage consumption" }).click();
-  assert.match(await equipmentDetails.innerText(), /Total demand[\s\S]*850 W/);
+  assert.match(await equipmentDetails.innerText(), /Total demand[\s\S]*850\sW/);
   assert.match(await equipmentDetails.innerText(), /branch-circuit measurements/);
   await page.keyboard.press("Escape");
   assert.equal(await equipmentDetails.isVisible(), false);

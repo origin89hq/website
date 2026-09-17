@@ -28,7 +28,7 @@ export function BuddyApp({
   const id = useId();
   const [scene, setScene] = useState(initialScene);
   const [chemistry, setChemistry] = useState("unknown");
-  const [answer, setAnswer] = useState("Choose a question to preview Buddy’s explanation.");
+  const [answer, setAnswer] = useState("Choose a question to see Buddy’s answer.");
   const dialog = useRef<HTMLDialogElement>(null);
   const [notificationHost, setNotificationHost] = useState<HTMLDivElement | null>(null);
   const appContent = useRef<HTMLDivElement>(null);
@@ -54,7 +54,7 @@ export function BuddyApp({
     telecom: {
       name: "Tundra relay / NU",
       initials: "NU",
-      status: "Sample telecom site · Last heard 12 min ago",
+      status: "Sample telecom site · Last heard 12 min ago",
       greeting: "Let’s check the relay.",
       intro: "Power, temperature and connection.",
     },
@@ -79,17 +79,17 @@ export function BuddyApp({
           ];
   const answers: Record<string, string> = {
     automation:
-      "Buddy could help identify the equipment, find its documented limits and draft a rule from your intent. You would review its conditions and affected circuits. The local controller would validate measurements, permissions and output limits before acting. Missing inputs cannot become permission to switch equipment. This is a design preview; no rule or command has been sent.",
+      "Buddy could help identify the equipment, find its documented limits and draft a rule from what you describe. You would review its conditions and the circuits it affects. The local controller would check measurements, permissions and output limits before acting, and a missing input never counts as permission to switch equipment. This is a design preview. No rule or command has been sent.",
     alarm:
-      "The sample level alarm reported high 30 seconds ago. That identifies the input needing attention, not the cause. Review the sensor reading and pump status, then follow the site’s operating procedure. Buddy has not changed any equipment controls.",
-    fuel: "The last tank reading is 62%. I would also need tank capacity, the usable reserve and the generator’s recent fuel consumption to estimate running time. Use the site’s refuelling procedure rather than treating a percentage as a runtime estimate.",
+      "The sample level alarm reported high 30 seconds ago. It shows which input needs attention but not what caused it. Check the sensor reading and pump status, then follow the site’s operating procedure. Buddy has not changed any equipment controls.",
+    fuel: "The last tank reading is 62%. To estimate running time, I would also need tank capacity, the usable reserve and the generator’s recent fuel consumption. Until then, follow the site’s refuelling procedure.",
     link: "The feed last updated 12 minutes ago. Battery, shelter temperature and generator state are last-known readings. I cannot confirm the current condition or identify the cause from that silence alone. Follow the site’s gateway, backhaul and power checks.",
     reserve:
       "A last-known battery percentage is not enough to calculate backup time. I would need fresh readings, usable battery capacity, current load and the configured reserve. Current site condition is unknown while the feed is stale.",
     loads:
-      "When solar output is strong, using appliances directly from that power can reduce how much energy you take from the battery. Check the appliance rating and your inverter’s limits. A cloud can change the available power quickly.",
+      "When solar output is strong, appliances can run from that power and take less from the battery. Check the appliance rating and your inverter’s limits. A cloud can change the available power quickly.",
     battery:
-      "Start with flexible loads: laundry, tools or other heavier jobs you can move into solar-producing hours. Keep essential loads running. I would need your battery capacity, reserve settings and recent usage to estimate how much the night will need.",
+      "Start with flexible loads: laundry, tools or other heavy jobs you can move to hours when solar is producing. Keep essential loads running. To estimate what the night will need, I would need your battery capacity, reserve settings and recent usage.",
     water:
       "Only some batteries need watering. Identify the exact make and model first. Serviceable flooded lead-acid batteries may need water according to the manufacturer’s guide. Never add water to sealed AGM or gel batteries. Lithium batteries do not need watering.",
   };
@@ -120,7 +120,7 @@ export function BuddyApp({
       if (presentation === "preview") event.currentTarget.scrollIntoView({ block: "start" });
     }
     if (button.hasAttribute("data-ask")) {
-      setAnswer("Choose a question to preview Buddy’s explanation.");
+      setAnswer("Choose a question to see Buddy’s answer.");
       dialog.current?.showModal();
     }
     if (button.classList.contains("dialog-close")) dialog.current?.close();
@@ -186,17 +186,17 @@ export function BuddyApp({
           {site === "cottage" ? (
             <>
               <h2>
-                Solar in.
+                Compare solar
                 <br />
-                Energy out.
+                with your use.
               </h2>
               <p className="buddy-explanation">
-                Solar above the line. Consumption below. Slide across the chart to compare any
+                Solar is above the line, consumption below. Slide across the chart to see each
                 reading.
               </p>
               <EnergyHistory />
               <p className="app-insight">
-                About <strong>1.25 kW</strong> is left before charging losses. Check a large
+                About <strong>1.25 kW</strong> is left before conversion losses. Check a large
                 appliance’s power draw before starting it.
               </p>
               <button className="inline-question" data-answer="loads" type="button">
@@ -215,8 +215,9 @@ export function BuddyApp({
         </div>
         <div className="app-panel" data-panel="care" hidden={scene !== "care"}>
           <h2>
-            A little care.
-            <br />A longer working life.
+            Look after
+            <br />
+            your batteries.
           </h2>
           <p className="buddy-explanation">
             I’ll tailor maintenance reminders to the battery you actually have.

@@ -77,7 +77,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
       aria-label={`${weekly ? "Last week" : profile.title} chart`}
     >
       <div className="power-history-heading">
-        <h3>{weekly ? "Last week" : site === "cottage" ? "Your day in energy" : profile.title}</h3>
+        <h3>{weekly ? "Last week" : site === "cottage" ? "Energy today" : profile.title}</h3>
         {site !== "telecom" ? (
           <fieldset className="history-period" aria-label="Chart period">
             {(["day", "week"] as const).map((value) => (
@@ -95,7 +95,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
             ))}
           </fieldset>
         ) : (
-          <span className="history-stale">Ends 12 min ago</span>
+          <span className="history-stale">Ends 12 min ago</span>
         )}
       </div>
       <div className="history-readout" aria-live="polite" aria-atomic="true">
@@ -286,7 +286,7 @@ export function EnergyHistory({ site = "cottage" }: { site?: JournalSite }) {
               {profile.second}
             </span>
           )}
-          <small>Drag to explore</small>
+          <small>Slide to inspect</small>
         </div>
       )}
       {site === "telecom" && (

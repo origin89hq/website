@@ -117,7 +117,7 @@ export function DualMcu() {
           >
             <p className="mcu-role">Every decision, all timing, all storage, all actuation.</p>
             <p className="mcu-core">
-              U7 · STM32G0B1RET6 · Arm Cortex-M0+ · 512 KB flash in two banks
+              U7 · STM32G0B1RET6 · Arm Cortex-M0+ · 512 KB flash in two banks
             </p>
             <ul className="duties">
               <li>
@@ -130,13 +130,13 @@ export function DualMcu() {
               <li>
                 <span className="mono">U9 U10</span>
                 <span>
-                  <b>Keeps the record.</b> State in FRAM, the event log in 128 Mbit NOR flash.
+                  <b>Keeps the record.</b> State in FRAM, the event log in 128 Mbit NOR flash.
                 </span>
               </li>
               <li>
                 <span className="mono">X2</span>
                 <span>
-                  <b>Keeps time.</b> A 32.768 kHz crystal with a backup cell, so the log’s timeline
+                  <b>Keeps time.</b> A 32.768 kHz crystal with a backup cell, so the log’s timeline
                   survives a power loss.
                 </span>
               </li>
@@ -151,7 +151,7 @@ export function DualMcu() {
                 <span className="mono">V3V3_ESP</span>
                 <span>
                   <b>Powers the radio.</b> It switches the ESP32’s rail, so a stuck radio restarts
-                  without a site visit. With that rail off, the board idles at 11 mA.
+                  without a site visit. With that rail off, the board idles at 11 mA.
                 </span>
               </li>
             </ul>
@@ -169,7 +169,7 @@ export function DualMcu() {
           >
             <p className="mcu-role">Carries the data. Decides nothing.</p>
             <p className="mcu-core">
-              U8 · ESP32-C6-WROOM-1-N8 · RISC-V · 2.4 GHz Wi-Fi 6 and Bluetooth LE
+              U8 · ESP32-C6-WROOM-1-N8 · RISC-V · 2.4 GHz Wi-Fi 6 and Bluetooth LE
             </p>
             <ul className="duties">
               <li>

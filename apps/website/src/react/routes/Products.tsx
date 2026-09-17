@@ -14,7 +14,7 @@ import { siteConfig } from "../lib/site-config";
 
 const productActions: Record<ProductId, { label: string; status: string }> = {
   controller: {
-    label: "Plan a connection",
+    label: "Plan your setup",
     status: "In active development. Not for sale yet.",
   },
   offgrid: {
@@ -32,8 +32,8 @@ export function ProductsPage() {
     <SiteShell>
       <PageIntro title="Meet the Controller, Offgrid and Buddy.">
         <p>
-          Origin89 helps its different parts work together. Connect at the site, see the readings in
-          Offgrid, and ask Buddy when something needs explaining.
+          Connect equipment at the site, see the readings in Offgrid and ask Buddy when something
+          needs explaining.
         </p>
       </PageIntro>
       <div className="system-map-showcase">
@@ -192,8 +192,8 @@ export function ProductPage({ productId }: { productId: ProductId }) {
               Browse hardware on GitHub <ArrowUpRight size={16} aria-hidden="true" />
             </a>
             <small>
-              Existing CAD artwork. Final product markings and release specifications are still in
-              development.
+              Rendered from the current CAD. Final product markings and release specifications are
+              still in development.
             </small>
           </div>
         </section>

@@ -140,7 +140,7 @@ export function nextReply(messages: BuddyMessage[]) {
       break;
     case "count":
       if (text !== "Not sure" && (!/^\d+$/.test(text) || Number(text) < 1 || Number(text) > 2000)) {
-        response = "A panel count, or “Not sure”, is enough for now.";
+        response = "Enter the panel count as a number, or choose “Not sure”.";
         break;
       }
       state.panelCount = text;
@@ -199,7 +199,7 @@ export function initialMessages(
         metadata: { setup: { ...emptySetup, stage: "kind", example: true } },
       },
     ];
-  const controller = scenario === "unknown" ? "EPEVER 100 A" : "Tracer 10415AN";
+  const controller = scenario === "unknown" ? "EPEVER 100 A" : "Tracer 10415AN";
   const state: SetupState = {
     ...emptySetup,
     example: true,

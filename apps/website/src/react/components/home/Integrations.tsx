@@ -1,4 +1,13 @@
+import { type LucideIcon, Network } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import {
+  type SimpleIcon,
+  siHomeassistant,
+  siMqtt,
+  siRust,
+  siSmartthings,
+  siTypescript,
+} from "simple-icons";
 import controllerImage from "../../../assets/home/integrate-controller.webp?url";
 
 type Status = "planned" | "specified" | "published";
@@ -7,31 +16,55 @@ const STATUS_LABEL: Record<Status, string> = {
   specified: "Specified in KM43",
   published: "Published",
 };
-type Node = { name: string; detail: string; mono?: boolean; status: Status };
+// Brand logos come from Simple Icons; WebSocket has none, so it uses a generic icon.
+type Node = {
+  name: string;
+  icon: SimpleIcon | LucideIcon;
+  detail: string;
+  mono?: boolean;
+  status: Status;
+};
 const LEFT: Node[] = [
   {
     name: "Home Assistant",
+    icon: siHomeassistant,
     detail: "Readings as sensors, generator requests as actions.",
     status: "planned",
   },
-  { name: "SmartThings", detail: "Site state inside your routines.", status: "planned" },
-  { name: "MQTT", detail: "km43/<device_id>/tx", mono: true, status: "specified" },
+  {
+    name: "SmartThings",
+    icon: siSmartthings,
+    detail: "Site state inside your routines.",
+    status: "planned",
+  },
+  { name: "MQTT", icon: siMqtt, detail: "km43/<device_id>/tx", mono: true, status: "specified" },
 ];
 const RIGHT: Node[] = [
-  { name: "Local WebSocket", detail: "The app’s own API, on your network.", status: "specified" },
-  { name: "Rust", detail: "km43 0.1.0 · crates.io", mono: true, status: "published" },
-  { name: "TypeScript", detail: "@origin89/km43 0.1.1 · npm", mono: true, status: "published" },
+  {
+    name: "Local WebSocket",
+    icon: Network,
+    detail: "The app’s own API, on your network.",
+    status: "specified",
+  },
+  { name: "Rust", icon: siRust, detail: "km43 0.1.0 · crates.io", mono: true, status: "published" },
+  {
+    name: "TypeScript",
+    icon: siTypescript,
+    detail: "@origin89/km43 0.1.1 · npm",
+    mono: true,
+    status: "published",
+  },
 ];
 
 const WHAT = {
-  fridge: { label: "the fridge shelf", cond: "rises above 7 °C", via: "1-Wire probe on CN8" },
+  fridge: { label: "the fridge shelf", cond: "rises above 7 °C", via: "1-Wire probe on CN8" },
   battery: {
     label: "the battery bank",
-    cond: "falls below 11.9 V",
+    cond: "falls below 11.9 V",
     via: "Charge controller on RS-485 1",
   },
-  propane: { label: "the propane tank", cond: "falls below 20 %", via: "4–20 mA sender on TNK" },
-  outdoor: { label: "the outdoor air", cond: "drops below −25 °C", via: "1-Wire probe on CN8" },
+  propane: { label: "the propane tank", cond: "falls below 20 %", via: "4–20 mA sender on TNK" },
+  outdoor: { label: "the outdoor air", cond: "drops below −25 °C", via: "1-Wire probe on CN8" },
 };
 const DO = {
   notify: {
@@ -105,10 +138,25 @@ const SKETCH: [string, string][][] = [
   [["", "});"]],
 ];
 
+function NodeIcon({ icon }: { icon: Node["icon"] }) {
+  if ("path" in icon) {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d={icon.path} />
+      </svg>
+    );
+  }
+  const Icon = icon;
+  return <Icon aria-hidden="true" />;
+}
+
 function HubNode({ node }: { node: Node }) {
   return (
     <li className="node" data-status={node.status}>
-      <b>{node.name}</b>
+      <b>
+        <NodeIcon icon={node.icon} />
+        {node.name}
+      </b>
       <span className={node.mono ? "mono" : undefined}>{node.detail}</span>
       <em>{STATUS_LABEL[node.status]}</em>
     </li>
@@ -120,7 +168,7 @@ export function Integrations() {
   const redraw = useRef(() => {});
   const [paths, setPaths] = useState<{ d: string; status: Status }[]>([]);
   const [what, setWhat] = useState<keyof typeof WHAT>("fridge");
-  const [duration, setDuration] = useState("10 min");
+  const [duration, setDuration] = useState("10 min");
   const [action, setAction] = useState<keyof typeof DO>("notify");
 
   useEffect(() => {
@@ -226,9 +274,9 @@ export function Integrations() {
               <label className="pick">
                 <span className="o89-sr">Duration</span>
                 <select id="ruleFor" value={duration} onChange={(e) => setDuration(e.target.value)}>
-                  <option>10 min</option>
-                  <option>2 min</option>
-                  <option>30 min</option>
+                  <option>10 min</option>
+                  <option>2 min</option>
+                  <option>30 min</option>
                 </select>
               </label>
               ,{" "}

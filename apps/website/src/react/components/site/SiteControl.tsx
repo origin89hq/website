@@ -28,7 +28,7 @@ export function SiteControl({
   return (
     <div className="site-control">
       <div className="control-intro">
-        <h2>Your site, in motion.</h2>
+        <h2>Control your site.</h2>
         <p>Connect cameras, switch circuits, and build rules around what happens at your site.</p>
         <small>Interactive concept · No equipment connected.</small>
       </div>
@@ -38,7 +38,7 @@ export function SiteControl({
           <strong>{lightName}</strong>
           <span>
             {stale
-              ? "Current state unknown · Last heard 12 min ago"
+              ? "Current state unknown · Last heard 12 min ago"
               : "Example relay · Manual control"}
           </span>
         </div>
@@ -89,8 +89,8 @@ export function SiteControl({
           </div>
           <p className="rule-evidence" aria-live="polite">
             {temperature === undefined
-              ? "Current temperature unknown. This rule cannot evaluate without a fresh reading."
-              : `Sample temperature: ${temperature}°C. ${temperature >= 28 ? "The threshold is met; the controller would check its output limits before acting." : "The threshold has not been reached."}`}
+              ? "Current temperature unknown. The rule needs a fresh reading."
+              : `Sample temperature: ${temperature}°C. ${temperature >= 28 ? "The threshold is met. The controller would check its output limits before acting." : "The threshold has not been reached."}`}
           </p>
           {!stale && (
             <fieldset className="rule-scenarios" aria-label="Automation sample">
@@ -130,8 +130,8 @@ export function SiteControl({
             </span>
           </div>
           <p className="rule-evidence">
-            Essential circuits stay outside this example. Equipment limits and switching permissions
-            belong to the local controller.
+            Essential circuits stay outside this example. The local controller checks equipment
+            limits and switching permissions.
           </p>
         </article>
       </section>
