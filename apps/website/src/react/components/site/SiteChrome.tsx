@@ -113,11 +113,12 @@ function ProductsMenu({ current }: { current: boolean }) {
   );
 }
 
-/** Marks the open page, and its section for a link that stands for several pages. */
+/** Marks the open page, and its section for a link that stands for several pages.
+    "/" is every path's prefix, so the home link only ever matches exactly. */
 function currentPage(href: string, path: string) {
   if (!path) return {};
   if (path === href) return { "aria-current": "page", "data-current": true } as const;
-  return path.startsWith(href) ? ({ "data-current": true } as const) : {};
+  return href !== "/" && path.startsWith(href) ? ({ "data-current": true } as const) : {};
 }
 
 export function SiteHeader() {
