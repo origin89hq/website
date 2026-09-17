@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowRight, Rss } from "lucide-react";
+import { ArrowLeft, Rss } from "lucide-react";
+import { BlogPostList } from "../components/site/BlogPostList";
 import { PageIntro, SiteShell } from "../components/site/SiteChrome";
 import type { BlogPost } from "../lib/blog";
 
@@ -16,22 +17,9 @@ export function BlogIndexPage({ posts }: { posts: readonly BlogPost[] }) {
           <Rss size={16} aria-hidden="true" /> Follow with the Atom feed
         </a>
       </PageIntro>
-      <section className="blog-list" aria-label="Posts">
+      <section className="blog-index" aria-label="Posts">
         {posts.length ? (
-          posts.map((post) => (
-            <article key={post.slug}>
-              <div>
-                <h2>
-                  <a href={`/blog/${post.slug}/`}>{post.title}</a>
-                </h2>
-                <p>{post.summary}</p>
-              </div>
-              <time className="micro" dateTime={post.date}>
-                {post.date}
-              </time>
-              <ArrowRight size={20} aria-hidden="true" />
-            </article>
-          ))
+          <BlogPostList posts={posts} />
         ) : (
           <p className="blog-empty">The first post is on its way.</p>
         )}

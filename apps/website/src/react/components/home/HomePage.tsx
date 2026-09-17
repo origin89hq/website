@@ -7,9 +7,11 @@ import gerberBoard from "../../../assets/home/gerber-board-dim.webp?url";
 import gerberU7 from "../../../assets/home/gerber-u7.webp?url";
 import traceBoard from "../../../assets/home/trace-mask-board.webp?url";
 import traceU7 from "../../../assets/home/trace-mask-u7.webp?url";
+import type { BlogPost } from "../../lib/blog";
 import { journalAssets } from "../../lib/react-assets";
 import { siteConfig } from "../../lib/site-config";
 import { BuddyAvatar } from "../buddy/BuddyAvatar";
+import { BlogPostList } from "../site/BlogPostList";
 import { SiteFooter, SiteHeader } from "../site/SiteChrome";
 import { AppPreview } from "./AppPreview";
 import { Connections } from "./Connections";
@@ -921,7 +923,28 @@ function Waitlist() {
   );
 }
 
-export function HomePage() {
+function LatestPosts({ posts }: { posts: readonly BlogPost[] }) {
+  if (!posts.length) return null;
+  return (
+    <section className="section home-posts" id="blog" aria-labelledby="blog-title">
+      <div className="o89-wrap">
+        <div className="device-head reveal">
+          <h2 id="blog-title" className="h-l">
+            Notes from the bench.
+          </h2>
+          <p className="lede">Bench results and progress on the Controller, posted as we go.</p>
+        </div>
+        <BlogPostList posts={posts} heading="h3" />
+        <a className="o89-text-link" href="/blog/">
+          All posts <ArrowIcon />
+        </a>
+      </div>
+    </section>
+  );
+}
+
+/** `latestPosts` comes from the router, so Storybook can render the page without the post loader. */
+export function HomePage({ latestPosts = [] }: { latestPosts?: readonly BlogPost[] }) {
   useReveal();
   return (
     <div className="website-concept web-journal home">
@@ -954,6 +977,7 @@ export function HomePage() {
         <AppSection />
         <BuddySection />
         <Specs />
+        <LatestPosts posts={latestPosts} />
         <Waitlist />
       </main>
       <SiteFooter />

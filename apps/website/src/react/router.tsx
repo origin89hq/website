@@ -150,7 +150,7 @@ const rootRoute = createRootRoute({
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: HomePage,
+  component: () => <HomePage latestPosts={blogPosts.slice(0, 3)} />,
 });
 const productsRoute = createRoute({
   getParentRoute: () => rootRoute,

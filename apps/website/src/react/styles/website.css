@@ -1801,7 +1801,7 @@ body {
 }
 
 /* Blog */
-.blog-list {
+.blog-index {
   padding: 0 var(--site-gutter);
 }
 .blog-list article {
@@ -1816,19 +1816,20 @@ body {
 .blog-list article:last-child {
   border-bottom: 1px solid var(--o89-line);
 }
-.blog-list h2 {
+/* `article` in these selectors outranks the homepage's heading and paragraph resets. */
+.blog-list article :is(h2, h3) {
   max-width: 28ch;
   font-size: clamp(26px, 2.2vw, 32px);
   letter-spacing: -0.03em;
   line-height: 1.1;
 }
 /* The title link covers the whole row. */
-.blog-list h2 a::after {
+.blog-list article :is(h2, h3) a::after {
   content: "";
   position: absolute;
   inset: 0;
 }
-.blog-list p {
+.blog-list article p {
   margin-top: 12px;
   max-width: 62ch;
   color: var(--o89-muted);
@@ -1849,6 +1850,12 @@ body {
 .blog-list article:hover > svg {
   color: var(--o89-fg);
   transform: translateX(4px);
+}
+.home-posts .blog-list {
+  margin-top: clamp(40px, 5vw, 72px);
+}
+.home-posts .blog-list + .o89-text-link {
+  margin-top: 20px;
 }
 .blog-empty {
   padding-block: 32px;

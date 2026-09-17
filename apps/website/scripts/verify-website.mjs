@@ -264,11 +264,11 @@ try {
   checks.push("Client navigation, titles, browser back and app scene deep links");
   const [latestPost] = blogPosts;
   if (latestPost) {
-    await open("/blog/");
+    await open("/");
     await page.evaluate(() => {
       window.__sameDocument = true;
     });
-    await page.getByRole("link", { name: latestPost.title, exact: true }).click();
+    await page.locator("#blog").getByRole("link", { name: latestPost.title, exact: true }).click();
     await page.waitForURL(`**/blog/${latestPost.slug}/`);
     assert.equal(await page.evaluate(() => window.__sameDocument), true);
     await page.locator(".blog-post-body > *").first().waitFor();
@@ -277,7 +277,9 @@ try {
   const feed = await page.request.get(base + "/blog/feed.xml");
   assert.equal(feed.status(), 200);
   assert.match(await feed.text(), /<feed xmlns="http:\/\/www\.w3\.org\/2005\/Atom">/);
-  checks.push("Blog post client navigation loads the post body; the Atom feed is served");
+  checks.push(
+    "The homepage links the latest post, client navigation loads its body, and the Atom feed is served",
+  );
   await open("/app/cottage/", 320);
   const solarPreview = page.locator(".buddy-app:visible");
   await solarPreview.getByRole("button", { name: "Inspect generator standby" }).click();
