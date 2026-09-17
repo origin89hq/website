@@ -338,7 +338,9 @@
 @keyframes pulse-run { from { stroke-dashoffset: 410; } to { stroke-dashoffset: 0; } }
 .home .hub-side { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; position: relative; }
 .home .node { position: relative; background: var(--o89-surface); border: 1px solid var(--o89-line-strong); border-radius: 14px; padding: 16px 18px; display: grid; gap: 4px; }
-.home .node b { font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+.home .node b { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+.home .node b svg { flex: none; width: 20px; height: 20px; color: var(--o89-muted); }
+.home .node[data-status="planned"] b svg { opacity: .5; }
 .home .node span { color: var(--o89-muted); font-size: 14px; }
 .home .node span.mono { font-size: 12.5px; }
 .home .node em { font-style: normal; justify-self: start; margin-top: 6px; font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid; }
@@ -383,7 +385,8 @@
   .home .hub-side { grid-template-columns: 1fr 1fr; gap: 10px; }
   .home .hub-side > :last-child:nth-child(odd) { grid-column: 1 / -1; }
   .home .node { padding: 14px; }
-  .home .node b { font-size: 16px; }
+  .home .node b { gap: 8px; font-size: 16px; }
+  .home .node b svg { width: 18px; height: 18px; }
   .home .node span { font-size: 13px; }
   .home .rule-facts { grid-template-columns: 1fr 1fr; }
 }
