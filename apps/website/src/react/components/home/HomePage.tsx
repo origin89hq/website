@@ -574,9 +574,9 @@ function Compare() {
             Raspberry Pi 4 product brief; Home Assistant Green’s specifications and support pages;
             and the datasheets of the Controller’s parts. The Cerbo’s boot time comes from Victron’s
             community forum, not an official figure. The Origin89 column comes from the revision A
-            design files; temperature figures are part ratings, the idle draw is a first bench
-            reading and other values are not yet measured. Corrections welcome at{" "}
-            <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+            design files; temperature figures are part ratings, the idle draw and the generator
+            watchdog timing are bench readings and other values are not yet measured. Corrections
+            welcome at <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
           </p>
         </div>
       </div>
