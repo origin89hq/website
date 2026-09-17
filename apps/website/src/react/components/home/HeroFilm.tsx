@@ -91,7 +91,7 @@ export function HeroFilm() {
           Math.max(right ? x + LEADER_GAP : x - LEADER_GAP - LABEL_WIDTH, 24),
           W - LABEL_WIDTH - Math.max(24, (W - 1320) / 2),
         );
-        const ly = Math.min(Math.max(y - 190, 128), H - 260);
+        const ly = Math.min(Math.max(y - 190, 168), H - 260);
         el.style.transform = `translate(${x}px, ${y}px)`;
         const line = el.querySelector("line");
         line?.setAttribute("x2", String(right ? lx - x : lx - x + LABEL_WIDTH));
@@ -241,25 +241,30 @@ export function HeroFilm() {
               </>
             ) : null}
           </p>
-          <h1 id="hero-title" className="h-xl">
-            One controller for the gear you already own.
-          </h1>
-          <p className="lede">
-            Origin89 reads the charge controller, inverter, batteries, probes and generator already
-            on your wall. It runs your rules at the site and keeps every reading with its age.
-          </p>
-          <div className="hero-actions">
-            <a className="o89-plate o89-plate-action" href="#waitlist">
-              Join the waitlist
-            </a>
-            <a className="o89-text-link" href="#device">
-              See every port <ArrowIcon />
-            </a>
+          <div className="hero-main">
+            <h1 id="hero-title" className="h-xl">
+              <span>One controller</span> <span>for the gear you already own.</span>
+            </h1>
+            <p className="lede">
+              Origin89 reads the charge controller, inverter, batteries, probes and generator
+              already on your wall. It runs your rules at the site and keeps every reading with its
+              age.
+            </p>
           </div>
-          <p className="status">
-            <i aria-hidden="true" />
-            Prototype. Board revision A is on the bench now.
-          </p>
+          <div className="hero-side">
+            <div className="hero-actions">
+              <a className="o89-plate o89-plate-action" href="#waitlist">
+                Join the waitlist
+              </a>
+              <a className="o89-text-link" href="#device">
+                See every port <ArrowIcon />
+              </a>
+            </div>
+            <p className="status">
+              <i aria-hidden="true" />
+              <b>Prototype.</b> Board revision A is on the bench now.
+            </p>
+          </div>
         </div>
       </div>
     </section>
