@@ -1,10 +1,10 @@
 ---
 title: Board A on the bench: the first four days
 date: 2026-09-17
-summary: Two unattended nights, one bad reply in 58 169 Modbus polls, and a working Wi-Fi link. What we measured on the first Controller board and what is still untested.
+summary: Two unattended nights on the first Controller board: one bad reply in 58 169 Modbus polls, a working Wi-Fi link, and the tests still to run.
 ---
 
-The first revision of the Controller's main board, board A, has been on our bench since 14 September. One board from the first order runs a self-test image that exercises each circuit on a schedule and keeps the results in the board's own memory. Everything below comes from that single board on a bench, not from a site.
+The first revision of the Controller's main board, board A, has been on our bench since 14 September. One board from the first order runs a self-test image that exercises each circuit on a schedule and keeps the results in the board's own memory. Every result below comes from that one board on the bench, before any site installation.
 
 ![Board A on the bench, powered, with a green lamp lit, wire loops joining three of its RS-485 terminals and test cables attached](./board-a-on-the-bench/board-a.webp)
 
@@ -32,9 +32,9 @@ On the second night it ran for 16 h 48 min from a bench supply at 14.4 V and pol
 
 ## Not tested yet
 
-- Board B's generator interlock. The [board B log](https://github.com/origin89hq/hardware/blob/main/boards/generator-b/bench/2026-09-14.md) explains why it is waiting.
+- Board B's generator interlock. The [board B log](https://github.com/origin89hq/hardware/blob/main/boards/generator-b/bench/2026-09-14.md) has the details.
 - RS-485 on a long cable, and radio range.
 - The selector switch, and VE.Direct with a real device.
 - Brown-out behaviour, and how far down a battery the board keeps running.
 
-Problems found on the bench are tracked in the [hardware repository's issues](https://github.com/origin89hq/hardware/issues). Follow along with the [Atom feed](/blog/feed.xml).
+We track problems found on the bench in the [hardware repository's issues](https://github.com/origin89hq/hardware/issues). Follow along with the [Atom feed](/blog/feed.xml).
