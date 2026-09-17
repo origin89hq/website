@@ -30,9 +30,12 @@ On the second night it ran for 16 h 48 min from a bench supply at 14.4 V and pol
 | Bluetooth | A 15 s scan found 30 to 43 devices | Receive only |
 | CAN | 3 019 frames in loopback with none missed | Loopback does not exercise the transceiver's receiver |
 
+## The generator interlock
+
+Board A also drives board B, which holds the generator's start contact. The pair ran end to end on 17 September: the contact holds while board A asks and keeps kicking, and opens 4.3 s after the last kick. [Why the generator start has its own board](/blog/why-the-generator-has-its-own-board/) has the results.
+
 ## Not tested yet
 
-- Board B's generator interlock. The [board B log](https://github.com/origin89hq/hardware/blob/main/boards/generator-b/bench/2026-09-14.md) has the details.
 - RS-485 on a long cable, and radio range.
 - The selector switch, and VE.Direct with a real device.
 - Brown-out behaviour, and how far down a battery the board keeps running.

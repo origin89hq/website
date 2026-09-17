@@ -357,7 +357,7 @@ const COMPARE: { group: string; rows: Row[] }[] = [
           {
             mark: "yes",
             text: "The generator contact opens by itself",
-            note: "A hardware watchdog on the generator board opens two relays in series. About 4.5 s by design; bench timing pending",
+            note: "A hardware watchdog on the generator board opens two relays in series, 4.3 s after the last kick on the bench",
           },
           {
             text: "Not documented",
@@ -784,10 +784,10 @@ const SPECS: { icon: keyof typeof SpecIcons; title: string; rows: SpecRow[] }[] 
     title: "Generator board",
     rows: [
       ["Contact", "Two G5V-2 relays in series, gold-clad contacts"],
-      ["Watchdog", "Hardware timer, opens about 4.5 s after the kicks stop, by design"],
+      ["Watchdog", "Hardware timer, opens 4.3 s after the kicks stop, measured"],
       ["Output", "Dry contact, 30 V DC max, 2 A fuse, SMBJ30CA clamp"],
       ["Link", "JST VH 5-pin to the Controller"],
-      ["Status", "Assembled, bench proof pending", true],
+      ["Status", "Interlock proven on the bench, 17 September 2026"],
     ],
   },
   {
@@ -848,7 +848,7 @@ const SPECS: { icon: keyof typeof SpecIcons; title: string; rows: SpecRow[] }[] 
 
 const BENCH_ITEMS: [string, string, boolean][] = [
   ["Idle draw", "11 mA radio off, 38 mA with Wi-Fi and Bluetooth, at 13.1 V", true],
-  ["Generator watchdog timing", "Designed for about 4.5 s", false],
+  ["Generator watchdog timing", "4.34 to 4.46 s after the last kick", true],
   ["1-Wire probes per bus", "Plus the longest outdoor run", false],
   ["Start-battery accuracy", "SNS calibration against a meter", false],
   ["Wi-Fi range in the enclosure", "Through the closed cover", false],

@@ -310,16 +310,17 @@ export const PORTS: Port[] = [
     specs: specs(
       ["Link", "JST VH 5-pin, locking"],
       ["Contact", "Two relays in series, gold-clad contacts rated from 10 µA"],
-      ["Watchdog", "Hardware timer: the contact opens about 4.5 s after the kicks stop, by design"],
+      ["Watchdog", "Hardware timer: the contact opens after the kicks stop"],
+      ["Watchdog timing", "4.34 to 4.46 s measured, against a 3.0 to 6.5 s specification"],
       ["Output", "Dry contact, 30 V DC max, 2 A fuse, 30 V bidirectional clamp"],
-      ["Watchdog timing", "Pending bench measurement", true],
     ),
     connect: ["Generators with a two-wire remote start input"],
     limits: [
       "Relays are rated for −25 to +65 °C ambient.",
       "The contact switches a signal, not engine current.",
     ],
-    stage: "Generator board assembled; bench proof pending.",
+    stage:
+      "Generator board proven on the bench on 17 September 2026: 68 interlock sequences passed.",
   },
   {
     id: "ve-2",

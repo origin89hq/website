@@ -28,12 +28,12 @@ Origin89 is an off-grid controller system: the Controller on the wall, the Offgr
 ## Operating Context
 
 - A typical cottage power wall (from the owner's own photos): plywood backing, a battery state-of-charge meter, a blade fuse block, a DC breaker box, an RS-485 solar charge controller, an inverter/charger, a converter/charger, a water pump, six 6 V flooded golf-cart batteries, a generator in a shed with a two-wire start input, a propane tank, an off-grid top-freezer fridge.
-- Controller board A: STM32G0B1, ESP32-C6, 3 × RS-485, CAN, 2 × VE.Direct, 1-Wire, SEL/SNS/TNK sense inputs, a link to generator board B; 12 V. Revision A fabricated; bench measurements in progress as of 2026-09-16. Generator board B assembled; bench proof pending.
+- Controller board A: STM32G0B1, ESP32-C6, 3 × RS-485, CAN, 2 × VE.Direct, 1-Wire, SEL/SNS/TNK sense inputs, a link to generator board B; 12 V. Revision A fabricated; bench measurements in progress as of 2026-09-16. Generator board B revision A: interlock proven on the bench on 2026-09-17, 68 sequences passed and the timed dropouts between 4.34 and 4.46 s after the last kick; revision A boards need four strap links each, which revision B is to fix in the footprint.
 
 ## Capabilities and Constraints
 
 - Prototype hardware. Nothing can be bought yet. Primary action: join a waitlist. The waitlist mechanism is not built; the current site only prepares an enquiry email.
-- Public claims use CAD and design facts. Measured values (consumption, probe counts, cable lengths, watchdog timing, radio range) are shown as pending until the bench provides them.
+- Public claims use CAD and design facts. Measured values (probe counts, cable lengths, radio range) are shown as pending until the bench provides them; idle draw and the generator watchdog now carry bench figures.
 - Equipment compatibility is verified model by model; no support claim without a test.
 - Buddy's advice does not operate equipment. Unknown and stale readings stay distinct from zero and from current values.
 - Published in English.
