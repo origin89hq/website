@@ -82,19 +82,28 @@ export function Viewer3D() {
         const h = container.clientHeight;
         renderer.setSize(w, h, false);
         camera.aspect = w / h;
+        // On a phone the title bar covers the lower part of the frame: lift the model above it.
+        if (w < 720) camera.setViewOffset(w, h, 0, h * 0.12, w, h);
+        else camera.clearViewOffset();
         camera.updateProjectionMatrix();
       };
       const resizer = new ResizeObserver(resize);
       resizer.observe(container);
       resize();
-      renderer.setAnimationLoop(() => {
+      const draw = () => {
         const target = openRef.current ? 0.1 : 0;
         lift += (target - lift) * (reduce ? 1 : 0.08);
         if (cover) cover.position.y = rest + lift;
         controls.update();
         renderer.render(scene, camera);
+      };
+      // Render only while the viewer is on screen.
+      const onScreen = new IntersectionObserver(([entry]) => {
+        renderer.setAnimationLoop(entry?.isIntersecting ? draw : null);
       });
+      onScreen.observe(container);
       return () => {
+        onScreen.disconnect();
         renderer.setAnimationLoop(null);
         resizer.disconnect();
         controls.dispose();
