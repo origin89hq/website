@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.96",
-    "@base-ui-components/react": "1.0.0-rc.0",
     "@origin89/brand": "0.4.0",
     "@origin89/buddy": "0.1.1",
     "@origin89/ui-react": "0.1.1",
@@ -33,15 +32,12 @@
     "@tanstack/react-router": "^1.170.33",
     "ai": "^7.0.93",
     "class-variance-authority": "^0.7.1",
-    "cmdk": "^1.1.1",
     "cn": "^0.2.6",
     "lucide-react": "^1.42.0",
     "nanoid": "^6.0.1",
-    "radix-ui": "^1.6.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "simple-icons": "^16.31.0",
-    "streamdown": "^2.6.0",
     "tailwindcss": "^4.3.3",
     "use-stick-to-bottom": "^1.1.6"
   },

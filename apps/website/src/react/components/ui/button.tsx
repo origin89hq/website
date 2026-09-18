@@ -1,6 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "cn";
-import { Slot } from "radix-ui";
 import type * as React from "react";
 
 const buttonVariants = cva(
@@ -35,20 +34,16 @@ const buttonVariants = cva(
   },
 );
 
+/* No caller composes this into another element any more, so the slot that allowed it is gone with
+ * the last of Radix. Base UI's `render` prop is the way back if one ever needs to. */
 function Button({
   className,
   variant = "default",
   size = "default",
-  asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot.Root : "button";
-
+}: React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>) {
   return (
-    <Comp
+    <button
       data-slot="button"
       data-variant={variant}
       data-size={size}
