@@ -9,12 +9,6 @@ import {
   Attachments,
 } from "../ai-elements/attachments";
 import {
-  Conversation,
-  ConversationContent,
-  ConversationScrollButton,
-} from "../ai-elements/conversation";
-import { Message, MessageContent } from "../ai-elements/message";
-import {
   PromptInput,
   PromptInputButton,
   PromptInputFooter,
@@ -27,7 +21,9 @@ import {
   usePromptInputAttachments,
   usePromptInputController,
 } from "../ai-elements/prompt-input";
-import { Suggestion } from "../ai-elements/suggestion";
+import { Conversation, ConversationContent, ConversationScrollButton } from "../chat/conversation";
+import { Message, MessageContent } from "../chat/message";
+import { Suggestion } from "../chat/suggestion";
 import { Button } from "../ui/button";
 import { TooltipProvider } from "../ui/tooltip";
 import { BuddyAvatar } from "./BuddyAvatar";
