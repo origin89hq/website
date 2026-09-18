@@ -83,6 +83,9 @@ export const AttachmentPreview = ({
 
 export type AttachmentRemoveProps = React.ComponentProps<typeof Button> & { label?: string };
 
+/* The reveal on hover is a pointer affordance and cannot be the only one: a touch device never
+ * hovers, and an `opacity-0` button takes its focus ring down with it. Backspace only drops the
+ * last attachment, so without these this is unreachable on a phone and invisible to a keyboard. */
 export const AttachmentRemove = ({
   label = "Remove",
   className,
@@ -95,7 +98,7 @@ export const AttachmentRemove = ({
     <Button
       aria-label={label}
       className={cn(
-        "absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-background [&>svg]:size-3",
+        "absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 focus-visible:opacity-100 [@media(pointer:coarse)]:opacity-100 hover:bg-background [&>svg]:size-3",
         className,
       )}
       onClick={(event) => {
