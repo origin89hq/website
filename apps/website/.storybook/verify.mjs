@@ -8,6 +8,15 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
   executablePath: process.env.ORIGIN89_CHROMIUM_PATH,
+  // Pin what the compositor is free to vary between runs: which rasteriser draws an image, and
+  // whether it refines a decode after first paint.
+  args: [
+    "--disable-gpu",
+    "--disable-gpu-rasterization",
+    "--disable-checker-imaging",
+    "--disable-partial-raster",
+    "--force-color-profile=srgb",
+  ],
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = [],
@@ -52,6 +61,25 @@ async function imagesSettled() {
               image.addEventListener("load", resolve, { once: true });
               image.addEventListener("error", resolve, { once: true });
             });
+          // A srcSet is a set of permissions, not an instruction: asked for 108px with 192w and
+          // 384w on offer, Chromium took the 192 on some runs and the 384 on others, and the two
+          // downscale differently. That was the last thing moving between runs of one build. Pin
+          // each one to what the selection rule actually asks for — the smallest candidate that
+          // covers the drawn size — so both builds are photographed showing the same file.
+          for (const image of images) {
+            const candidates = (image.getAttribute("srcset") ?? "")
+              .split(",")
+              .map((part) => part.trim().split(/\s+/))
+              .filter(([, w]) => /^\d+w$/.test(w ?? ""))
+              .map(([url, w]) => ({ url, width: Number.parseInt(w, 10) }))
+              .sort((a, b) => a.width - b.width);
+            if (!candidates.length) continue;
+            const wanted = image.clientWidth * devicePixelRatio;
+            const pick = candidates.find((c) => c.width >= wanted) ?? candidates.at(-1);
+            image.removeAttribute("srcset");
+            image.removeAttribute("sizes");
+            if (image.getAttribute("src") !== pick.url) image.setAttribute("src", pick.url);
+          }
           await Promise.all(
             images.map(async (image) => {
               if (!image.getAttribute("src") && !image.srcset) return;
