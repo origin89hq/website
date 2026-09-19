@@ -2,18 +2,9 @@ import { useChat } from "@ai-sdk/react";
 import type { ChatTransport, FileUIPart } from "ai";
 import { ArrowUpIcon, PaperclipIcon, RotateCcwIcon, XIcon } from "lucide-react";
 import { useEffect, useId, useMemo, useState } from "react";
-import {
-  Attachment,
-  AttachmentPreview,
-  AttachmentRemove,
-  Attachments,
-} from "../ai-elements/attachments";
-import {
-  Conversation,
-  ConversationContent,
-  ConversationScrollButton,
-} from "../ai-elements/conversation";
-import { Message, MessageContent } from "../ai-elements/message";
+import { Attachment, AttachmentPreview, AttachmentRemove, Attachments } from "../chat/attachments";
+import { Conversation, ConversationContent, ConversationScrollButton } from "../chat/conversation";
+import { Message, MessageContent } from "../chat/message";
 import {
   PromptInput,
   PromptInputButton,
@@ -26,10 +17,9 @@ import {
   PromptInputTools,
   usePromptInputAttachments,
   usePromptInputController,
-} from "../ai-elements/prompt-input";
-import { Suggestion } from "../ai-elements/suggestion";
+} from "../chat/prompt-input";
+import { Suggestion } from "../chat/suggestion";
 import { Button } from "../ui/button";
-import { TooltipProvider } from "../ui/tooltip";
 import { BuddyAvatar } from "./BuddyAvatar";
 import { SetupMap } from "./SetupMap";
 import {
@@ -56,15 +46,13 @@ export interface BuddyWorkspaceProps {
 export default function BuddyWorkspace(props: BuddyWorkspaceProps) {
   const [round, setRound] = useState(0);
   return (
-    <TooltipProvider>
-      <PromptInputProvider key={`${props.scenario || "welcome"}-${round}`}>
-        <BuddySession
-          {...props}
-          scenario={round ? "welcome" : props.scenario}
-          onReset={() => setRound((value) => value + 1)}
-        />
-      </PromptInputProvider>
-    </TooltipProvider>
+    <PromptInputProvider key={`${props.scenario || "welcome"}-${round}`}>
+      <BuddySession
+        {...props}
+        scenario={round ? "welcome" : props.scenario}
+        onReset={() => setRound((value) => value + 1)}
+      />
+    </PromptInputProvider>
   );
 }
 function PhotoAttachments() {
@@ -72,7 +60,7 @@ function PhotoAttachments() {
   if (!attachments.files.length) return null;
   return (
     <PromptInputHeader>
-      <Attachments variant="grid">
+      <Attachments>
         {attachments.files.map((file) => (
           <Attachment key={file.id} data={file} onRemove={() => attachments.remove(file.id)}>
             <AttachmentPreview />

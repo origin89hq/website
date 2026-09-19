@@ -35,13 +35,9 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { journalAssets } from "../../lib/react-assets";
-import {
-  Conversation,
-  ConversationContent,
-  ConversationScrollButton,
-} from "../ai-elements/conversation";
-import { Message, MessageContent } from "../ai-elements/message";
-import { Suggestion } from "../ai-elements/suggestion";
+import { Conversation, ConversationContent, ConversationScrollButton } from "../chat/conversation";
+import { Message, MessageContent } from "../chat/message";
+import { Suggestion } from "../chat/suggestion";
 import { Button } from "../ui/button";
 import { BuddyAvatar } from "./BuddyAvatar";
 import "../../styles/buddy-poc.css";

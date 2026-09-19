@@ -1,31 +1,32 @@
-/* Origin89 web theme: the brand's dark palette, used as the only website theme.
-   Values match @origin89/brand 0.4.0 tokens/themes.css (dark). The site uses
-   its own names because the brand file also switches to light values under a
-   light operating-system preference, and the website is dark only. */
+/* Origin89 web theme.
+ *
+ * Colour and the Plate 89 geometry come from @origin89/brand rather than being copied here. The
+ * brand sheet switches to paper under a light operating-system preference and the website is dark
+ * only, which is what `data-theme="dark"` on the document pins; the site keeps its own --o89-*
+ * names, resolved from the package's tokens so there is one set of values rather than two. */
+@import "@origin89/brand/tokens/themes.css";
+@import "@origin89/brand/tokens/plate.css";
+
 :root {
   color-scheme: dark;
-  --o89-page: #07090c;
-  --o89-surface: #0d1116;
-  --o89-surface-raised: #12171e;
-  --o89-line: #1e252e;
-  --o89-line-strong: #2b343f;
-  --o89-focus: #ffffff;
-  --o89-fg: #e7eaee;
-  --o89-muted: #9aa5b1;
-  --o89-faint: #707b87;
-  --o89-action: #2b4a97;
-  --o89-action-lit: #3f61b3;
-  --o89-link: #6279ad;
-  --o89-signal: #7f9ce0;
-  --o89-on-fill: #ffffff;
-  --o89-nominal: #2f9d64;
-  --o89-warning: #e9a13c;
-  --o89-alarm: #e05a3c;
-  --o89-info: #7fb0d4;
-  --o89-max: 1320px;
-  --o89-gutter: clamp(16px, 4vw, 56px);
-  --o89-cut: 10px;
-  --o89-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --o89-page: var(--color-page);
+  --o89-surface: var(--color-surface);
+  --o89-surface-raised: var(--color-surface-raised);
+  --o89-line: var(--color-line);
+  --o89-line-strong: var(--color-line-strong);
+  --o89-focus: var(--color-focus);
+  --o89-fg: var(--color-fg);
+  --o89-muted: var(--color-muted);
+  --o89-faint: var(--color-faint);
+  --o89-action: var(--color-action);
+  --o89-action-lit: var(--color-action-lit);
+  --o89-link: var(--color-link);
+  --o89-signal: var(--color-signal);
+  --o89-on-fill: var(--color-on-fill);
+  --o89-nominal: var(--color-nominal);
+  --o89-warning: var(--color-warning);
+  --o89-alarm: var(--color-alarm);
+  --o89-info: var(--color-info);
   --font-text: Concept, "Helvetica Neue", Arial, sans-serif;
   --font-data: Technical, ui-monospace, "SF Mono", Menlo, monospace;
 }
@@ -99,102 +100,6 @@ dd,
   color: var(--o89-fg);
 }
 
-/* Plate 89 geometry: frames take the plate's clipped corner. */
-.o89-frame {
-  border: 1px solid var(--o89-line-strong);
-  border-radius: 14px;
-  corner-shape: bevel;
-  background: var(--o89-surface);
-}
-
-/* Plate buttons */
-.o89-plate {
-  --c: var(--o89-cut);
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 0 22px;
-  border: 0;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 15px;
-  white-space: nowrap;
-  clip-path: polygon(
-    var(--c) 0,
-    calc(100% - var(--c)) 0,
-    100% var(--c),
-    100% calc(100% - var(--c)),
-    calc(100% - var(--c)) 100%,
-    var(--c) 100%,
-    0 calc(100% - var(--c)),
-    0 var(--c)
-  );
-  transition: background 0.25s var(--o89-ease);
-}
-.o89-plate::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  z-index: -1;
-  clip-path: inherit;
-  transition: background 0.25s var(--o89-ease);
-}
-.o89-plate-action {
-  background: rgb(255 255 255 / 0.9);
-  color: var(--o89-on-fill);
-}
-.o89-plate-action::before {
-  background: var(--o89-action);
-}
-.o89-plate-action:hover::before {
-  background: var(--o89-action-lit);
-}
-.o89-plate-ghost {
-  background: var(--o89-line-strong);
-  color: var(--o89-fg);
-}
-.o89-plate-ghost::before {
-  background: var(--o89-page);
-}
-.o89-plate-ghost:hover {
-  background: var(--o89-muted);
-}
-.o89-plate-ghost:is([aria-pressed="true"], [aria-selected="true"]) {
-  background: var(--o89-fg);
-}
-.o89-plate-ghost:is([aria-pressed="true"], [aria-selected="true"])::before {
-  background: var(--o89-surface-raised);
-}
-.o89-plate-sm {
-  --c: 7px;
-  min-height: 40px;
-  padding: 0 16px;
-  font-size: 14px;
-}
-.o89-text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  color: var(--o89-fg);
-  font-weight: 600;
-  font-size: 15px;
-}
-.o89-text-link svg {
-  transition: transform 0.3s var(--o89-ease);
-}
-.o89-text-link:hover svg {
-  transform: translateX(4px);
-}
-.o89-wrap {
-  width: min(100% - 2 * var(--o89-gutter), var(--o89-max));
-  margin-inline: auto;
-}
 .o89-pending {
   color: var(--o89-warning);
 }

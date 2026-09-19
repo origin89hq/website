@@ -1,1 +1,7 @@
 <meta name="robots" content="noindex, nofollow" />
+<!-- The brand sheet follows the operating system unless the document pins a theme, and the site is
+     dark only. index.html carries data-theme; Storybook renders in its own document, so it needs
+     the same attribute or every story reads on paper. -->
+<script>
+  document.documentElement.dataset.theme = "dark";
+</script>
