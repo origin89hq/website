@@ -26,7 +26,55 @@ async function open(id, extra = "") {
 async function ready() {
   await page.locator('[data-chat-status="ready"]').waitFor();
 }
+/**
+ * Images are the reason these screenshots used to differ between two runs of the same build.
+ * `waitUntil: "load"` covers the document, and `document.fonts.ready` covers text, but nothing
+ * waited for an <img> to arrive and decode — and Buddy's avatar is a srcSet the browser resolves
+ * per viewport, so a run could photograph it half-painted or not yet swapped. Five of the six
+ * screenshots moved between runs; one by 4,528 pixels.
+ */
+async function imagesSettled() {
+  // Every frame, not just the top document: the manager preset photographs a story through an
+  // iframe and some stories embed the site through another, and the avatar inside those was
+  // still moving once the outer page had settled.
+  await Promise.all(
+    page.frames().map(async (frame) => {
+      try {
+        await frame.evaluate(async () => {
+          const images = [...document.images];
+          // A lazy image below the fold may never start loading while the page sits still, which
+          // is how a screenshot ended up with the portrait missing entirely rather than half
+          // drawn. Asking for it eagerly is what makes the run reproducible.
+          for (const image of images) if (image.loading === "lazy") image.loading = "eager";
+          const settled = (image) =>
+            new Promise((resolve) => {
+              if (image.complete) return resolve();
+              image.addEventListener("load", resolve, { once: true });
+              image.addEventListener("error", resolve, { once: true });
+            });
+          await Promise.all(
+            images.map(async (image) => {
+              if (!image.getAttribute("src") && !image.srcset) return;
+              // An asset that never arrives must not hold the run open; the asset check is what
+              // reports a broken image, this only decides when to stop waiting.
+              await Promise.race([settled(image), new Promise((r) => setTimeout(r, 5000))]);
+              try {
+                await image.decode();
+              } catch {
+                // Broken or cross-origin: nothing to wait for.
+              }
+            }),
+          );
+        });
+      } catch {
+        // A frame can go away while a story swaps. Nothing to wait for if it has.
+      }
+    }),
+  );
+}
+
 async function screenshot(name) {
+  await imagesSettled();
   await page.screenshot({
     path: new URL(name + ".png", output).pathname,
     animations: "disabled",
