@@ -119,8 +119,8 @@ importers:
         specifier: ^4.0.96
         version: 4.0.100(react@19.3.0)(zod@4.6.2)
       '@origin89/brand':
-        specifier: 0.5.0
-        version: 0.5.0
+        specifier: 0.6.0
+        version: 0.6.0
       '@origin89/buddy':
         specifier: 0.1.1
         version: 0.1.1
@@ -1107,8 +1107,8 @@ packages:
     resolution: {integrity: sha512-H0d49I0nWyYmq9CPr/4e8/lo1yRUYyaEMhqqNxxvM5xvk3ujnnvSZP02t1Zp7ncCjwRW4ihVzPmL5RXIwxP13Q==}
     engines: {node: '>=22.12.0'}
 
-  '@origin89/brand@0.5.0':
-    resolution: {integrity: sha512-oth7NIfEkwjW793FmOYdmd2FEq0xnuD7KEZxANtRfRK8WCAT6sMlReSVjIQ4PY+pxu3qX89SePnZGEXATkgdtQ==}
+  '@origin89/brand@0.6.0':
+    resolution: {integrity: sha512-MuRv/vLNNtIRKR9acA8m+nUkOICMELJQSAlWz1qNffrT3g1naDZKyWC8i0Dhr3wxnezAD0We4GXBjK2jfGCl8w==}
     engines: {node: '>=22.12.0'}
 
   '@origin89/buddy@0.1.1':
@@ -3298,7 +3298,7 @@ snapshots:
 
   '@origin89/brand@0.3.1': {}
 
-  '@origin89/brand@0.5.0': {}
+  '@origin89/brand@0.6.0': {}
 
   '@origin89/buddy@0.1.1':
     dependencies:

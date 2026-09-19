@@ -1,32 +1,7 @@
-/* Site navigation and footer. */
-.o89-nav {
-  position: sticky;
-  z-index: 50;
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  width: min(100% - 2 * var(--o89-gutter) + 24px, calc(var(--o89-max) + 24px));
-  margin: 12px auto 0;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  padding: 10px 10px 10px 20px;
-  background: rgb(10 13 17 / 0.8);
-  border: 1px solid rgb(255 255 255 / 0.07);
-  border-radius: 14px;
-  corner-shape: bevel;
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-}
-.o89-nav-logo img {
-  display: block;
-  width: auto;
-  height: 22px;
-}
-.o89-nav > nav {
-  display: flex;
-  gap: 22px;
-  margin-right: auto;
-}
-.o89-nav > nav a,
+/* What this site adds to the shared chrome: a product menu on the bar, how the bar collapses on
+   a narrow window, and which state its footer dot reports. The bar itself, the links, the GitHub
+   button and the footer are @origin89/brand's, imported below. */
+@import "@origin89/brand/tokens/chrome.css";
 .o89-nav-menu > button {
   position: relative;
   display: inline-flex;
@@ -37,15 +12,12 @@
   font-weight: 500;
   transition: color 0.2s;
 }
-.o89-nav > nav a:hover,
-.o89-nav > nav a[data-current],
 .o89-nav-menu > button:hover,
 .o89-nav-menu > button[data-current],
 .o89-nav-menu > button[aria-expanded="true"] {
   color: var(--o89-fg);
 }
-/* The open page keeps a mark of its own, so hovering a neighbour cannot stand in for it. */
-.o89-nav > nav a[data-current]::after,
+/* The trigger marks the open section the way a link marks the open page. */
 .o89-nav-menu > button[data-current]::after {
   content: "";
   position: absolute;
@@ -192,22 +164,6 @@
     transition: none;
   }
 }
-.o89-nav-github {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  color: var(--o89-muted);
-}
-.o89-nav-github:hover {
-  color: var(--o89-fg);
-  background: var(--o89-surface-raised);
-}
-.o89-nav-github svg {
-  width: 20px;
-  height: 20px;
-}
 .o89-nav .concept-menu {
   display: none;
 }
@@ -282,65 +238,7 @@
   }
 }
 
-.o89-footer {
-  margin-top: clamp(64px, 8vw, 120px);
-  border-top: 1px solid var(--o89-line);
-  padding-block: 64px calc(64px + env(safe-area-inset-bottom, 0px));
-  color: var(--o89-muted);
-  font-size: 14px;
-}
-.o89-footer-grid {
-  display: grid;
-  grid-template-columns: 1.3fr repeat(3, 1fr);
-  gap: 40px 24px;
-}
-.o89-footer-brand {
-  display: grid;
-  gap: 16px;
-  align-content: start;
-}
-.o89-footer-brand img {
-  display: block;
-  width: auto;
-  height: 28px;
-}
-.o89-footer-brand p {
-  margin: 0;
-  max-width: 36ch;
-}
+/* Amber, because what this reports is a service still settling rather than one known good. */
 .o89-footer-status {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-}
-.o89-footer-status i {
-  width: 7px;
-  height: 7px;
-  margin-top: 0.55lh;
-  translate: 0 -50%;
-  border-radius: 50%;
-  background: var(--o89-warning);
-  flex: none;
-}
-.o89-footer nav {
-  display: grid;
-  gap: 10px;
-  align-content: start;
-}
-.o89-footer nav b {
-  color: var(--o89-fg);
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.o89-footer nav a:hover {
-  color: var(--o89-fg);
-}
-@media (max-width: 800px) {
-  .o89-footer-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .o89-footer-brand {
-    grid-column: 1 / -1;
-  }
+  --o89-chrome-status: var(--color-warning);
 }
