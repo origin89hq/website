@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
+import { pickSource } from "./pick-source.mjs";
 
 const { chromium } = await import(process.env.ORIGIN89_PLAYWRIGHT_PATH || "playwright");
 const base = (process.env.ORIGIN89_STORYBOOK_URL || "http://127.0.0.1:6007").replace(/\/$/, "");
@@ -8,6 +9,15 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
   executablePath: process.env.ORIGIN89_CHROMIUM_PATH,
+  // Pin what the compositor is free to vary between runs: which rasteriser draws an image, and
+  // whether it refines a decode after first paint.
+  args: [
+    "--disable-gpu",
+    "--disable-gpu-rasterization",
+    "--disable-checker-imaging",
+    "--disable-partial-raster",
+    "--force-color-profile=srgb",
+  ],
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = [],
@@ -40,6 +50,28 @@ async function imagesSettled() {
   await Promise.all(
     page.frames().map(async (frame) => {
       try {
+        // The choice is made here, with a rule that has its own tests, rather than inside the
+        // page: a selector that quietly stopped parsing would otherwise restore the flake with
+        // nothing to say so.
+        const drawn = await frame.evaluate(() =>
+          [...document.images].map((image, index) => ({
+            index,
+            srcset: image.getAttribute("srcset"),
+            wanted: image.clientWidth * devicePixelRatio,
+          })),
+        );
+        const pinned = drawn
+          .map(({ index, srcset, wanted }) => ({ index, url: pickSource(srcset, wanted) }))
+          .filter(({ url }) => url);
+        await frame.evaluate((picks) => {
+          for (const { index, url } of picks) {
+            const image = document.images[index];
+            if (!image) continue;
+            image.removeAttribute("srcset");
+            image.removeAttribute("sizes");
+            if (image.getAttribute("src") !== url) image.setAttribute("src", url);
+          }
+        }, pinned);
         await frame.evaluate(async () => {
           const images = [...document.images];
           // A lazy image below the fold may never start loading while the page sits still, which
@@ -66,8 +98,26 @@ async function imagesSettled() {
             }),
           );
         });
-      } catch {
-        // A frame can go away while a story swaps. Nothing to wait for if it has.
+        // Pinning is only worth doing if it took, and `currentSrc` alone does not say so: a URL
+        // that 404s still becomes the current source, so a selector that started producing
+        // nonsense would pass a test of that attribute while the page showed nothing at all.
+        // What has to hold is that the pinned file is the one on screen and that it decoded.
+        const wrong = await frame.evaluate(
+          (picks) =>
+            picks
+              .filter(({ index, url }) => {
+                const image = document.images[index];
+                if (!image) return false;
+                return !image.currentSrc.endsWith(url) || image.naturalWidth === 0;
+              })
+              .map(({ url }) => url),
+          pinned,
+        );
+        assert.deepEqual(wrong, [], "a pinned image is not the one showing, or did not load");
+      } catch (error) {
+        // A frame can go away while a story swaps. Nothing to wait for if it has — but a failed
+        // assertion is this run's own finding and must not be swallowed with it.
+        if (error instanceof assert.AssertionError) throw error;
       }
     }),
   );
